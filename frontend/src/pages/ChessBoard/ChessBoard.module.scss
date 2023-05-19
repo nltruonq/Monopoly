@@ -10,18 +10,18 @@
 }
 .user-zone-2{
     position: absolute;
-    top:0;
-    left: 0;
+    top:5%;
+    left: 5%;
 }
 .user-zone-3{
     position: absolute;
-    top:0;
+    top:5%;
     left: 80%;
 }
 .user-zone-4{
     position: absolute;
     top:80%;
-    left: 0;
+    left: 5%;
 }
 
 .chess-board{
@@ -57,6 +57,48 @@
         background-color: red;
         transform:  rotate(0) skew(-45deg);   
     }
+}
+
+.char{
+  transform: translate(20%,20%) rotate(45deg);
+}
+
+.move{
+  animation: jump 0.5s ease-in-out;
+}
+
+.down{
+  animation: downn 0.5s linear;
+}
+@keyframes downn{
+  0%{
+    transform: translate(-20%,-0%) ;
+  }
+  99%{
+    transform: translate(-20%,-1%) ;
+  }
+  100%{
+    transform: translate(-20%,-0%) ;
+  }
+}
+
+
+@keyframes jump{
+  0%{
+    transform: translate(20%,-20%) rotate(45deg);
+  }
+  20%{
+    transform: translate(30%,-40%) rotate(45deg);
+  }
+  50%{
+    transform: translate(60%,-70%) rotate(45deg);
+  }
+  80%{
+    transform: translate(30%,-40%) rotate(45deg);
+  }
+  100%{
+    transform: translate(20%,-20%) rotate(45deg);
+  }
 }
 
   .row {
