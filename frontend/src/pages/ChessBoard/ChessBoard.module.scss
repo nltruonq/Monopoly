@@ -1,0 +1,80 @@
+ .chess-board{
+    display: flex;
+    flex-direction: column;
+    width: 1024px;
+    margin: 0;
+    justify-content: center;
+    align-items: center;
+ }
+
+  .content{
+    transform: translate(20%,10%) rotate(-30deg) skew(25deg);
+
+    &::before{
+        content: '';
+        position: absolute;
+        top:10px;
+        left:-20px;
+        height: calc(var(--width-cell)*7 + 1*2*8px);
+        width: 20px;
+        background-color: red;
+        transform: translate(20%,20%) rotate(-45deg) skew(-45deg);    
+    }
+    &::after{
+        content: '';
+        position: absolute;
+        top:calc(var(--width-cell)*7 + var(--length-cell)*2 + 1*2*8px);
+        left:-7px;
+        height: 15px;
+        width: calc(var(--width-cell)*7 + var(--length-cell)*2 + 1*2*8px);
+        background-size: 300px;
+        background-color: red;
+        transform:  rotate(0) skew(-45deg);   
+    }
+}
+
+  .row {
+    display: flex;
+    flex-direction: row;
+  }
+  
+  .rectangle {
+    width: var(--width-cell);
+    height: var(--length-cell);
+    background-color: gray;
+    margin: 1px;
+  }
+
+  .square{
+    width: var(--length-cell);
+    height: var(--length-cell);
+    background-color: green;
+    margin: 1px;
+  }
+  .row-board{
+    display: flex;
+    flex-direction: row;
+  }
+
+  .center-board{
+    display: flex;
+    flex-direction: row;
+    .col{
+        display: flex;
+        .column{
+          display: flex;
+          flex-direction: column;
+          .rectangle-column{
+            width: var(--length-cell);
+            height: var(--width-cell);
+            background-color: gray;
+            margin: 1px;
+          }   
+        }
+    }
+    .center{
+        height: calc(var(--width-cell)*7 + 1*2*7px);
+        width: calc(var(--width-cell)*7 + 1*2*7px);
+        background-color: aqua;
+    }
+  }
