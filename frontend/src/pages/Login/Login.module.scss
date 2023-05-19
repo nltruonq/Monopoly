@@ -1,0 +1,10 @@
+.login-google{
+    border: solid 1px red;
+    color: white;
+    background-color: Blue;
+    padding: 3px 10px;
+    width: 100px;
+    &:hover{
+        cursor: pointer;
+    }
+}

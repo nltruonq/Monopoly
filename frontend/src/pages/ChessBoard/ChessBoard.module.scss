@@ -1,14 +1,40 @@
- .chess-board{
+.wrapper{
+    display: flex;
+    height: 100vh;
+    position: relative;
+}
+.user-zone{
+    position: absolute;
+    top:80%;
+    left: 80%;
+}
+.user-zone-2{
+    position: absolute;
+    top:0;
+    left: 0;
+}
+.user-zone-3{
+    position: absolute;
+    top:0;
+    left: 80%;
+}
+.user-zone-4{
+    position: absolute;
+    top:80%;
+    left: 0;
+}
+
+.chess-board{
     display: flex;
     flex-direction: column;
-    width: 1024px;
+    width: 1300px;
     margin: 0;
     justify-content: center;
     align-items: center;
  }
 
   .content{
-    transform: translate(20%,10%) rotate(-30deg) skew(25deg);
+    transform: translate(20%,0%) rotate(-30deg) skew(25deg);
 
     &::before{
         content: '';

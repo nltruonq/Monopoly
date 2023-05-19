@@ -1,11 +1,36 @@
 import styles from "./ChessBoard.module.scss";
 import classNames from "classnames/bind";
+import UserZone from "./UserZone/UserZone";
+import bgImage from "../../../src/assets/images/bg_in_game.jpg"
 
 const cx = classNames.bind(styles);
 
 function ChessBoard() {
   return (
     <>
+    <div className={cx("wrapper")} 
+
+        style={{
+            backgroundImage: 'linear-gradient(0deg, #95656c, #bf985c)',
+        }}
+    >
+
+      {/* Current user */}
+      <div className={cx("user-zone")}>
+            <UserZone></UserZone>
+      </div>
+
+      {/* Other users */}
+      <div className={cx("user-zone-2")}>
+            <UserZone></UserZone>
+      </div>
+      <div className={cx("user-zone-3")}>
+            <UserZone></UserZone>
+      </div>
+      <div className={cx("user-zone-4")}>
+            <UserZone></UserZone>
+      </div>
+
       <div className={cx("chess-board")}>
         <div className={cx("content")}>
           {/* 2 góc và 7 hình vuông */}
@@ -54,6 +79,8 @@ function ChessBoard() {
           </div>
         </div>
       </div>
+    </div>
+
     </>
   );
 }
