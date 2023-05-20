@@ -1,0 +1,40 @@
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.banner {
+    margin-left: auto;
+    cursor: pointer;
+    &:hover {
+        opacity: 0.8;
+    }
+    img {
+        width: 300px;
+        aspect-ratio: 3 / 1;
+        object-fit: cover;
+        object-position: center;
+    }
+}
+
+.event {
+    cursor: pointer;
+    width: 300px;
+    margin-left: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    padding: 4px 12px;
+    border-radius: 8px;
+    background-color: #00000032;
+    span {
+        color: #ccc;
+        font-size: 20px;
+    }
+
+    &:hover {
+        opacity: 0.8;
+    }
+}

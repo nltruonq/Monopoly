@@ -1,0 +1,18 @@
+.wrapper {
+    margin-top: 20px;
+}
+
+.invite {
+    display: flex;
+    width: 300px;
+    overflow: hidden;
+    align-items: center;
+    background-color: #00000032;
+    padding: 6px 12px;
+    gap: 10px;
+    .chat {
+        span {
+            color: #ccc;
+        }
+    }
+}

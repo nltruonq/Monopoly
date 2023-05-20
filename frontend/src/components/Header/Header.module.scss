@@ -1,67 +1,43 @@
-.header {
-    position: relative;
+.wrapper {
     display: flex;
-    height: 56px;
-    padding: 0 20px;
     justify-content: space-between;
-    align-items: center;
+}
 
-    &::after {
-        height: 4px;
-        position: absolute;
-        top: 100%;
-        right: 0px;
-        left: 0px;
-        background: linear-gradient(rgba(9, 30, 66, 0.13) 0px, rgba(9, 30, 66, 0.13) 1px, rgba(9, 30, 66, 0.08) 1px, rgba(9, 30, 66, 0) 4px);
-        content: "";
+.avatar {
+    cursor: pointer;
+    &:hover {
+        opacity: 0.8;
     }
-
-    .header-left {
-        display: flex;
-        align-items: center;
-        gap: 30px;
-
-        .logo {
-            color: #344563;
-            font-size: 20px;
-            font-weight: 700;
-        }
-
-        .btn {
-            color: #344563;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: 500;
-            padding: 4px 10px;
-            border-radius: 4px;
-
-            &:hover {
-                background-color: #DEEBFFE6;
-            }
-
-            .active {
-                color: #0052CC;
-
-            }
-        }
+    img {
+        width: 80px;
+        height: 80px;
+        border-radius: 8px;
     }
+}
 
-    .header-right {
+.right {
+    display: flex;
+    margin-bottom: auto;
+    gap: 40px;
+    .resources {
         display: flex;
-        align-items: center;
-        gap: 30px;
-
-        .profile {
+        padding: 4px 12px;
+        border-radius: 8px;
+        background-color: #00000032;
+        gap: 40px;
+        .group {
             display: flex;
             align-items: center;
-            gap: 10px;
-            cursor: pointer;
-            padding: 4px 10px;
-            border-radius: 4px;
+            gap: 8px;
 
-            &:hover {
-                background-color: #DEEBFFE6;
+            span {
+                color: #ccc;
+                font-size: 20px;
             }
         }
+    }
+
+    .others {
+
     }
 }
