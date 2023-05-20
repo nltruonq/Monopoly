@@ -7,7 +7,7 @@ const publicRoutes = [
     { path: "/login", component: Login },
     { path: "/register", component: Register },
     { path: "/", component: Home },
-    { path:"/game", component: ChessBoard}
+    { path: "/game", component: ChessBoard }
 ];
 
 const privateRoutes = [];

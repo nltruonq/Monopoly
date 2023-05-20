@@ -11,22 +11,22 @@ function ChessBoard() {
 
 
   // giá trị xúc xắc (sau này sẽ lấy từ server) 
-  const [diceOne,setDiceOne]=useState(0)
-  const [diceTwo,setDiceTwo]=useState(0)
-  
+  const [diceOne, setDiceOne] = useState(0)
+  const [diceTwo, setDiceTwo] = useState(0)
+
   //handle roll
-  const [roll,setRoll]=useState(false)
-  const changeRoll=(a)=>{
+  const [roll, setRoll] = useState(false)
+  const changeRoll = (a) => {
     setRoll(a)
   }
 
   // vị trí nhân vật
-  const [possition,setPos]=useState(0)
-  
+  const [possition, setPos] = useState(0)
+
   // số bước di chuyển
-  const [userSteps,setSteps]=useState(0)
-  
-  
+  const [userSteps, setSteps] = useState(0)
+
+
   const cellRefs = useRef([]);
 
   // thẻ div chứa nhân vật
@@ -37,46 +37,46 @@ function ChessBoard() {
     .fill()
     .map((_, i) => cellRefs.current[i] ?? createRef());
 
-  const moveBySteps=(step)=>{
+  const moveBySteps = (step) => {
     setRoll(true)
     setSteps(step)
   }
 
-  const moveOneStep=()=>{
+  const moveOneStep = () => {
     userRef.current.classList.add(cx("move"))
-    if(possition>31){
+    if (possition > 31) {
       setPos(0)
       // handle Start 
 
     }
     else {
-      setPos(possition+1)
+      setPos(possition + 1)
     }
-    userRef.current.style.transform="translate(20%,-20%) rotate(45deg)"
-    possition!=0 && cellRefs.current[possition-1].current.classList.add(cx("down"))
+    userRef.current.style.transform = "translate(20%,-20%) rotate(45deg)"
+    possition != 0 && cellRefs.current[possition - 1].current.classList.add(cx("down"))
     cellRefs.current[possition].current.appendChild(userRef.current);
     cellRefs.current[possition].current.classList.remove(cx("down"))
-    
+
   }
 
 
   // roll dice
-  useEffect(()=>{
+  useEffect(() => {
     // giá trị xúc xắc (sau này sẽ lấy từ server)
-    if(!roll) {
+    if (!roll) {
       setDiceOne(Math.floor(Math.random() * 6 + 1));
       setDiceTwo(Math.floor(Math.random() * 6 + 1));
-      console.log(diceOne,diceTwo)
-    } 
+      console.log(diceOne, diceTwo)
+    }
 
-  },[roll])
+  }, [roll])
 
   // di chuyển 
   useEffect(() => {
     const interval = setInterval(() => {
-      if (userSteps >0) {
+      if (userSteps > 0) {
         moveOneStep()
-        setSteps(userSteps-1);
+        setSteps(userSteps - 1);
       } else {
         clearInterval(interval);
       }
@@ -86,7 +86,7 @@ function ChessBoard() {
       clearInterval(interval);
     }
 
-  }, [possition,userSteps]);
+  }, [possition, userSteps]);
 
   return (
     <>
@@ -155,17 +155,17 @@ function ChessBoard() {
                 </div>
               </div>
               <div className={cx("center")}>
-                  <button onClick={()=>moveBySteps(diceOne+diceTwo)}>
-                    MOVE
-                  </button>
-                  <Dice 
-                    diceOne={diceOne} 
-                    diceTwo={diceTwo} 
-                    roll={roll}
-                    changeRoll={changeRoll}
-                  >
+                <button onClick={() => moveBySteps(diceOne + diceTwo)}>
+                  MOVE
+                </button>
+                <Dice
+                  diceOne={diceOne}
+                  diceTwo={diceTwo}
+                  roll={roll}
+                  changeRoll={changeRoll}
+                >
 
-                  </Dice>
+                </Dice>
 
               </div>
               {/* thẻ đánh dấu từ 17 tới 23 */}
