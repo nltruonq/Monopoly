@@ -1,8 +1,8 @@
-import ActionUser from "../../components/ActionUser/ActionUser";
-import Event from "../../components/Event/Event";
-import Friend from "../../components/Friend/Friend";
-import Header from "../../components/Header/Header";
-import InviteWorld from "../../components/InviteWorld/InviteWorld";
+import ActionUser from "./ActionUser/ActionUser";
+import Event from "./Event/Event";
+import Friend from "./Friend/Friend";
+import Header from "./Header/Header";
+import InviteWorld from "./InviteWorld/InviteWorld";
 import styles from "./Home.module.scss";
 import classNames from "classnames/bind";
 import { SocketContext } from "../../SocketService";
