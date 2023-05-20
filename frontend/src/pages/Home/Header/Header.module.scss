@@ -1,0 +1,43 @@
+.wrapper {
+    display: flex;
+    justify-content: space-between;
+}
+
+.avatar {
+    cursor: pointer;
+    &:hover {
+        opacity: 0.8;
+    }
+    img {
+        width: 80px;
+        height: 80px;
+        border-radius: 8px;
+    }
+}
+
+.right {
+    display: flex;
+    margin-bottom: auto;
+    gap: 40px;
+    .resources {
+        display: flex;
+        padding: 4px 12px;
+        border-radius: 8px;
+        background-color: #00000032;
+        gap: 40px;
+        .group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+
+            span {
+                color: #ccc;
+                font-size: 20px;
+            }
+        }
+    }
+
+    .others {
+
+    }
+}

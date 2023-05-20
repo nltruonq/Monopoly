@@ -1,10 +1,10 @@
-import styles from "./Header.module.scss";
 import classNames from "classnames/bind";
+import styles from "./Event.module.scss";
 
 const cx = classNames.bind(styles);
 
-function Header() {
+function Event() {
     return <></>;
 }
 
-export default Header;
+export default Event;

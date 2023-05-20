@@ -2,30 +2,31 @@ import styles from "./ChessBoard.module.scss";
 import classNames from "classnames/bind";
 import UserZone from "./UserZone/UserZone";
 import char from "../../assets/images/char.png";
-import { useEffect, useRef, createRef, useState } from "react";
+import { useEffect, useRef, createRef, useState, useContext } from "react";
 import Dice from "./Dice/Dice";
+import { SocketContext } from "../../SocketService";
 
 const cx = classNames.bind(styles);
 
 function ChessBoard() {
-
+  const socket = useContext(SocketContext);
 
   // giá trị xúc xắc (sau này sẽ lấy từ server) 
   const [diceOne, setDiceOne] = useState(0)
   const [diceTwo, setDiceTwo] = useState(0)
 
+
   //handle roll
-  const [roll, setRoll] = useState(false)
+  const [roll, setRoll] = useState(false);
   const changeRoll = (a) => {
-    setRoll(a)
-  }
+    setRoll(a);
+  };
 
   // vị trí nhân vật
-  const [possition, setPos] = useState(0)
+  const [possition, setPos] = useState(0);
 
   // số bước di chuyển
-  const [userSteps, setSteps] = useState(0)
-
+  const [userSteps, setSteps] = useState(0);
 
   const cellRefs = useRef([]);
 
@@ -55,10 +56,13 @@ function ChessBoard() {
     userRef.current.style.transform = "translate(20%,-20%) rotate(45deg)"
     possition != 0 && cellRefs.current[possition - 1].current.classList.add(cx("down"))
     cellRefs.current[possition].current.appendChild(userRef.current);
-    cellRefs.current[possition].current.classList.remove(cx("down"))
 
-  }
 
+    cellRefs.current[possition].current.classList.remove(cx("down-right"));
+    cellRefs.current[possition].current.classList.remove(cx("down-top"));
+    cellRefs.current[possition].current.classList.remove(cx("down-left"));
+    cellRefs.current[possition].current.classList.remove(cx("down-bottom"));
+  };
 
   // roll dice
   useEffect(() => {
@@ -84,9 +88,9 @@ function ChessBoard() {
 
     return () => {
       clearInterval(interval);
-    }
-
+    };
   }, [possition, userSteps]);
+
 
   return (
     <>
@@ -102,7 +106,7 @@ function ChessBoard() {
         {/* Other users */}
         {[...Array(3)].map((_, index) => {
           return (
-            <div className={cx(`user-zone-${2 + index}`)}>
+            <div key={index} className={cx(`user-zone-${2 + index}`)}>
               <UserZone></UserZone>
             </div>
           );
@@ -166,6 +170,7 @@ function ChessBoard() {
                 >
 
                 </Dice>
+
 
               </div>
               {/* thẻ đánh dấu từ 17 tới 23 */}

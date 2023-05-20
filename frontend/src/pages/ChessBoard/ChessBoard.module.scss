@@ -69,18 +69,60 @@
   animation: jump 0.5s ease-in-out;
 }
 
-.down{
-  animation: downn 0.5s linear;
+.down-right{
+  animation: downRight 0.5s linear;
 }
-@keyframes downn{
+.down-left{
+  animation: downLeft 0.5s linear;
+}
+.down-top{
+  animation: downTop 0.5s linear;
+}
+.down-bottom{
+  animation: downBottom 0.5s linear;
+}
+@keyframes downRight{
   0%{
-    transform: translate(-20%,-0%) ;
+    transform: translate(0,-0%) ;
   }
   99%{
-    transform: translate(-20%,-1%) ;
+    transform: translate(-10px,0) ;
   }
   100%{
-    transform: translate(-20%,-0%) ;
+    transform: translate(0,-0%) ;
+  }
+}
+@keyframes downLeft{
+  0%{
+    transform: translate(0,-0%) ;
+  }
+  99%{
+    transform: translate(10px,0) ;
+  }
+  100%{
+    transform: translate(0,-0%) ;
+  }
+}
+@keyframes downTop{
+  0%{
+    transform: translate(0,-0%) ;
+  }
+  99%{
+    transform: translate(0px,-10px) ;
+  }
+  100%{
+    transform: translate(0,-0%) ;
+  }
+}
+@keyframes downBottom{
+  0%{
+    transform: translate(0,-0%) ;
+  }
+  99%{
+    transform: translate(0px,10px) ;
+  }
+  100%{
+    transform: translate(0,-0%) ;
   }
 }
 
