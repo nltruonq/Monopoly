@@ -31,6 +31,7 @@
     margin: 0;
     justify-content: center;
     align-items: center;
+
  }
 
   .content{
@@ -60,6 +61,7 @@
 }
 
 .char{
+  z-index: 11;
   transform: translate(20%,20%) rotate(45deg);
 }
 
@@ -144,5 +146,23 @@
         height: calc(var(--width-cell)*7 + 1*2*7px);
         width: calc(var(--width-cell)*7 + 1*2*7px);
         background-color: aqua;
+        button {
+          padding: 15px 50px;
+          color: #fff;
+          background-color: #f4d35e;
+          border: none;
+          font-size: 20px;
+          border-radius: 20px; 
+          box-shadow: 1px 3px #50514F;
+          outline: none;
+          transition: .3s; 
+        }
+        
+        button:hover, button:active {
+          outline: none;
+          background: #50514F;
+          cursor: pointer;
+          transform: translateY(15px); 
+        }
     }
   }

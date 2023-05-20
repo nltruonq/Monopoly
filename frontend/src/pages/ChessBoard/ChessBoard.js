@@ -3,21 +3,46 @@ import classNames from "classnames/bind";
 import UserZone from "./UserZone/UserZone";
 import char from "../../assets/images/char.png";
 import { useEffect, useRef, createRef, useState } from "react";
+import Dice from "./Dice/Dice";
 
 const cx = classNames.bind(styles);
 
 function ChessBoard() {
+
+
+  // giá trị xúc xắc (sau này sẽ lấy từ server) 
+  const [diceOne,setDiceOne]=useState(0)
+  const [diceTwo,setDiceTwo]=useState(0)
+  
+  //handle roll
+  const [roll,setRoll]=useState(false)
+  const changeRoll=(a)=>{
+    setRoll(a)
+  }
+
+  // vị trí nhân vật
   const [possition,setPos]=useState(0)
+  
+  // số bước di chuyển
+  const [userSteps,setSteps]=useState(0)
+  
   
   const cellRefs = useRef([]);
 
+  // thẻ div chứa nhân vật
   const userRef = useRef();
 
+  // quản lý các ô trên bàn cờ từ 0->31
   cellRefs.current = Array(32)
     .fill()
     .map((_, i) => cellRefs.current[i] ?? createRef());
 
-  const move=()=>{
+  const moveBySteps=(step)=>{
+    setRoll(true)
+    setSteps(step)
+  }
+
+  const moveOneStep=()=>{
     userRef.current.classList.add(cx("move"))
     if(possition>31){
       setPos(0)
@@ -33,9 +58,35 @@ function ChessBoard() {
     cellRefs.current[possition].current.classList.remove(cx("down"))
     
   }
-  useEffect(() => {
 
-  }, [possition]);
+
+  // roll dice
+  useEffect(()=>{
+    // giá trị xúc xắc (sau này sẽ lấy từ server)
+    if(!roll) {
+      setDiceOne(Math.floor(Math.random() * 6 + 1));
+      setDiceTwo(Math.floor(Math.random() * 6 + 1));
+      console.log(diceOne,diceTwo)
+    } 
+
+  },[roll])
+
+  // di chuyển 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (userSteps >0) {
+        moveOneStep()
+        setSteps(userSteps-1);
+      } else {
+        clearInterval(interval);
+      }
+    }, 500);
+
+    return () => {
+      clearInterval(interval);
+    }
+
+  }, [possition,userSteps]);
 
   return (
     <>
@@ -104,9 +155,17 @@ function ChessBoard() {
                 </div>
               </div>
               <div className={cx("center")}>
-                  <button onClick={move}>
+                  <button onClick={()=>moveBySteps(diceOne+diceTwo)}>
                     MOVE
                   </button>
+                  <Dice 
+                    diceOne={diceOne} 
+                    diceTwo={diceTwo} 
+                    roll={roll}
+                    changeRoll={changeRoll}
+                  >
+
+                  </Dice>
 
               </div>
               {/* thẻ đánh dấu từ 17 tới 23 */}
