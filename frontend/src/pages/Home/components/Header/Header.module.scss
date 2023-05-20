@@ -9,8 +9,8 @@
         opacity: 0.8;
     }
     img {
-        width: 80px;
-        height: 80px;
+        width: var(--size-avt);
+        height: var(--size-avt);
         border-radius: 8px;
     }
 }
