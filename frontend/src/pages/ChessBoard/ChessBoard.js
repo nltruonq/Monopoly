@@ -61,7 +61,6 @@ function ChessBoard() {
 
   };
 
-  //di chuyển 1 bước
   const moveOneStep = () => {
     userRef.current[turnOfUser].current.classList.add(cx("move"));
     if (0 < possition[turnOfUser] && possition[turnOfUser] <= 8) {
@@ -135,6 +134,7 @@ function ChessBoard() {
     // listen event other click btn roll
     socket.on("roll-result",(data)=>{
       if(socket.id!==data.socket){
+        console.log(data)
         setTurnUser(turnOfUser)
         setRoll(true)
         setDiceOne(data.diceOne);

@@ -1,11 +1,11 @@
 import Dice from "../Dice/Dice";
 
 function Board(props){
-    const {cx,roll,diceOne,diceTwo,cellRefs,changeRoll,moveBySteps,socket}=props
+    const {cx,roll,diceOne,diceTwo,cellRefs,changeRoll,moveBySteps}=props
 
     return (
         <>
-                <div className={cx("chess-board")}>
+          <div className={cx("chess-board")}>
           <div className={cx("content")}>
             {/* 2 góc và 7 hình vuông */}
             <div className={cx("row-board")}>
