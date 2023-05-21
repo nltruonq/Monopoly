@@ -3,8 +3,9 @@ import classNames from "classnames/bind";
 import UserZone from "./UserZone/UserZone";
 import char from "../../assets/images/char.png";
 import { useEffect, useRef, createRef, useState, useContext } from "react";
-import Dice from "./Dice/Dice";
+
 import { SocketContext } from "../../SocketService";
+import Board from "./Board/Board";
 
 const cx = classNames.bind(styles);
 
@@ -13,12 +14,12 @@ function ChessBoard() {
 
   // số user trong phòng
   const [numberUser,setNumberUser]=useState(0)
-  
+   
   // lượt chơi
   const [turnOfUser,setTurnUser]=useState(0)
   const [yourTurn,setYourTurn] = useState(0)
 
-  // giá trị xúc xắc (sau này sẽ lấy từ server)
+  // giá trị xúc xắc sẽ được gửi tới tất cả các socket trong room
   const [diceOne, setDiceOne] = useState(0);
   const [diceTwo, setDiceTwo] = useState(0);
 
@@ -28,8 +29,8 @@ function ChessBoard() {
     setRoll(a);
   };
 
-  // vị trí nhân vật
-  const [possition, setPos] = useState([0,0,0,0]);
+  // vị trí cac nhân vật
+  const [possition, setPos] = useState([-1,-1,-1,-1]);
 
   // số bước di chuyển
   const [userSteps, setSteps] = useState(0);
@@ -60,6 +61,7 @@ function ChessBoard() {
 
   };
 
+  //di chuyển 1 bước
   const moveOneStep = () => {
     userRef.current[turnOfUser].current.classList.add(cx("move"));
     if (0 < possition[turnOfUser] && possition[turnOfUser] <= 8) {
@@ -159,6 +161,8 @@ function ChessBoard() {
         {[...Array(numberUser)].map((_, index) => {
           return (
             <div key={index} className={cx(`user-zone-${index}`)}>
+
+                {/* nhân vật */}
                 <div className={cx(`char`)} ref={userRef.current[index]}>
                   <img src={char} width="50px" />
                 </div>
@@ -169,109 +173,17 @@ function ChessBoard() {
           );
         })}
 
-        <div className={cx("chess-board")}>
-          <div className={cx("content")}>
-            {/* 2 góc và 7 hình vuông */}
-            <div className={cx("row-board")}>
-              <div
-                className={cx("corner", "square")}
-                ref={cellRefs.current[8]}
-              ></div>
-              {/* thẻ đánh dấu từ 9 tới 15 */}
-              <div className={cx("row")}>
-                {[...Array(7)].map((_, index) => {
-                  return (
-                    <div
-                      key={index}
-                      className={cx("rectangle")}
-                      ref={cellRefs.current[9 + index]}
-                    ></div>
-                  );
-                })}
-              </div>
-              <div
-                className={cx("corner", "square")}
-                ref={cellRefs.current[16]}
-              ></div>
-            </div>
+        <Board 
+          cx={cx} 
+          cellRefs={cellRefs}  
+          diceOne={diceOne}
+          diceTwo={diceTwo}
+          roll={roll}
+          socket={socket}
+          changeRoll={changeRoll}
+          moveBySteps={moveBySteps}
+        ></Board>
 
-            {/* 14 hình vuông: 7 hình bên trái và 7 hình bên phải */}
-            <div className={cx("center-board")}>
-              {/* thẻ đánh dấu từ 7->1 */}
-              <div className={cx("col")}>
-                <div className={cx("column")}>
-                  {[...Array(7)].map((_, index) => {
-                    return (
-                      <div
-                        key={index}
-                        className={cx("rectangle-column")}
-                        ref={cellRefs.current[7 - index]}
-                      ></div>
-                    );
-                  })}
-                </div>
-              </div>
-              <div className={cx("center")}>
-                {<button onClick={() => moveBySteps(diceOne + diceTwo)}>
-                  MOVE
-                </button>}
-                <Dice
-                  diceOne={diceOne}
-                  diceTwo={diceTwo}
-                  roll={roll}
-                  changeRoll={changeRoll}
-                >
-
-                </Dice>
-
-
-              </div>
-              {/* thẻ đánh dấu từ 17 tới 23 */}
-              <div className={cx("col")}>
-                <div className={cx("column")}>
-                  {[...Array(7)].map((_, index) => {
-                    return (
-                      <div
-                        key={index}
-                        className={cx("rectangle-column")}
-                        ref={cellRefs.current[17 + index]}
-                      ></div>
-                    );
-                  })}
-                </div>
-              </div>
-            </div>
-
-            {/* 2 góc dưới và 7 hình vuông */}
-
-            <div className={cx("row-board")}>
-              {/* Thẻ đánh dấu ô 0 */}
-              <div
-                className={cx("corner", "square")}
-                ref={cellRefs.current[0]}
-              ></div>
-
-              {/* Đánh dấu từ 31->25*/}
-              <div className={cx("row")}>
-                {[...Array(7)].map((_, index) => {
-                  return (
-                    <div
-                      key={index}
-                      className={cx("rectangle")}
-                      ref={cellRefs.current[31 - index]}
-                    ></div>
-                  );
-                })}
-              </div>
-
-              {/* thẻ đánh dấu ô 24 */}
-              <div
-                className={cx("corner", "square")}
-                ref={cellRefs.current[24]}
-              ></div>
-            </div>
-          </div>
-        </div>
       </div>
     </>
   );
