@@ -1,11 +1,13 @@
 import styles from "./ChessBoard.module.scss";
 import classNames from "classnames/bind";
 import UserZone from "./UserZone/UserZone";
-import char from "../../assets/images/char.png";
 import { useEffect, useRef, createRef, useState, useContext } from "react";
 
 import { SocketContext } from "../../SocketService";
 import Board from "./Board/Board";
+import house0_1 from "../../assets/images/house0-lv1.png"
+import char from "../../assets/images/char.png";
+
 
 const cx = classNames.bind(styles);
 
@@ -15,8 +17,10 @@ function ChessBoard() {
   // số user trong phòng
   const [numberUser,setNumberUser]=useState(0)
    
-  // lượt chơi
+  // lượt chơi (user đang chơi)
   const [turnOfUser,setTurnUser]=useState(0)
+  
+  // vị trí index trong room (số thứ tự)
   const [yourTurn,setYourTurn] = useState(0)
 
   // giá trị xúc xắc sẽ được gửi tới tất cả các socket trong room
@@ -40,10 +44,17 @@ function ChessBoard() {
   // thẻ div chứa nhân vật
   const userRef = useRef([]);
 
+  //thẻ chứa nhà
+  const houseRefs=useRef([])
+
   // quản lý các ô trên bàn cờ từ 0->31
   cellRefs.current = Array(32)
     .fill()
     .map((_, i) => cellRefs.current[i] ?? createRef());
+
+  houseRefs.current = Array(20)
+    .fill()
+    .map((_, i) => houseRefs.current[i] ?? createRef());
 
   // click btn roll
   const moveBySteps = (step) => {
@@ -61,7 +72,9 @@ function ChessBoard() {
 
   };
 
-  const moveOneStep = () => {
+  const moveOneStep = (turnOfUser) => {
+    // possition[turnOfUser] lưu giữ vị trí thứ turnOfUser
+     
     userRef.current[turnOfUser].current.classList.add(cx("move"));
     if (0 < possition[turnOfUser] && possition[turnOfUser] <= 8) {
       cellRefs.current[possition[turnOfUser] - 1].current.classList.add(cx("down-right"));
@@ -100,17 +113,52 @@ function ChessBoard() {
   useEffect(() => {
     const interval = setInterval(() => {
       if (userSteps > 0) {
-        moveOneStep()
-        setSteps(userSteps - 1);
-      } else {
+        moveOneStep(turnOfUser)
+        userSteps===1 ? setSteps(userSteps - 2) :setSteps(userSteps-1);
+      } 
+      else if(userSteps===-1) {
+        // xử lý khi đi tới đích
+            console.log("aaaa")
+            // xây nhà
+            const houseNode=houseRefs.current[0].current
+            cellRefs.current[possition[turnOfUser]].current.appendChild(houseNode)
+
+            houseNode.style.display="block"
+            if (0 < possition[turnOfUser] && possition[turnOfUser] <= 8) {
+                houseNode.style.top="-20px"
+                houseNode.style.left="20px"
+            } 
+            else if (8 < possition[turnOfUser] && possition[turnOfUser] < 16) {
+                houseNode.style.top="-20px"
+                houseNode.style.left="-20px"
+            } 
+            else if (16 < possition[turnOfUser] && possition[turnOfUser] < 24) {
+              houseNode.style.top="-20px"
+              houseNode.style.left="40px"
+            } 
+            else if (24 < possition[turnOfUser] && possition[turnOfUser] < 32) {
+              houseNode.style.top="-40px"
+              houseNode.style.left="-20px"         }
+            // trả tiền?
+
+            // ...
+            
+            // finish
+
         clearInterval(interval);
       }
+      else {
+        clearInterval(interval);
+
+      }
+
     }, 500);
+
 
     return () => {
       clearInterval(interval);
     };
-  }, [possition, userSteps,roll]);
+  }, [userSteps,roll,turnOfUser]);
 
   //socket
   useEffect(() => {
@@ -120,7 +168,6 @@ function ChessBoard() {
 
     // 
     socket.on("room-size",(data)=>{
-      console.log(data,"aa")
       setNumberUser(data.size)
       if(data.socket===socket.id) {
         setYourTurn(data.index)
@@ -133,21 +180,23 @@ function ChessBoard() {
 
     // listen event other click btn roll
     socket.on("roll-result",(data)=>{
-      if(socket.id!==data.socket){
-        console.log(data)
-        setTurnUser(turnOfUser)
+      if(socket.id!==data.socket)
+      { 
+        setTurnUser(data.user) 
         setRoll(true)
         setDiceOne(data.diceOne);
         setDiceTwo(data.diceTwo);
         setTimeout(() => {
-        setSteps(data.diceOne+data.diceTwo);
+        setSteps(data.diceOne + data.diceTwo);
     }, 2000);   
       }
     })
+    
     return () => {
       socket.off("joinRoom", gameRoom);
     };
-  }, [socket,numberUser,yourTurn,userRef]);
+  }, [socket,numberUser,yourTurn,userRef,turnOfUser]);
+
 
   return (
     <>
@@ -155,7 +204,11 @@ function ChessBoard() {
         className={cx("wrapper")}
         style={{ backgroundImage: "linear-gradient(0deg, #95656c, #bf985c)" }}
       >
-
+        
+        {/* houses */}
+        <div className={cx("house")} ref={houseRefs.current[0]} style={{display:"none"}}>
+            <img src={house0_1} width="100px"/>
+        </div>
 
         {/*  users */}
         {[...Array(numberUser)].map((_, index) => {
@@ -163,15 +216,18 @@ function ChessBoard() {
             <div key={index} className={cx(`user-zone-${index}`)}>
 
                 {/* nhân vật */}
-                <div className={cx(`char`)} ref={userRef.current[index]}>
+                <div className={cx(`char`)} ref={userRef.current[index]} >
                   <img src={char} width="50px" />
                 </div>
+
               <UserZone>
 
               </UserZone>
             </div>
           );
         })}
+
+        
 
         <Board 
           cx={cx} 
@@ -182,6 +238,7 @@ function ChessBoard() {
           socket={socket}
           changeRoll={changeRoll}
           moveBySteps={moveBySteps}
+          yourTurn={yourTurn===turnOfUser}
         ></Board>
 
       </div>

@@ -34,6 +34,9 @@
 
  }
 
+
+
+
   .content{
     transform: translate(20%,0%) rotate(-30deg) skew(25deg);
 
@@ -60,10 +63,7 @@
     }
 }
 
-.char{
-  z-index: 11;
-  transform: translate(20%,20%) rotate(45deg);
-}
+
 
 
 .move{
@@ -152,17 +152,31 @@
   }
   
   .rectangle {
+    position: relative;
     width: var(--width-cell);
     height: var(--length-cell);
     background-color: gray;
     margin: 1px;
+    // z-index: 10;
   }
-
+  .house{
+    position: absolute;
+    top:0px;
+    left: 20px;
+    z-index: 12;
+    transform: rotate(45deg);
+  }
+  .char{
+    position: absolute;
+    z-index: 13;
+    transform: translate(20%,20%) rotate(45deg);
+  }
   .square{
     width: var(--length-cell);
     height: var(--length-cell);
     background-color: green;
     margin: 1px;
+    // z-index: 10;
   }
   .row-board{
     display: flex;
@@ -178,10 +192,12 @@
           display: flex;
           flex-direction: column;
           .rectangle-column{
+            position: relative;
             width: var(--length-cell);
             height: var(--width-cell);
             background-color: gray;
             margin: 1px;
+            // z-index: 10;
           }   
         }
     }
@@ -209,3 +225,4 @@
         }
     }
   }
+

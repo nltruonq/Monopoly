@@ -18,6 +18,6 @@ const roomEvent = (socket,io) => {
       console.log(socket.id," leave room")
       socket.leave("123")
     })
-  };
+};
   
 module.exports = roomEvent;

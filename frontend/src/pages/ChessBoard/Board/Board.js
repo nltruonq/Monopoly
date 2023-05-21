@@ -1,7 +1,12 @@
 import Dice from "../Dice/Dice";
+import home0_1 from "../../../assets/images/house0-lv1.png"
+import styles from "./Board.module.scss"
+import classNames from "classnames/bind";
+
+const cxb = classNames.bind(styles)
 
 function Board(props){
-    const {cx,roll,diceOne,diceTwo,cellRefs,changeRoll,moveBySteps}=props
+    const {yourTurn,cx,roll,diceOne,diceTwo,cellRefs,changeRoll,moveBySteps}=props
 
     return (
         <>
@@ -48,7 +53,7 @@ function Board(props){
                 </div>
               </div>
               <div className={cx("center")}>
-                {<button onClick={() => moveBySteps(diceOne + diceTwo)}>
+                {yourTurn&&<button onClick={() => moveBySteps(diceOne + diceTwo)}>
                   MOVE
                 </button>}
                 <Dice

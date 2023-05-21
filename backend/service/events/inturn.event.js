@@ -1,7 +1,7 @@
 const turnEvent = (socket,io) => {
     socket.on("roll",(data)=>{
         const room = io.sockets.adapter.rooms.get(data.gameRoom);
-        const roomArr=Array.from(room)
+        const roomArr=Array?.from(room)
         const user= roomArr.indexOf(socket.id)
 
         diceOne=Math.floor(Math.random() * 6 + 1)

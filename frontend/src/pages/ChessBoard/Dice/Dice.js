@@ -28,7 +28,6 @@ function Dice(props) {
   }
 
   useEffect(()=>{
-    console.log(props.roll)
     const interval = setInterval(()=>{
         if(props.roll){
             rollDice()
