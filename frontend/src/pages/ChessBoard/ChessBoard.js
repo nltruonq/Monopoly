@@ -5,8 +5,13 @@ import { useEffect, useRef, createRef, useState, useContext } from "react";
 
 import { SocketContext } from "../../SocketService";
 import Board from "./Board/Board";
+
 import house0_1 from "../../assets/images/house0-lv1.png"
+import house0_2 from "../../assets/images/house0-lv2.png"
+import house0_3 from "../../assets/images/house0-lv3.png"
+
 import char from "../../assets/images/char.png";
+import BuySelection from "./BuySelection/BuySelection";
 
 
 const cx = classNames.bind(styles);
@@ -32,6 +37,8 @@ function ChessBoard() {
   const changeRoll = (a) => {
     setRoll(a);
   };
+
+  const [show,setShow]=useState(false)
 
   // vị trí cac nhân vật
   const [possition, setPos] = useState([-1,-1,-1,-1]);
@@ -61,7 +68,7 @@ function ChessBoard() {
     socket.emit("roll",{socket:socket.id,gameRoom:"123"})
     socket.on("roll-result",(data)=>{
       setTurnUser(data.user)
-      console.log(data)
+      // console.log(data)
       setRoll(true);
       setDiceOne(data.diceOne);
       setDiceTwo(data.diceTwo);
@@ -114,16 +121,19 @@ function ChessBoard() {
     const interval = setInterval(() => {
       if (userSteps > 0) {
         moveOneStep(turnOfUser)
-        userSteps===1 ? setSteps(userSteps - 2) :setSteps(userSteps-1);
+        userSteps===1 ? setSteps(userSteps - 3) :setSteps(userSteps-1);
       } 
-      else if(userSteps===-1) {
+      else if(userSteps===-2) {
         // xử lý khi đi tới đích
-            console.log("aaaa")
+            // console.log("buying")
             // xây nhà
-            const houseNode=houseRefs.current[0].current
-            cellRefs.current[possition[turnOfUser]].current.appendChild(houseNode)
 
-            houseNode.style.display="block"
+            setShow(true)
+
+            const houseNode=houseRefs.current[0].current
+            // cellRefs.current[possition[turnOfUser]].current.appendChild(houseNode)
+
+            // houseNode.style.display="block"
             if (0 < possition[turnOfUser] && possition[turnOfUser] <= 8) {
                 houseNode.style.top="-20px"
                 houseNode.style.left="20px"
@@ -138,13 +148,16 @@ function ChessBoard() {
             } 
             else if (24 < possition[turnOfUser] && possition[turnOfUser] < 32) {
               houseNode.style.top="-40px"
-              houseNode.style.left="-20px"         }
+              houseNode.style.left="-20px"}
             // trả tiền?
 
             // ...
             
             // finish
-
+              setSteps(-1)
+              // >0 : di chuyển
+              // -2 : dừng lại để xử lý nhà
+              // -1 : đặt lại -> không di chuyển + xử lý nhà
         clearInterval(interval);
       }
       else {
@@ -162,7 +175,6 @@ function ChessBoard() {
 
   //socket
   useEffect(() => {
-    console.log(turnOfUser,yourTurn)
     const gameRoom = "123";
     socket.emit("joinRoom", gameRoom);
 
@@ -239,8 +251,19 @@ function ChessBoard() {
           changeRoll={changeRoll}
           moveBySteps={moveBySteps}
           yourTurn={yourTurn===turnOfUser}
+
         ></Board>
 
+        <BuySelection
+          title={"Hong Kong"}
+          setShow={setShow}
+          show={show}
+          images={[house0_1,house0_2,house0_3]}
+          turnOfUser={turnOfUser}
+        >
+
+        </BuySelection>
+        
       </div>
     </>
   );
