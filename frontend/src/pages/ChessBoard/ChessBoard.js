@@ -93,11 +93,13 @@ function ChessBoard() {
   };
 
 
-  // di chuyển
+
+
+  // di chuyển 
   useEffect(() => {
     const interval = setInterval(() => {
       if (userSteps > 0) {
-        moveOneStep();
+        moveOneStep()
         setSteps(userSteps - 1);
       } else {
         clearInterval(interval);
@@ -218,7 +220,11 @@ function ChessBoard() {
                   diceTwo={diceTwo}
                   roll={roll}
                   changeRoll={changeRoll}
-                ></Dice>
+                >
+
+                </Dice>
+
+
               </div>
               {/* thẻ đánh dấu từ 17 tới 23 */}
               <div className={cx("col")}>
