@@ -1,5 +1,7 @@
 const socketIO = require("socket.io");
 const contants = require("../constant/constant");
+const handleEvent = require(".");
+
 
 module.exports = (server) => {
   const io = socketIO(server,{
@@ -15,15 +17,8 @@ module.exports = (server) => {
     
     console.log('A client connected with id ',socket.id);
 
-    socket.on('joinRoom',async(room)=>{
-        console.log(socket.id ," join room ",room)
-        socket.join(room)
-    })
-    socket.on('leaveRoom',async(key)=>{
-        console.log(socket.id," leave room ", key)
-        socket.leave(key)
-    })
-
+    handleEvent(socket,io)
+    
     socket.on('disconnect', () => {
         console.log(`A client with id ${socket.id} disconnected`);
     });

@@ -3,22 +3,22 @@
     height: 100vh;
     position: relative;
 }
-.user-zone{
+.user-zone-3{
     position: absolute;
     top:80%;
     left: 80%;
 }
-.user-zone-2{
+.user-zone-1{
     position: absolute;
     top:5%;
     left: 5%;
 }
-.user-zone-3{
+.user-zone-2{
     position: absolute;
     top:5%;
     left: 80%;
 }
-.user-zone-4{
+.user-zone-0{
     position: absolute;
     top:80%;
     left: 5%;
@@ -64,6 +64,7 @@
   z-index: 11;
   transform: translate(20%,20%) rotate(45deg);
 }
+
 
 .move{
   animation: jump 0.5s ease-in-out;
