@@ -12,6 +12,7 @@ import house0_3 from "../../assets/images/house0-lv3.png"
 
 import char from "../../assets/images/char.png";
 import BuySelection from "./BuySelection/BuySelection";
+import Buying from "./Buying/Buying";
 
 
 const cx = classNames.bind(styles);
@@ -39,6 +40,9 @@ function ChessBoard() {
   };
 
   const [show,setShow]=useState(false)
+  const changeShow=(a)=>{
+    setShow(a)
+  }
 
   // vị trí cac nhân vật
   const [possition, setPos] = useState([-1,-1,-1,-1]);
@@ -66,17 +70,6 @@ function ChessBoard() {
   // click btn roll
   const moveBySteps = (step) => {
     socket.emit("roll",{socket:socket.id,gameRoom:"123"})
-    socket.on("roll-result",(data)=>{
-      setTurnUser(data.user)
-      // console.log(data)
-      setRoll(true);
-      setDiceOne(data.diceOne);
-      setDiceTwo(data.diceTwo);
-      setTimeout(() => {
-        setSteps(data.diceOne+data.diceTwo);
-      }, 2000);
-    })
-
   };
 
   const moveOneStep = (turnOfUser) => {
@@ -125,33 +118,40 @@ function ChessBoard() {
       } 
       else if(userSteps===-2) {
         // xử lý khi đi tới đích
-            // console.log("buying")
-            // xây nhà
+          console.log(show)
+          setShow(true)
 
-            setShow(true)
+          if(turnOfUser === yourTurn) {
+              // xây nhà
 
-            const houseNode=houseRefs.current[0].current
-            // cellRefs.current[possition[turnOfUser]].current.appendChild(houseNode)
-
-            // houseNode.style.display="block"
-            if (0 < possition[turnOfUser] && possition[turnOfUser] <= 8) {
+              const houseNode=houseRefs.current[0].current
+              // cellRefs.current[possition[turnOfUser]].current.appendChild(houseNode)
+  
+              // houseNode.style.display="block"
+              if (0 < possition[turnOfUser] && possition[turnOfUser] <= 8) {
+                  houseNode.style.top="-20px"
+                  houseNode.style.left="20px"
+              } 
+              else if (8 < possition[turnOfUser] && possition[turnOfUser] < 16) {
+                  houseNode.style.top="-20px"
+                  houseNode.style.left="-20px"
+              } 
+              else if (16 < possition[turnOfUser] && possition[turnOfUser] < 24) {
                 houseNode.style.top="-20px"
-                houseNode.style.left="20px"
-            } 
-            else if (8 < possition[turnOfUser] && possition[turnOfUser] < 16) {
-                houseNode.style.top="-20px"
-                houseNode.style.left="-20px"
-            } 
-            else if (16 < possition[turnOfUser] && possition[turnOfUser] < 24) {
-              houseNode.style.top="-20px"
-              houseNode.style.left="40px"
-            } 
-            else if (24 < possition[turnOfUser] && possition[turnOfUser] < 32) {
-              houseNode.style.top="-40px"
-              houseNode.style.left="-20px"}
-            // trả tiền?
+                houseNode.style.left="40px"
+              } 
+              else if (24 < possition[turnOfUser] && possition[turnOfUser] < 32) {
+                houseNode.style.top="-40px"
+                houseNode.style.left="-20px"}
+              // trả tiền?
+  
+              // ...
+          }
+          else{
+              // người chơi khác
 
-            // ...
+          }
+
             
             // finish
               setSteps(-1)
@@ -171,7 +171,7 @@ function ChessBoard() {
     return () => {
       clearInterval(interval);
     };
-  }, [userSteps,roll,turnOfUser]);
+  }, [userSteps,roll,turnOfUser,show]);
 
   //socket
   useEffect(() => {
@@ -192,8 +192,6 @@ function ChessBoard() {
 
     // listen event other click btn roll
     socket.on("roll-result",(data)=>{
-      if(socket.id!==data.socket)
-      { 
         setTurnUser(data.user) 
         setRoll(true)
         setDiceOne(data.diceOne);
@@ -201,7 +199,6 @@ function ChessBoard() {
         setTimeout(() => {
         setSteps(data.diceOne + data.diceTwo);
     }, 2000);   
-      }
     })
     
     return () => {
@@ -230,6 +227,12 @@ function ChessBoard() {
                 {/* nhân vật */}
                 <div className={cx(`char`)} ref={userRef.current[index]} >
                   <img src={char} width="50px" />
+                  {
+                    show  // mua nhà 
+                    && turnOfUser!==yourTurn 
+                    &&index===turnOfUser
+                    && <Buying socket={socket} setShow={changeShow}></Buying>
+                  }
                 </div>
 
               <UserZone>
@@ -254,16 +257,17 @@ function ChessBoard() {
 
         ></Board>
 
-        <BuySelection
+        {turnOfUser===yourTurn&&<BuySelection
           title={"Hong Kong"}
-          setShow={setShow}
+          setShow={changeShow}
           show={show}
           images={[house0_1,house0_2,house0_3]}
           turnOfUser={turnOfUser}
+          socket={socket}
         >
 
         </BuySelection>
-        
+        }
       </div>
     </>
   );

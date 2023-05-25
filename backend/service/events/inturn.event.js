@@ -14,6 +14,15 @@ const turnEvent = (socket,io) => {
             diceTwo
         })
     })
+
+    // người chơi khác mua nhà xong
+    socket.on("bought",(data)=>{
+        //...
+        
+        socket.nsp.in(data.gameRoom).emit("bought-result"),{
+            socket:socket.id
+        }
+    })
   };
   
 module.exports = turnEvent;

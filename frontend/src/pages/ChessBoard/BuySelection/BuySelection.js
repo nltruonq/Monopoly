@@ -8,9 +8,11 @@ import { RiCoinFill } from "react-icons/ri";
 import { colors } from "../Color/color";
 const cx = classNames.bind(styles);
 
-function BuySelection({ show, setShow, title, images,turnOfUser }) {
+function BuySelection({ show, setShow, title, images,turnOfUser,socket }) {
   const handleClose = () => {
     setShow(false);
+    //gameRoom sau sẽ tạo sau
+    socket.emit("bought",{gameRoom:"123"})
   };
   const [select,setSelect]=useState()
 
@@ -19,7 +21,7 @@ function BuySelection({ show, setShow, title, images,turnOfUser }) {
 
   return (
     <Modal show={show}>
-      <Modal.Header closeButton style={{backgroundColor:colors[turnOfUser],color:"white"}}>
+      <Modal.Header closeButton onClick={handleClose} style={{backgroundColor:colors[turnOfUser],color:"white"}}>
         <Modal.Title>{title}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
