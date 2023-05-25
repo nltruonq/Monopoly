@@ -3,7 +3,7 @@ import { RiChat2Fill, RiChatCheckFill } from "react-icons/ri"
 
 function Buying({socket,setShow}){
     useEffect(()=>{
-        socket.on("bought-result",(data)=>{
+        socket.on("close-result",(data)=>{
             setShow(false)
         })
     },[socket])

@@ -6,7 +6,7 @@ const turnEvent = (socket,io) => {
 
         diceOne=Math.floor(Math.random() * 6 + 1)
         diceTwo=Math.floor(Math.random() * 6 + 1)
-
+        console.log(user,"aa")
         socket.nsp.in(data.gameRoom).emit("roll-result",{
             user,
             socket:socket.id,
@@ -15,14 +15,7 @@ const turnEvent = (socket,io) => {
         })
     })
 
-    // người chơi khác mua nhà xong
-    socket.on("bought",(data)=>{
-        //...
-        
-        socket.nsp.in(data.gameRoom).emit("bought-result"),{
-            socket:socket.id
-        }
-    })
+
   };
   
 module.exports = turnEvent;

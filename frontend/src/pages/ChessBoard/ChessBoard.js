@@ -6,13 +6,12 @@ import { useEffect, useRef, createRef, useState, useContext } from "react";
 import { SocketContext } from "../../SocketService";
 import Board from "./Board/Board";
 
-import house0_1 from "../../assets/images/house0-lv1.png"
-import house0_2 from "../../assets/images/house0-lv2.png"
-import house0_3 from "../../assets/images/house0-lv3.png"
+import houses from "./constants/houses";
 
 import char from "../../assets/images/char.png";
 import BuySelection from "./BuySelection/BuySelection";
 import Buying from "./Buying/Buying";
+import House from "./House/House";
 
 
 const cx = classNames.bind(styles);
@@ -124,25 +123,7 @@ function ChessBoard() {
           if(turnOfUser === yourTurn) {
               // xây nhà
 
-              const houseNode=houseRefs.current[0].current
-              // cellRefs.current[possition[turnOfUser]].current.appendChild(houseNode)
-  
-              // houseNode.style.display="block"
-              if (0 < possition[turnOfUser] && possition[turnOfUser] <= 8) {
-                  houseNode.style.top="-20px"
-                  houseNode.style.left="20px"
-              } 
-              else if (8 < possition[turnOfUser] && possition[turnOfUser] < 16) {
-                  houseNode.style.top="-20px"
-                  houseNode.style.left="-20px"
-              } 
-              else if (16 < possition[turnOfUser] && possition[turnOfUser] < 24) {
-                houseNode.style.top="-20px"
-                houseNode.style.left="40px"
-              } 
-              else if (24 < possition[turnOfUser] && possition[turnOfUser] < 32) {
-                houseNode.style.top="-40px"
-                houseNode.style.left="-20px"}
+
               // trả tiền?
   
               // ...
@@ -171,7 +152,7 @@ function ChessBoard() {
     return () => {
       clearInterval(interval);
     };
-  }, [userSteps,roll,turnOfUser,show]);
+  }, [userSteps,roll,turnOfUser,show,possition]);
 
   //socket
   useEffect(() => {
@@ -200,7 +181,10 @@ function ChessBoard() {
         setSteps(data.diceOne + data.diceTwo);
     }, 2000);   
     })
-    
+    socket.on("turn-result",(data)=>{
+      setTurnUser(data.user)
+    })
+
     return () => {
       socket.off("joinRoom", gameRoom);
     };
@@ -215,9 +199,17 @@ function ChessBoard() {
       >
         
         {/* houses */}
-        <div className={cx("house")} ref={houseRefs.current[0]} style={{display:"none"}}>
-            <img src={house0_1} width="100px"/>
-        </div>
+        <House 
+          houseRefs={houseRefs} 
+          houses={houses} 
+          cx={cx} 
+          socket={socket}
+          possition={possition}
+          turnOfUser={turnOfUser}
+          cellRefs={cellRefs}
+          >
+
+          </House>
 
         {/*  users */}
         {[...Array(numberUser)].map((_, index) => {
@@ -235,7 +227,7 @@ function ChessBoard() {
                   }
                 </div>
 
-              <UserZone>
+              <UserZone index={index}>
 
               </UserZone>
             </div>
@@ -261,7 +253,6 @@ function ChessBoard() {
           title={"Hong Kong"}
           setShow={changeShow}
           show={show}
-          images={[house0_1,house0_2,house0_3]}
           turnOfUser={turnOfUser}
           socket={socket}
         >

@@ -5,19 +5,27 @@ import Image from "react-bootstrap/Image";
 import classNames from "classnames/bind";
 import styles from "./BuySelection.module.scss";
 import { RiCoinFill } from "react-icons/ri";
-import { colors } from "../Color/color";
+import { colors } from "../constants/Color/color";
+import houses from "../constants/houses";
 const cx = classNames.bind(styles);
 
-function BuySelection({ show, setShow, title, images,turnOfUser,socket }) {
+function BuySelection({ show, setShow, title,turnOfUser,socket }) {
   const handleClose = () => {
     setShow(false);
-    //gameRoom sau sẽ tạo sau
-    socket.emit("bought",{gameRoom:"123"})
+    //gameRoom sẽ tạo sau
+    const gameRoom="123"
+    socket.emit("close",{gameRoom})
+    // {} sau này sẽ thế thành giá trị 2 xúc xắc để xét double
+    socket.emit("turn",{gameRoom})
   };
   const [select,setSelect]=useState()
 
   // sau này sẽ lấy từ server
   const priceDefault=200000
+
+  const buyHouse=()=>{
+      socket.emit("bought",{gameRoom:"123",select})
+  }
 
   return (
     <Modal show={show}>
@@ -29,7 +37,7 @@ function BuySelection({ show, setShow, title, images,turnOfUser,socket }) {
           {[...Array(3)].map((_,index)=>{
               return (
                 <div className={cx("house",select===index?"active":"")} key={index} onMouseMove={()=>{setSelect(index)}}>
-                  <Image src={images[index]} style={{ width: "150px" }} />
+                  <Image src={houses[`house${turnOfUser}_${index+1}`]} style={{ width: "150px" }} />
                 </div>
               )
           })}
@@ -39,7 +47,7 @@ function BuySelection({ show, setShow, title, images,turnOfUser,socket }) {
       <Modal.Footer>
         <Button 
           onClick={()=>{
-            
+            buyHouse()
             handleClose()
           }} 
           variant="secondary">
