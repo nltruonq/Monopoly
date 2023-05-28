@@ -1,5 +1,32 @@
-const roomEvent = (socket,io) => {
-    socket.on('joinRoom', (gameRoom) => {
+
+const roomEvent = (socket,io,queue) => {
+
+    // chờ ghép phòng
+    socket.on("waitting",()=>{
+      queue.enqueue(socket.id)
+      // queue.printQueue()
+      if(queue.length===4){
+        let gameRoom
+        for(let i=0;i<4;i++){
+            let socketId=queue.dequeue()
+            
+            // gameRoom lấy từ socketId của người chơi đầu tiên 
+            if (i===0) {
+              gameRoom=socketId
+            }
+            io.to(socketId).emit("waitting-result",{gameRoom})
+          }
+      }  
+    })
+
+    // xử lý khi hủy ghép phòng
+    //=> xóa node khỏi queue
+    socket.on("cancle",()=>{
+        queue.delete(socket.id)
+    })
+
+    // khi ghép phòng đã xong
+    socket.on('join-room', (gameRoom) => {
       console.log(socket.id," join room")
       socket.join(gameRoom)   
       const room = io.sockets.adapter.rooms.get(gameRoom);

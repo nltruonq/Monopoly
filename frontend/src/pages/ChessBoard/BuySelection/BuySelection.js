@@ -9,11 +9,9 @@ import { colors } from "../constants/Color/color";
 import houses from "../constants/houses";
 const cx = classNames.bind(styles);
 
-function BuySelection({ show, setShow, title,turnOfUser,socket }) {
+function BuySelection({ show, setShow, title,turnOfUser,socket,gameRoom }) {
   const handleClose = () => {
     setShow(false);
-    //gameRoom sẽ tạo sau
-    const gameRoom="123"
     socket.emit("close",{gameRoom})
     // {} sau này sẽ thế thành giá trị 2 xúc xắc để xét double
     socket.emit("turn",{gameRoom})
@@ -24,7 +22,7 @@ function BuySelection({ show, setShow, title,turnOfUser,socket }) {
   const priceDefault=200000
 
   const buyHouse=()=>{
-      socket.emit("bought",{gameRoom:"123",select})
+      socket.emit("bought",{gameRoom,select})
   }
 
   return (

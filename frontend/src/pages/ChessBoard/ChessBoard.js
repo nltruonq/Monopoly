@@ -12,12 +12,16 @@ import char from "../../assets/images/char.png";
 import BuySelection from "./BuySelection/BuySelection";
 import Buying from "./Buying/Buying";
 import House from "./House/House";
+import { useLocation } from "react-router-dom";
 
 
 const cx = classNames.bind(styles);
 
 function ChessBoard() {
   const socket = useContext(SocketContext);
+  const location=useLocation()
+  const searchParams = new URLSearchParams(location.search);
+  const gameRoom = searchParams.get("room");
 
   // số user trong phòng
   const [numberUser,setNumberUser]=useState(0)
@@ -68,7 +72,7 @@ function ChessBoard() {
 
   // click btn roll
   const moveBySteps = (step) => {
-    socket.emit("roll",{socket:socket.id,gameRoom:"123"})
+    socket.emit("roll",{socket:socket.id,gameRoom})
   };
 
   const moveOneStep = (turnOfUser) => {
@@ -156,8 +160,7 @@ function ChessBoard() {
 
   //socket
   useEffect(() => {
-    const gameRoom = "123";
-    socket.emit("joinRoom", gameRoom);
+    socket.emit("join-room", gameRoom);
 
     // 
     socket.on("room-size",(data)=>{
@@ -186,7 +189,7 @@ function ChessBoard() {
     })
 
     return () => {
-      socket.off("joinRoom", gameRoom);
+      socket.off("join-room", gameRoom);
     };
   }, [socket,numberUser,yourTurn,userRef,turnOfUser]);
 
@@ -255,6 +258,7 @@ function ChessBoard() {
           show={show}
           turnOfUser={turnOfUser}
           socket={socket}
+          gameRoom={gameRoom}
         >
 
         </BuySelection>

@@ -4,10 +4,27 @@ import styles from "./ActionUser.module.scss";
 import { HiShoppingCart } from "react-icons/hi";
 import { FaFantasyFlightGames } from "react-icons/fa";
 import { SiRiotgames } from "react-icons/si";
-
+import {  useEffect } from "react";
+import {useNavigate} from "react-router-dom"
 const cx = classNames.bind(styles);
 
-function ActionUser() {
+function ActionUser({changeWaitting,socket}) {
+    const navigate=useNavigate()
+    
+    const ranking=()=>{
+        changeWaitting(true)
+        socket.emit("waitting")
+    }
+    useEffect(()=>{
+        socket.on("waitting-result",(data)=>{
+            changeWaitting(false)
+            navigate(`/game?room=${data.gameRoom}`)
+        })
+        return()=>{
+            socket.off("waitting")
+        }
+    },[socket])
+
     return (
         <div className={cx("wrapper")}>
             <div className={cx("user")}>
@@ -31,7 +48,7 @@ function ActionUser() {
                     </div>
                     <span>Đấu với bạn bè</span>
                 </div>
-                <div className={cx("rank")}>
+                <div className={cx("rank")} onClick={ranking}>
                     <div className={cx("shape")}>
                         <SiRiotgames size={30} color="yellow" />
                     </div>
