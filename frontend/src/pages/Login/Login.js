@@ -3,15 +3,16 @@ import styles from "./Login.module.scss";
 import classNames from "classnames/bind";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFacebookF, faGoogle } from "@fortawesome/free-brands-svg-icons";
+import axios from "axios";
 
 const cx = classNames.bind(styles);
 
 function Login() {
-    const [email, setEmail] = useState("");
+    const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
 
     const handleEmailChange = (e) => {
-        setEmail(e.target.value);
+        setUsername(e.target.value);
     };
 
     const handlePasswordChange = (e) => {
@@ -20,11 +21,21 @@ function Login() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-
-        // Perform login logic here
+        axios.post(`${process.env.REACT_APP_SERVER_API}/api/auth/login`,{username,password},{
+            headers:{
+                ContentType:"application/json"
+            }
+        })
+        .then(res=>{
+            console.log(res.data)
+        })
+        .catch(error=>{
+            console.log(error)
+        })
+            // Perform login logic here
 
         // Reset form fields
-        setEmail("");
+        setUsername("");
         setPassword("");
     };
 
@@ -42,10 +53,9 @@ function Login() {
                         <div className={cx("form-group")}>
                             <label htmlFor="email" p></label>
                             <input
-                                type="email"
                                 id="email"
-                                placeholder="Email"
-                                value={email}
+                                placeholder="Username"
+                                value={username}
                                 onChange={handleEmailChange}
                                 required
                             />
