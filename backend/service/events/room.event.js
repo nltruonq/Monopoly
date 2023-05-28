@@ -1,5 +1,31 @@
+const Queue = require("../queqe");
+
+let queue= new Queue()
 const roomEvent = (socket,io) => {
-    socket.on('joinRoom', (gameRoom) => {
+
+    // chờ ghép phòng
+    socket.on("waitting",()=>{
+      queue.enqueue(socket.id)
+      if(queue.length===4){
+        let gameRoom
+        for(let i=0;i<4;i++){
+            let socketId=queue.dequeue()
+            
+            // gameRoom lấy từ socketId của người chơi đầu tiên 
+            if (i===0) {
+              gameRoom=socketId
+            }
+            io.to(socketId).emit("waitting-result",{gameRoom})
+          }
+      }  
+    })
+
+    // xử lý khi hủy ghép phòng
+    //=> xóa node khỏi queue
+    // socket.on("cancle")....
+
+    // khi ghép phòng đã xong
+    socket.on('join-room', (gameRoom) => {
       console.log(socket.id," join room")
       socket.join(gameRoom)   
       const room = io.sockets.adapter.rooms.get(gameRoom);
