@@ -1,5 +1,5 @@
 const turnEvent=(socket,io)=>{
-    // mua nhà
+    // quản lý lượt chơi tron 1 phòng
     socket.on("turn",(data)=>{
         const {gameRoom}=data
         const room = io.sockets.adapter.rooms.get(gameRoom);

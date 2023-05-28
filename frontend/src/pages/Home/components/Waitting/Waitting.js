@@ -4,8 +4,12 @@ import { useState,useEffect } from "react";
 
 const cx = classNames.bind(styles);
 
-function Waitting() {
+function Waitting({socket,changeWaitting}) {
     const [count, setCount] = useState(0);
+    const cancle=()=>{
+        changeWaitting(false)
+        socket.emit("cancle")
+    }
 
     useEffect(() => {
       const interval = setInterval(() => {
@@ -28,8 +32,11 @@ function Waitting() {
         <div className={cx("wrapper")}>
             <div style={{position:"relative"}}>
                 <div className={cx("content")}>
-                    <h3>Waiting Game</h3>
-                    <div>Count: {formatTime(count)}</div>
+                    <h4>Game bắt đầu</h4>
+                    <div className={cx("row")}>
+                        <div>sau: {formatTime(count)}</div>
+                        <div className={cx("cancelBtn")} onClick={cancle}>Hủy</div>
+                    </div>
                 </div>
             </div>
         </div>

@@ -4,13 +4,11 @@ import styles from "./ActionUser.module.scss";
 import { HiShoppingCart } from "react-icons/hi";
 import { FaFantasyFlightGames } from "react-icons/fa";
 import { SiRiotgames } from "react-icons/si";
-import {SocketContext} from "../../../../SocketService"
-import { useContext, useEffect } from "react";
+import {  useEffect } from "react";
 import {useNavigate} from "react-router-dom"
 const cx = classNames.bind(styles);
 
-function ActionUser({changeWaitting}) {
-    const socket=useContext(SocketContext)
+function ActionUser({changeWaitting,socket}) {
     const navigate=useNavigate()
     
     const ranking=()=>{

@@ -51,8 +51,35 @@ class Queue {
         let currentNode = this.head;
         
         while (currentNode !== null) {
-            console.log(currentNode.data.id);
+            console.log(currentNode.data);
             currentNode = currentNode.next;
+        }
+    }
+    delete(data) {
+        let current = this.head;
+        if (current === null) {
+          return;
+        }
+        if (current.data === data) {
+          this.head = current.next;
+          if (this.head === null) {
+            this.tail = null;
+          }
+          this.length--;
+          return;
+        }
+        let prev = null;
+        while (current !== null) {
+          if (current.data === data) {
+            prev.next = current.next;
+            if (current === this.tail) {
+              this.tail = prev;
+            }
+            this.length--
+            return;
+          }
+          prev = current;
+          current = current.next;
         }
     }
 }

@@ -1,11 +1,10 @@
-const Queue = require("../queqe");
 
-let queue= new Queue()
-const roomEvent = (socket,io) => {
+const roomEvent = (socket,io,queue) => {
 
     // chờ ghép phòng
     socket.on("waitting",()=>{
       queue.enqueue(socket.id)
+      // queue.printQueue()
       if(queue.length===4){
         let gameRoom
         for(let i=0;i<4;i++){
@@ -22,7 +21,9 @@ const roomEvent = (socket,io) => {
 
     // xử lý khi hủy ghép phòng
     //=> xóa node khỏi queue
-    // socket.on("cancle")....
+    socket.on("cancle",()=>{
+        queue.delete(socket.id)
+    })
 
     // khi ghép phòng đã xong
     socket.on('join-room', (gameRoom) => {

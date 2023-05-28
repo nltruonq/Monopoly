@@ -1,6 +1,7 @@
 const socketIO = require("socket.io");
 const contants = require("../constant/constant");
 const handleEvent = require(".");
+const Queue = require("./queqe");
 
 
 module.exports = (server) => {
@@ -11,15 +12,16 @@ module.exports = (server) => {
         credentials: true,
     },      
   });
-
+  const queue=new Queue()
 
   io.on('connection',(socket)=>{
     
     console.log('A client connected with id ',socket.id);
 
-    handleEvent(socket,io)
+    handleEvent(socket,io,queue)
     
     socket.on('disconnect', () => {
+        queue.delete(socket.id)
         console.log(`A client with id ${socket.id} disconnected`);
     });
 })

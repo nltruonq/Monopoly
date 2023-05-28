@@ -2,14 +2,24 @@
     position: absolute;
     top:0;
     left: 700px;
+    h4{
+        padding-left: 20px;
+    }
 }
-
+.row{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
 .content{
-    height: 100px;
+    padding: 10px 0;
     width: 200px;
     border: 1px solid red;
-    background-color: red;
-    color: white;
+    background-color: #00000032;
+    color: yellow;
     font-weight: 700;
     border-radius: 5px;
+}
+.cancelBtn{
+    cursor: pointer;
 }
