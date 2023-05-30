@@ -9,7 +9,6 @@
 /coverage
 test.http
 *.http
-.env
 # production
 /build
 
