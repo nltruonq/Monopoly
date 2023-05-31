@@ -69,7 +69,7 @@ function Register() {
                             type="text"
                             id="fullName"
                             value={fullName}
-                            placeholder="Fullname"
+                            placeholder="Username"
                             onChange={handleFullNameChange}
                             required
                         />

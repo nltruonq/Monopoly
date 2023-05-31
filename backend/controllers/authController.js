@@ -1,3 +1,4 @@
+const bcrypt=require("bcrypt")
 const User = require("../models/user.model")
 
 const authController = {
@@ -16,7 +17,8 @@ const authController = {
     register: async (req, res) => {
         try {
 
-            const { username } = req.body
+            let { username,password,...rest } = req.body
+
             // console.log(user)
 
             // kiểm tra thử tên username đã tồn tại hay chưa
@@ -25,15 +27,20 @@ const authController = {
             if (isExisted) {
                 return res.json({
                     "message": "username đã tồn tại",
-                    "status": 200,
+                    "status": 500,
                 })
             }
-            const newUser = new User(req.body) //{username,...}
+            const salt=await bcrypt.genSalt(10)
+            const hashedPassword=await bcrypt.hash(password,salt)
+            password=hashedPassword
+
+            const user = {username,password,...rest}
+            const newUser = new User(user) //{username,...}
 
             await newUser.save()
 
             res.json({
-                status: 500,
+                status: 200,
                 "message": "Tạo thành công"
             })
         } catch (error) {
@@ -47,16 +54,17 @@ const authController = {
             //i kiểm tra mật khẩu
             // lấy dc user tu db
             const user = await User.findOne({ username })
-            if (password === user?.password) {
+            const isValid= await user.isRightPassword(password)
+            if (isValid) {
                 return res.json({
-                    status: 500,
+                    status: 200,
                     message: "Đăng nhập thành công",
                     user: user // chua tat ca thong tin. tra ve cho client qua response
                 })
             }
             else {
                 return res.json({
-                    status: 200,
+                    status: 500,
                     message: "Username hoac password khong dung"
                 })
             }
