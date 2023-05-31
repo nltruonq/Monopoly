@@ -11,10 +11,10 @@ function House({houses,houseRefs,cx,socket,possition,turnOfUser,cellRefs}){
             houseNode.style.display="block"
             if (0 < possition[turnOfUser] && possition[turnOfUser] <= 8) {
                 houseNode.style.top="-20px"
-                houseNode.style.left="20px"
+                houseNode.style.left="30px"
             } 
             else if (8 < possition[turnOfUser] && possition[turnOfUser] < 16) {
-                houseNode.style.top="-20px"
+                houseNode.style.top="-30px"
                 houseNode.style.left="-20px"
             } 
             else if (16 < possition[turnOfUser] && possition[turnOfUser] < 24) {

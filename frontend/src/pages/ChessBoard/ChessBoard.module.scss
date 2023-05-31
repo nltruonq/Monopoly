@@ -159,6 +159,19 @@
     margin: 1px;
     // z-index: 10;
   }
+  .city-top{
+    position: absolute;
+    top:40px;
+    left: 0;
+    font-size: smaller;
+  }
+  .city-left{
+    position: absolute;
+    top:20px;
+    left: 10px;
+    font-size: smaller;
+    transform: rotate(90deg);
+  }
   .house{
     position: absolute;
     top:0px;

@@ -1,10 +1,8 @@
 import Dice from "../Dice/Dice";
-import home0_1 from "../../../assets/images/house0-lv1.png"
-import styles from "./Board.module.scss"
-import classNames from "classnames/bind";
-
-const cxb = classNames.bind(styles)
-
+import seaBG from "../../../assets/images/sea.jpg"
+import { locations } from "../constants/locations/data";
+import { types } from "../constants/locations/type";
+import Chance from "./components/Chance/Chance";
 function Board(props){
     const {yourTurn,cx,roll,diceOne,diceTwo,cellRefs,changeRoll,moveBySteps}=props
 
@@ -26,7 +24,20 @@ function Board(props){
                       key={index}
                       className={cx("rectangle")}
                       ref={cellRefs.current[9 + index]}
-                    ></div>
+                    >
+                      { locations[9+index].type=== types.SEA 
+                        ? <img src= {seaBG} width="60" height="90" style={{
+                          position:"absolute",
+                          overflow:"hidden",
+                          objectFit:"cover",
+                        }}/>
+                        :
+                        locations[9+index].type === types.CITY
+                        ? <div className={cx("city-top")}>{locations[9+index].city}</div>
+                        :<Chance></Chance>
+                      }
+
+                    </div>
                   );
                 })}
               </div>
@@ -47,7 +58,19 @@ function Board(props){
                         key={index}
                         className={cx("rectangle-column")}
                         ref={cellRefs.current[7 - index]}
-                      ></div>
+                      >
+                        {locations[7-index].type=== types.SEA ? <img src= {seaBG} width="60" height="90" style={{
+                          position:"absolute",
+                          overflow:"hidden",
+                          objectFit:"cover",
+                          transform: "translate(27%,-18%) rotate(90deg)",
+                        }}/>
+                        :
+                        locations[7-index].type===types.CITY
+                        ? <div className={cx("city-left")}>{locations[7-index].city}</div>
+                        :<Chance></Chance>
+                      } 
+                      </div>
                     );
                   })}
                 </div>
@@ -76,7 +99,20 @@ function Board(props){
                         key={index}
                         className={cx("rectangle-column")}
                         ref={cellRefs.current[17 + index]}
-                      ></div>
+                      >
+                        {locations[17+index].type=== types.SEA ? <img src= {seaBG} width="60" height="90" style={{
+                          position:"absolute",
+                          overflow:"hidden",
+                          objectFit:"cover",
+                          transform: "translate(27%,-18%) rotate(90deg)",
+                        }}/>
+                        :
+                        locations[17+index].type===types.CITY
+                        ? <div className={cx("city-left")}>{locations[17+index].city}</div>
+                        :<Chance></Chance>
+                      } 
+
+                      </div>
                     );
                   })}
                 </div>
@@ -100,7 +136,18 @@ function Board(props){
                       key={index}
                       className={cx("rectangle")}
                       ref={cellRefs.current[31 - index]}
-                    ></div>
+                    >
+                      {locations[31-index].type=== types.SEA ? <img src= {seaBG} width="60" height="90" style={{
+                          position:"absolute",
+                          overflow:"hidden",
+                          objectFit:"cover",
+                        }}/>
+                        :
+                        locations[31-index].type===types.CITY 
+                        ? <div className={cx("city-top")}>{locations[31-index].city}</div>
+                        :"TAX"
+                      } 
+                    </div>
                   );
                 })}
               </div>

@@ -4,12 +4,14 @@ import classNames from "classnames/bind";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFacebookF, faGoogle } from "@fortawesome/free-brands-svg-icons";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const cx = classNames.bind(styles);
 
 function Login() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const navigate = useNavigate()
 
     const handleEmailChange = (e) => {
         setUsername(e.target.value);
@@ -28,6 +30,9 @@ function Login() {
         })
         .then(res=>{
             console.log(res.data)
+            if(res.data.status===200){
+                navigate("/")
+            }
         })
         .catch(error=>{
             console.log(error)

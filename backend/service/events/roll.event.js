@@ -6,7 +6,6 @@ const turnEvent = (socket,io) => {
 
         diceOne=Math.floor(Math.random() * 6 + 1)
         diceTwo=Math.floor(Math.random() * 6 + 1)
-        console.log(user,"aa")
         socket.nsp.in(data.gameRoom).emit("roll-result",{
             user,
             socket:socket.id,
