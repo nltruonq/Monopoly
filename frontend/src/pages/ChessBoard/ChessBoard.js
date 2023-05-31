@@ -13,7 +13,7 @@ import BuySelection from "./BuySelection/BuySelection";
 import Buying from "./Buying/Buying";
 import House from "./House/House";
 import { useLocation } from "react-router-dom";
-
+import Cell from "./Cell/Cell";
 
 const cx = classNames.bind(styles);
 
@@ -110,8 +110,6 @@ function ChessBoard() {
   };
 
 
-
-
   // di chuyển 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -121,23 +119,8 @@ function ChessBoard() {
       } 
       else if(userSteps===-2) {
         // xử lý khi đi tới đích
-          console.log(show)
-          setShow(true)
 
-          if(turnOfUser === yourTurn) {
-              // xây nhà
-
-
-              // trả tiền?
-  
-              // ...
-          }
-          else{
-              // người chơi khác
-
-          }
-
-            
+          socket.emit("moved",{possition,turnOfUser,yourTurn,gameRoom})
             // finish
               setSteps(-1)
               // >0 : di chuyển
@@ -209,6 +192,7 @@ function ChessBoard() {
           socket={socket}
           possition={possition}
           turnOfUser={turnOfUser}
+          yourTurn={yourTurn}
           cellRefs={cellRefs}
           >
 
@@ -263,6 +247,12 @@ function ChessBoard() {
 
         </BuySelection>
         }
+
+        {/* Thực hiện các hàm thuộc về Cell */}
+        <Cell
+          socket={socket}
+          changeShow={changeShow}
+        ></Cell>
       </div>
     </>
   );

@@ -8,17 +8,19 @@
 // price to pay : A0i * cR (i : 1->3)
 // price to upgrade: A0j - A0i 
 // redemption price: A0i * rR
+import { Cell } from "./cell"
 
 
-export class City{
+
+export class City extends Cell{
     constructor(boardIndex,city,basePrice,commonRatio,redemptionRatio){
-        this.boardIndex=boardIndex
-        this.city=city,
+        super(boardIndex)
+        this.city=city
         this.basePrice=basePrice
         this.commonRatio=commonRatio
         this.redemptionRatio=redemptionRatio
     }
-    fPriceToBuy=function(level){
+    fPriceToBuy(level){
         if(level===1){
             return this.basePrice
         }
@@ -30,15 +32,15 @@ export class City{
         }
     }
 
-    fPriceToPay=function(level){
-        return this.redemptionRatio* this.fPriceToBuy(boardIndex,level)
+    fPriceToPay(level){
+        return this.redemptionRatio* this.fPriceToBuy(super.boardIndex,level)
     }
 
-    fPriceToUpgrade=function(currentLevel,nextLevel){
+    fPriceToUpgrade(currentLevel,nextLevel){
         return this.fPriceToBuy(nextLevel)- this.fPriceToBuy(currentLevel)
     }
 
-    redemptionPrice = function(level){
+    redemptionPrice(level){
         return this.redemptionRatio* this.fPriceToBuy(level)
     }
 }
