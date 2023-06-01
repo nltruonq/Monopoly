@@ -1,10 +1,15 @@
 import { useEffect, useState } from "react"
-
+import {updateBalance } from "../../../redux/userSlice"
+import {useDispatch} from "react-redux"
 function House({houses,houseRefs,cx,socket,possition,turnOfUser,cellRefs}){
     const [inuse,setInuse]=useState(0)
+    const dispatch=useDispatch()
+    
     useEffect(()=>{
         socket.on("bought-result",(data)=>{
-            houseRefs.current[inuse].current.firstChild.src=houses[`house${turnOfUser}_1`]
+            dispatch(updateBalance({amount:-data.price,turnOfUser}))
+
+            houseRefs.current[inuse].current.firstChild.src=houses[`house${turnOfUser}_${data.select}`]
             const houseNode=houseRefs.current[inuse].current
             cellRefs.current[possition[turnOfUser]].current.appendChild(houseNode)
 

@@ -27,9 +27,10 @@ export class City extends Cell{
         else if(level===2){
             return this.basePrice* 1.5
         }
-        else {
+        else if (level===3){
             return this.basePrice*2.5
         }
+        else return ""
     }
 
     fPriceToPay(level){

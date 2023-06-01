@@ -7,9 +7,11 @@ import styles from "./BuySelection.module.scss";
 import { RiCoinFill } from "react-icons/ri";
 import { colors } from "../constants/Color/color";
 import houses from "../constants/houses";
+import {cells} from "../constants/cell/index"
+
 const cx = classNames.bind(styles);
 
-function BuySelection({ show, setShow, title,turnOfUser,socket,gameRoom }) {
+function BuySelection({ show, setShow, possition,title,turnOfUser,socket,gameRoom }) {
   const handleClose = () => {
     setShow(false);
     socket.emit("close",{gameRoom})
@@ -18,11 +20,8 @@ function BuySelection({ show, setShow, title,turnOfUser,socket,gameRoom }) {
   };
   const [select,setSelect]=useState()
 
-  // sau này sẽ lấy từ server
-  const priceDefault=200000
-
   const buyHouse=()=>{
-      socket.emit("bought",{gameRoom,select})
+      socket.emit("bought",{gameRoom,select,price:cells[possition[turnOfUser]]?.fPriceToBuy(select)})
   }
 
   return (
@@ -32,9 +31,9 @@ function BuySelection({ show, setShow, title,turnOfUser,socket,gameRoom }) {
       </Modal.Header>
       <Modal.Body>
         <div className={cx("house-all")}>
-          {[...Array(3)].map((_,index)=>{
+          {[...Array(2)].map((_,index)=>{
               return (
-                <div className={cx("house",select===index?"active":"")} key={index} onMouseMove={()=>{setSelect(index)}}>
+                <div className={cx("house",select===index+1?"active":"")} key={index} onClick={()=>{setSelect(index+1)}}>
                   <Image src={houses[`house${turnOfUser}_${index+1}`]} style={{ width: "150px" }} />
                 </div>
               )
@@ -49,7 +48,7 @@ function BuySelection({ show, setShow, title,turnOfUser,socket,gameRoom }) {
             handleClose()
           }} 
           variant="secondary">
-          Buy {priceDefault} <RiCoinFill color="yellow" />
+          Buy {cells[possition[turnOfUser]].fPriceToBuy(select)} <RiCoinFill color="yellow" />
         </Button>
         <Button onClick={handleClose} variant="secondary">
           Cancel

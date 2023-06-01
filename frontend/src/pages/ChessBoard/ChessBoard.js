@@ -214,7 +214,7 @@ function ChessBoard() {
                   }
                 </div>
 
-              <UserZone index={index}>
+              <UserZone index={index} socket={socket} turnOfUser={turnOfUser}>
 
               </UserZone>
             </div>
@@ -236,13 +236,14 @@ function ChessBoard() {
 
         ></Board>
 
-        {turnOfUser===yourTurn&&<BuySelection
+        {turnOfUser===yourTurn&&show&&<BuySelection
           title={"Hong Kong"}
           setShow={changeShow}
           show={show}
           turnOfUser={turnOfUser}
           socket={socket}
           gameRoom={gameRoom}
+          possition={possition}
         >
 
         </BuySelection>

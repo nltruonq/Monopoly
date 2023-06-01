@@ -2,9 +2,13 @@ import styles from "./UserZone.module.scss"
 import classNames from "classnames/bind"
 import avatarDefault from "../../../../src/assets/images/avatar_default.jpg"
 import { colors } from "../constants/Color/color"
+import { selectUser, updateBalance } from "../../../redux/userSlice"
+import {useDispatch, useSelector} from "react-redux"
 const cx=classNames.bind(styles)
 
-function UserZone({index}){
+function UserZone({index,socket,turnOfUser}){
+    const user= useSelector(selectUser)
+    
     return (
         <>
             <div className={cx("wrapper")}>
@@ -14,7 +18,7 @@ function UserZone({index}){
                 </div>
                 <div className={cx("info")}>
                     <h3 className={cx("name")} style={{backgroundColor:colors[index]}}>name</h3>
-                    <p className={cx("score")} style={{color:colors[index]}}>Score: </p>
+                    <p className={cx("score")} style={{color:colors[index]}}>Score: {user[index].balance}</p>
                 </div>
             </div>
             </div>

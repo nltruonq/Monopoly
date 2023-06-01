@@ -8,9 +8,9 @@ import { Chance } from "../../class/chance";
 
 export const cells= locations.map((location)=>{
     const {type,...rest}=location
-    
+
     if(type===types.CITY){
-      let cell=new City(rest)
+      let cell=new City(rest.boardIndex,rest.city,rest.basePrice,rest.commonRatio,rest.redemptionRatio)
       return cell
     }
     else if(type ===types.CHANCE){
@@ -18,7 +18,7 @@ export const cells= locations.map((location)=>{
       return cell
     }
     else if(type===types.SEA){
-      let cell = new Sea(rest)
+      let cell = new Sea(rest.boardIndex,rest.basePrice,rest.priceToBuy,rest.priceToPay)
       return cell
     }
     else if(type === types.TAX){

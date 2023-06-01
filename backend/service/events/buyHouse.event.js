@@ -1,8 +1,8 @@
 const buyEvent = (socket) => {
     // mua nhà
     socket.on("bought", (data) => {
-        const { gameRoom, select } = data
-        socket.nsp.in(gameRoom).emit("bought-result", { gameRoom, select })
+        const { gameRoom, select,price } = data
+        socket.nsp.in(gameRoom).emit("bought-result", { gameRoom, select,price })
     })
 
 

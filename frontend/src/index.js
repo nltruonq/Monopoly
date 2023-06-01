@@ -4,14 +4,19 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import GlobalStyles from "./components/GlobalStyles";
 import { SocketContext,socket } from "./SocketService";
+import store from "./redux/store"
+import { Provider } from "react-redux";
+
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
     // <React.StrictMode>
     <SocketContext.Provider value={socket}>
-        <GlobalStyles>
-            <App />
-        </GlobalStyles>
+        <Provider store={store}>
+            <GlobalStyles>
+                <App />
+            </GlobalStyles>
+        </Provider>
     </SocketContext.Provider>
     // </React.StrictMode>,
 );
