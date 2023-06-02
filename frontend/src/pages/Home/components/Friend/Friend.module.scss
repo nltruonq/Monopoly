@@ -50,19 +50,20 @@
     }
 }
 
-.footer {
+// btn friend
+.friend {
     margin-top: 10px;
     display: flex;
     justify-content: center;
     cursor: pointer;
 
-    .list {
-        background-color: rgba($color: #eefe76, $alpha: 0.4);
+    .btn_friend {
+        background-color: rgba($color: #491ddb, $alpha: 0.4);
         padding: 10px;
         border-radius: 50%;
 
         &:hover {
-            opacity: 0.8;
+            opacity: 0.5;
         }
     }
 

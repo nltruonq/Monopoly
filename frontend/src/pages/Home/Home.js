@@ -12,25 +12,25 @@ import { useContext } from "react";
 const cx = classNames.bind(styles);
 
 function Home() {
-    const [waitting,setWaitting]=useState(false)
-    
-    const changeWaitting=(value)=>{
+    const [waitting, setWaitting] = useState(false)
+
+    const changeWaitting = (value) => {
         setWaitting(value)
     }
 
-    const socket=useContext(SocketContext)
+    const socket = useContext(SocketContext)
 
 
     return (
         <div className={cx("wrapper")}>
-            {waitting&& <Waitting socket={socket} changeWaitting={changeWaitting}></Waitting>}
+            {waitting && <Waitting socket={socket} changeWaitting={changeWaitting}></Waitting>}
             <Header />
             <div className={cx("f-e")}>
                 <Friend />
                 <Event />
             </div>
             <InviteWorld />
-            <ActionUser changeWaitting={changeWaitting} socket={socket}/>
+            <ActionUser changeWaitting={changeWaitting} socket={socket} />
         </div>
     );
 }
