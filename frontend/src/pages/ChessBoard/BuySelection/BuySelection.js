@@ -11,11 +11,11 @@ import {cells} from "../constants/cell/index"
 
 const cx = classNames.bind(styles);
 
-function BuySelection({ show, setShow, possition,title,turnOfUser,socket,gameRoom }) {
+function BuySelection({ show, changeShow, possition,title,turnOfUser,socket,gameRoom }) {
   const handleClose = () => {
-    setShow(false);
+    changeShow(false);
     socket.emit("close",{gameRoom})
-    // {} sau này sẽ thế thành giá trị 2 xúc xắc để xét double
+    //  sau này sẽ thế thành giá trị 2 xúc xắc để xét double
     socket.emit("turn",{gameRoom})
   };
   const [select,setSelect]=useState()

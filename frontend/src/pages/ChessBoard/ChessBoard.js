@@ -238,7 +238,7 @@ function ChessBoard() {
 
         {turnOfUser===yourTurn&&show&&<BuySelection
           title={"Hong Kong"}
-          setShow={changeShow}
+          changeShow={changeShow}
           show={show}
           turnOfUser={turnOfUser}
           socket={socket}
@@ -250,10 +250,10 @@ function ChessBoard() {
         }
 
         {/* Thực hiện các hàm thuộc về Cell */}
-        <Cell
+        {<Cell
           socket={socket}
           changeShow={changeShow}
-        ></Cell>
+        ></Cell>}
       </div>
     </>
   );
