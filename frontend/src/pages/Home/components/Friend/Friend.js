@@ -1,13 +1,25 @@
+import { useState } from "react";
+import Modal from 'react-modal';
+
 import classNames from "classnames/bind";
 import styles from "./Friend.module.scss";
 
 import { CgUserList } from "react-icons/cg";
 import { FaUserFriends } from "react-icons/fa";
 import { BiWorld } from "react-icons/bi";
+import { useNavigate } from "react-router-dom"
 
 const cx = classNames.bind(styles);
 
 function Friend() {
+
+    const naviate = useNavigate()
+    // logic
+    const changePage = () => {
+        naviate("/search-friend")
+    }
+
+
     return (
         <div className={cx("wrapper")}>
             <div className={cx("header")}>
@@ -44,12 +56,17 @@ function Friend() {
                     <span>Display Name6</span>
                 </div>
             </div>
-            <div className={cx("footer")}>
-                <div className={cx("list")}>
-                    <FaUserFriends size={24} style={{zIndex: 2}} color="#ccc" />
+
+            {/* btn Friend */}
+            <div className={cx("friend")}>
+                <div onClick={changePage} className={cx("btn_friend")}>
+                    <FaUserFriends size={24} style={{ zIndex: 2 }} color="#ccc" />
                 </div>
+
             </div>
-        </div>
+
+
+        </div >
     );
 }
 

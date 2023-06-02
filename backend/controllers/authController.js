@@ -1,4 +1,4 @@
-const bcrypt=require("bcrypt")
+const bcrypt = require("bcrypt")
 const User = require("../models/user.model")
 
 const authController = {
@@ -8,8 +8,6 @@ const authController = {
             const username = req.params.username
             // console.log(username)
 
-
-
         } catch (error) {
             console.log(error)
         }
@@ -17,10 +15,9 @@ const authController = {
     register: async (req, res) => {
         try {
 
-            let { username,password,...rest } = req.body
+            let { username, password, ...rest } = req.body
 
             // console.log(user)
-
             // kiểm tra thử tên username đã tồn tại hay chưa
             const isExisted = await User.findOne({ username }) // username: ?
             // console.log(isExisted?.username,"aa")
@@ -30,11 +27,11 @@ const authController = {
                     "status": 500,
                 })
             }
-            const salt=await bcrypt.genSalt(10)
-            const hashedPassword=await bcrypt.hash(password,salt)
-            password=hashedPassword
+            const salt = await bcrypt.genSalt(10)
+            const hashedPassword = await bcrypt.hash(password, salt)
+            password = hashedPassword
 
-            const user = {username,password,...rest}
+            const user = { username, password, ...rest }
             const newUser = new User(user) //{username,...}
 
             await newUser.save()
@@ -54,7 +51,7 @@ const authController = {
             //i kiểm tra mật khẩu
             // lấy dc user tu db
             const user = await User.findOne({ username })
-            const isValid= await user.isRightPassword(password)
+            const isValid = await user.isRightPassword(password)
             if (isValid) {
                 return res.json({
                     status: 200,

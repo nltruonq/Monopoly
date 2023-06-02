@@ -1,12 +1,12 @@
-import { createSlice,createSelector } from '@reduxjs/toolkit';
+import { createSlice, createSelector } from '@reduxjs/toolkit';
 
 
 const userSlice = createSlice({
   name: 'user',
   initialState: [
     { balance: 500 },
-    {  balance: 500 },
-    {  balance: 500 },
+    { balance: 500 },
+    { balance: 500 },
     { balance: 500 },
   ],
   reducers: {
@@ -23,8 +23,8 @@ const userSlice = createSlice({
 export const { updateBalance } = userSlice.actions;
 
 export const selectUser = createSelector(
-    (state) => state.user,
-    (user)=>user
-  );
+  (state) => state.user,
+  (user) => user
+);
 
 export default userSlice.reducer;
