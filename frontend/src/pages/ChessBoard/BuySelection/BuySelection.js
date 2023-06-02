@@ -8,6 +8,7 @@ import { RiCoinFill } from "react-icons/ri";
 import { colors } from "../constants/Color/color";
 import houses from "../constants/houses";
 import {cells} from "../constants/cell/index"
+import { City } from "../class/city";
 
 const cx = classNames.bind(styles);
 
@@ -19,9 +20,9 @@ function BuySelection({ show, changeShow, possition,title,turnOfUser,socket,game
     socket.emit("turn",{gameRoom})
   };
   const [select,setSelect]=useState()
-
+  
   const buyHouse=()=>{
-      socket.emit("bought",{gameRoom,select,price:cells[possition[turnOfUser]]?.fPriceToBuy(select)})
+     socket.emit("bought",{gameRoom,select,price:cells[possition[turnOfUser]].fPriceToBuy(select)})
   }
 
   return (
@@ -48,7 +49,10 @@ function BuySelection({ show, changeShow, possition,title,turnOfUser,socket,game
             handleClose()
           }} 
           variant="secondary">
-          Buy {cells[possition[turnOfUser]].fPriceToBuy(select)} <RiCoinFill color="yellow" />
+          Buy {cells[possition[turnOfUser]] instanceof City 
+          ? cells[possition[turnOfUser]].fPriceToBuy(select)
+          : ""
+        } <RiCoinFill color="yellow" />
         </Button>
         <Button onClick={handleClose} variant="secondary">
           Cancel

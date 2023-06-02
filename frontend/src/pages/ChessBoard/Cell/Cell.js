@@ -27,6 +27,7 @@ function Cell({socket,changeShow,show}){
                 else if(house.turnOfUser===turnOfUser){
                     changeShow(false)
                     console.log("vào nhà mình")
+                    
                 }
                 else {
                     changeShow(false)
