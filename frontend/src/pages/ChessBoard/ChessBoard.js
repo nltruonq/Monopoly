@@ -1,19 +1,20 @@
 import styles from "./ChessBoard.module.scss";
 import classNames from "classnames/bind";
-import UserZone from "./UserZone/UserZone";
 import { useEffect, useRef, createRef, useState, useContext } from "react";
+import { useLocation } from "react-router-dom";
 
 import { SocketContext } from "../../SocketService";
-import Board from "./Board/Board";
 
 import houses from "./constants/houses";
-
 import char from "../../assets/images/char.png";
-import BuySelection from "./BuySelection/BuySelection";
-import Buying from "./Buying/Buying";
-import House from "./House/House";
-import { useLocation } from "react-router-dom";
-import Cell from "./Cell/Cell";
+
+import UserZone from "./UserZone/UserZone";
+import Board from "./Board/Board";
+import BuySelection from "./modals/BuySelection/BuySelection";
+import Buying from "./components/Buying/Buying";
+import House from "./components/House/House";
+import Cell from "./components/Cell/Cell";
+import UpgradeHouse from "./modals/UpgradeHouse";
 
 const cx = classNames.bind(styles);
 
@@ -119,22 +120,15 @@ function ChessBoard() {
       } 
       else if(userSteps===-2) {
         // xử lý khi đi tới đích
-
           socket.emit("moved",{possition,turnOfUser,yourTurn,gameRoom})
-            // finish
-              setSteps(-1)
-              // >0 : di chuyển
-              // -2 : dừng lại để xử lý nhà
-              // -1 : đặt lại -> không di chuyển + xử lý nhà
+          setSteps(-1)
         clearInterval(interval);
       }
       else {
         clearInterval(interval);
-
       }
 
     }, 500);
-
 
     return () => {
       clearInterval(interval);
@@ -144,7 +138,6 @@ function ChessBoard() {
   //socket
   useEffect(() => {
     socket.emit("join-room", gameRoom);
-
     // 
     socket.on("room-size",(data)=>{
       setNumberUser(data.size)
@@ -236,8 +229,9 @@ function ChessBoard() {
 
         ></Board>
 
-        {turnOfUser===yourTurn&&show&&<BuySelection
-          title={"Hong Kong"}
+        {turnOfUser===yourTurn
+        &&show===BUY_HOUSE?
+        <BuySelection
           changeShow={changeShow}
           show={show}
           turnOfUser={turnOfUser}
@@ -247,9 +241,22 @@ function ChessBoard() {
         >
 
         </BuySelection>
+        :show===UPGRADE_HOUSE
+        ?<UpgradeHouse 
+          changeShow={changeShow}
+          show={show}
+          turnOfUser={turnOfUser}
+          socket={socket}
+          gameRoom={gameRoom}
+          possition={possition}
+        >
+
+        </UpgradeHouse>
+        :
+        ""
         }
 
-        {/* Thực hiện các hàm thuộc về Cell */}
+        {/* Xử lí khi di chyển đến ô đích */}
         {<Cell
           socket={socket}
           changeShow={changeShow}
@@ -259,3 +266,7 @@ function ChessBoard() {
   );
 }
 export default ChessBoard;
+
+
+const BUY_HOUSE = 1
+const UPGRADE_HOUSE = 2

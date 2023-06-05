@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
-import {updateBalance } from "../../../redux/userSlice"
+import {updateBalance } from "../../../../redux/userSlice"
 import {useDispatch} from "react-redux"
-import { buyHouse } from "../../../redux/cellSlice"
+import { buyHouse } from "../../../../redux/cellSlice"
 
 
 function House({houses,houseRefs,cx,socket,possition,turnOfUser,cellRefs}){

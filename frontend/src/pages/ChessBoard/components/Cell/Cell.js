@@ -1,14 +1,14 @@
 import { useEffect } from "react"
-import { cells } from "../constants/cell"
-import { types } from "../constants/locations/type"
-import { City } from "../class/city"
-import { Sea } from "../class/sea"
-import { Chance } from "../class/chance"
-import { Tax } from "../class/tax"
+import { cells } from "../../constants/cell"
+import { types } from "../../constants/locations/type"
+import { City } from "../../class/city"
+import { Sea } from "../../class/sea"
+import { Chance } from "../../class/chance"
+import { Tax } from "../../class/tax"
 import { useSelector } from "react-redux"
-import { selectCell } from "../../../redux/cellSlice"
+import { selectCell } from "../../../../redux/cellSlice"
 
-function Cell({socket,changeShow,show}){
+function Cell({socket,changeShow}){
     const buyHouse = useSelector(selectCell)
     
     useEffect(()=>{
@@ -22,16 +22,18 @@ function Cell({socket,changeShow,show}){
             
                 })
                 if(!house) {
-                    changeShow(true)
+                    changeShow(1)
+                    //vào ô trống
                 }
                 else if(house.turnOfUser===turnOfUser){
-                    changeShow(false)
-                    console.log("vào nhà mình")
+                    changeShow(2)
+                    //vào nhà mình"
                     
                 }
                 else {
-                    changeShow(false)
-                    console.log("Vào nhà người khác")
+                    changeShow(3)
+                    //Vào nhà người khác
+
                 }
             }
             else if(cell instanceof Sea){

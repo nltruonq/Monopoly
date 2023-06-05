@@ -1,0 +1,17 @@
+.house-all{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    .house{
+        // &:hover{
+        //     border: 3px solid green;
+        //     border-radius: 3px;
+        // }
+        cursor: pointer;
+
+    }
+    .active{
+        border: 3px solid green;
+        border-radius: 3px;
+    }
+}

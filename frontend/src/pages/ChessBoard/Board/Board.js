@@ -1,4 +1,4 @@
-import Dice from "../Dice/Dice";
+import Dice from "../components/Dice/Dice";
 import seaBG from "../../../assets/images/sea.jpg"
 import { locations } from "../constants/locations/data";
 import { types } from "../constants/locations/type";
