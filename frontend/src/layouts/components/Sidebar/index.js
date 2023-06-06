@@ -7,7 +7,6 @@ const cx = classNames.bind(styles);
 
 function Sidebar() {
 
-
     const optionList = [
         {
             id: 1,

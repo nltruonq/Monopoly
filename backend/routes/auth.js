@@ -14,6 +14,6 @@ router.get('/google/callback', passport.authenticate('google'));
 
 router.post("/register", authController.register);
 router.post("/login", authController.login);
-router.get("/get/:username",authController.getUserByUsername)
+router.get("/get/:username", authController.getUserByUsername)
 
 module.exports = router;

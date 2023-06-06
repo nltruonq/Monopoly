@@ -1,5 +1,5 @@
 const bcrypt = require("bcrypt")
-const User = require("../models/user.model")
+const { User } = require("../models/user.model")
 
 const authController = {
     getUserByUsername: async (req, res) => {
@@ -16,11 +16,7 @@ const authController = {
         try {
 
             let { username, password, ...rest } = req.body
-
-            // console.log(user)
-            // kiểm tra thử tên username đã tồn tại hay chưa
             const isExisted = await User.findOne({ username }) // username: ?
-            // console.log(isExisted?.username,"aa")
             if (isExisted) {
                 return res.json({
                     "message": "username đã tồn tại",
