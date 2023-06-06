@@ -11,10 +11,10 @@ const cellSlice = createSlice({
         return elm?.boardIndex === boardIndex
       })
       if(bought) {
-        state[state.indexOf(bought)].turnOfUser=turnOfUser
+        state[state.indexOf(bought)].owner=turnOfUser
       }
       else {
-        state.push({turnOfUser,boardIndex,level})
+        state.push({owner:turnOfUser,boardIndex,level})
       }
     },
     houseByIndex: (state,action)=>{

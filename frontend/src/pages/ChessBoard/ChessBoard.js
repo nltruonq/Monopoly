@@ -8,13 +8,14 @@ import { SocketContext } from "../../SocketService";
 import houses from "./constants/houses";
 import char from "../../assets/images/char.png";
 
-import UserZone from "./UserZone/UserZone";
+import UserZone from "./components/UserZone/UserZone";
 import Board from "./Board/Board";
 import BuySelection from "./modals/BuySelection/BuySelection";
 import Buying from "./components/Buying/Buying";
 import House from "./components/House/House";
 import Cell from "./components/Cell/Cell";
 import UpgradeHouse from "./modals/UpgradeHouse";
+import OtherHouse from "./modals/OtherHouse";
 
 const cx = classNames.bind(styles);
 
@@ -241,7 +242,8 @@ function ChessBoard() {
         >
 
         </BuySelection>
-        :show===UPGRADE_HOUSE
+        :turnOfUser===yourTurn
+        &&show===UPGRADE_HOUSE
         ?<UpgradeHouse 
           changeShow={changeShow}
           show={show}
@@ -253,7 +255,18 @@ function ChessBoard() {
 
         </UpgradeHouse>
         :
-        ""
+        turnOfUser===yourTurn
+        &&show===RE_BUY_HOUSE
+        ?
+        <OtherHouse
+          changeShow={changeShow}
+          show={show}
+          turnOfUser={turnOfUser}
+          socket={socket}
+          gameRoom={gameRoom}
+          possition={possition}
+        ></OtherHouse>
+        :""
         }
 
         {/* Xử lí khi di chyển đến ô đích */}
@@ -270,3 +283,4 @@ export default ChessBoard;
 
 const BUY_HOUSE = 1
 const UPGRADE_HOUSE = 2
+const RE_BUY_HOUSE = 3

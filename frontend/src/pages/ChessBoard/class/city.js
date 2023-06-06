@@ -34,15 +34,15 @@ export class City extends Cell{
     }
 
     fPriceToPay(level){
-        return this.redemptionRatio* this.fPriceToBuy(super.boardIndex,level)
+        return Math.round(this.commonRatio* this.fPriceToBuy(level))
     }
 
     fPriceToUpgrade(currentLevel,nextLevel){
         return this.fPriceToBuy(nextLevel)- this.fPriceToBuy(currentLevel)
     }
 
-    redemptionPrice(level){
-        return this.redemptionRatio* this.fPriceToBuy(level)
+    fRedemptionPrice(level){
+        return Math.round(this.redemptionRatio* this.fPriceToBuy(level))
     }
 }
 

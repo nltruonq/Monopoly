@@ -17,8 +17,7 @@ const cx = classNames.bind(styles);
 function OtherHouse({ show, changeShow, possition,title,turnOfUser,socket,gameRoom }) {
 
   const house = useSelector(selectCell);
-  const [select,setSelect]=useState()
-
+  
   const handleClose = () => {
     changeShow(false);
     socket.emit("close",{gameRoom})
@@ -31,8 +30,13 @@ function OtherHouse({ show, changeShow, possition,title,turnOfUser,socket,gameRo
   })
   const currentLevel= currentCell.level
   const currentCity = cells[possition[turnOfUser]]
-  const buyHouse=()=>{
-     socket.emit("bought",{gameRoom,select,price:currentCity.fPriceToUpgrade(currentLevel,select)})
+  console.log(currentCell)
+  const handlePay=()=>{
+     socket.emit("pay",{gameRoom,price:currentCity.fPriceToPay(currentLevel),owner:currentCell.owner})
+  }
+
+  const handleReBought=()=>{
+    socket.emit("re-bought",{gameRoom,price: currentCity.fRedemptionPrice(currentLevel),owner:currentCell.owner})
   }
 
   return (
@@ -42,30 +46,34 @@ function OtherHouse({ show, changeShow, possition,title,turnOfUser,socket,gameRo
       </Modal.Header>
       <Modal.Body>
         <div className={cx("house-all")}>
-          {[...Array(3-currentLevel)].map((_,index)=>{
-              return (
-                <div className={cx("house",select===index+4-currentLevel?"active":"")} key={index} onClick={()=>{setSelect(index+4-currentLevel)}}>
-                  <Image src={houses[`house${turnOfUser}_${index+4-currentLevel}`]} style={{ width: "150px" }} />
+                <div className={cx("house","active")} >
+                  <Image src={houses[`house${currentCell.owner}_${currentLevel}`]} style={{ width: "150px" }} />
                 </div>
-              )
-          })}
-
         </div>
       </Modal.Body>
       <Modal.Footer>
         <Button 
           onClick={()=>{
-            buyHouse()
+            handlePay()
             handleClose()
           }} 
           variant="secondary">
-          Buy {currentCity instanceof City 
-          ? currentCity.fPriceToUpgrade(currentLevel,select)
+          Pay {currentCity instanceof City 
+          ? currentCity.fPriceToPay(currentLevel)
           : ""
         } <RiCoinFill color="yellow" />
         </Button>
-        <Button onClick={handleClose} variant="secondary">
-          Cancel
+        <Button 
+            onClick={()=>{
+                handleReBought()
+                handleClose()
+            }} 
+            variant="secondary"
+        >
+            Buy {currentCity instanceof City 
+            ? currentCity.fRedemptionPrice(currentLevel)
+            : ""
+            } <RiCoinFill color="yellow" />
         </Button>
       </Modal.Footer>
     </Modal>

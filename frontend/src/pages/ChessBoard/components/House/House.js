@@ -39,8 +39,22 @@ function House({houses,houseRefs,cx,socket,possition,turnOfUser,cellRefs}){
             setInuse(inuse+1)
 
         })
+
+        socket.on("pay-result",(data)=>{
+            dispatch(updateBalance({amount:-data.price,turnOfUser}))
+            dispatch(updateBalance({amount:data.price,turnOfUser: data.owner}))
+        })
+
+        socket.on("re-bought-result",(data)=>{
+            console.log(data.price)
+            dispatch(updateBalance({amount:-data.price,turnOfUser}))
+            dispatch(updateBalance({amount:data.price,turnOfUser: data.owner}))
+        })
+
         return ()=>{
             socket.off("bought-result")
+            socket.off("pay-result")
+            socket.off("re-bought-result")
         }
     },[inuse,turnOfUser,possition])
     return(

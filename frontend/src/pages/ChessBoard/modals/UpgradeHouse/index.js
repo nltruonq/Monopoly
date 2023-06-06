@@ -17,7 +17,7 @@ const cx = classNames.bind(styles);
 function UpgradeHouse({ show, changeShow, possition,title,turnOfUser,socket,gameRoom }) {
 
   const house = useSelector(selectCell);
-  const [select,setSelect]=useState()
+  const [select,setSelect]=useState(3)
 
   const handleClose = () => {
     changeShow(false);
@@ -44,8 +44,8 @@ function UpgradeHouse({ show, changeShow, possition,title,turnOfUser,socket,game
         <div className={cx("house-all")}>
           {[...Array(3-currentLevel)].map((_,index)=>{
               return (
-                <div className={cx("house",select===index+4-currentLevel?"active":"")} key={index} onClick={()=>{setSelect(index+4-currentLevel)}}>
-                  <Image src={houses[`house${turnOfUser}_${index+4-currentLevel}`]} style={{ width: "150px" }} />
+                <div className={cx("house",select===index+currentLevel+1?"active":"")} key={index} onClick={()=>{setSelect(index+1+currentLevel)}}>
+                  <Image src={houses[`house${turnOfUser}_${index+currentLevel+1}`]} style={{ width: "150px" }} />
                 </div>
               )
           })}

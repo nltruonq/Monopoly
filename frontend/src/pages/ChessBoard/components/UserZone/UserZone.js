@@ -1,12 +1,12 @@
 import styles from "./UserZone.module.scss"
 import classNames from "classnames/bind"
-import avatarDefault from "../../../../src/assets/images/avatar_default.jpg"
-import { colors } from "../constants/Color/color"
-import { selectUser, updateBalance } from "../../../redux/userSlice"
-import {useDispatch, useSelector} from "react-redux"
+import avatarDefault from "../../../../../src/assets/images/avatar_default.jpg"
+import { colors } from "../../constants/Color/color"
+import { selectUser} from "../../../../redux/userSlice"
+import {useSelector} from "react-redux"
 const cx=classNames.bind(styles)
 
-function UserZone({index,socket,turnOfUser}){
+function UserZone({index}){
     const user= useSelector(selectUser)
     
     return (
