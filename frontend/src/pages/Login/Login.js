@@ -6,12 +6,14 @@ import { faFacebookF, faGoogle } from "@fortawesome/free-brands-svg-icons";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
+import Swal from "sweetalert2";
+
 const cx = classNames.bind(styles);
 
 function Login() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const navigate = useNavigate()
+    const navigate = useNavigate();
 
     const handleEmailChange = (e) => {
         setUsername(e.target.value);
@@ -23,21 +25,41 @@ function Login() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        axios.post(`${process.env.REACT_APP_SERVER_API}/api/auth/login`,{username,password},{
-            headers:{
-                ContentType:"application/json"
-            }
-        })
-        .then(res=>{
-            console.log(res.data)
-            if(res.data.status===200){
-                navigate("/")
-            }
-        })
-        .catch(error=>{
-            console.log(error)
-        })
-            // Perform login logic here
+        axios
+            .post(
+                `${process.env.REACT_APP_SERVER_API}/api/auth/login`,
+                { username, password },
+                {
+                    headers: {
+                        ContentType: "application/json",
+                    },
+                }
+            )
+            .then(async (res) => {
+                if (res.data.status === 200) {
+                    await Swal.fire({
+                        icon: "success",
+                        title: "Login success!",
+                    });
+                    localStorage.setItem("user", JSON.stringify(res.data.user));
+                    navigate("/");
+                } else {
+                    await Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: "Something went wrong!",
+                    });
+                }
+            })
+            .catch(async (error) => {
+                console.log(error);
+                await Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Something went wrong!",
+                });
+            });
+        // Perform login logic here
 
         // Reset form fields
         setUsername("");
@@ -47,7 +69,6 @@ function Login() {
     return (
         <div className={cx("login-container")}>
             <div className={cx("login-form")}>
-
                 {/* form login */}
                 <div className={cx("form-login")}>
                     <div className={cx("text-login")}>
@@ -57,13 +78,7 @@ function Login() {
                     <form onSubmit={handleSubmit}>
                         <div className={cx("form-group")}>
                             <label htmlFor="email" p></label>
-                            <input
-                                id="email"
-                                placeholder="Username"
-                                value={username}
-                                onChange={handleEmailChange}
-                                required
-                            />
+                            <input id="email" placeholder="Username" value={username} onChange={handleEmailChange} required />
                         </div>
                         <div className={cx("form-group")}>
                             <label htmlFor="password"></label>
@@ -77,9 +92,8 @@ function Login() {
                             />
                         </div>
                         <div className={cx("form-group")}>
-                            <button type="submit">SING IN</button>
+                            <button type="submit">SIGN IN</button>
                         </div>
-
                     </form>
                     <p className={cx("text-connect")}>Connect with</p>
                     <div className={cx("button-group")}>
@@ -91,7 +105,9 @@ function Login() {
                         </button>
                     </div>
                     <div className={cx("text-change-register")}>
-                        <p>Don't have an account? <a href="/register">Sign Up</a></p>
+                        <p>
+                            Don't have an account? <a href="/register">Sign Up</a>
+                        </p>
                     </div>
                 </div>
             </div>

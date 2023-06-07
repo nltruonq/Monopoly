@@ -1,9 +1,12 @@
-const event=(socket,io,queue)=>{
-    require("./events/room.event")(socket,io,queue)
-    require("./events/roll.event")(socket,io) 
-    require("./events/buyHouse.event")(socket)
-    require("./events/turn.event")(socket,io)  
-    require("./events/move.event")(socket)
-}
+const event = (socket, io, queue) => {
+    require("./events/room.event")(socket, io, queue);
+    require("./events/roll.event")(socket, io);
+    require("./events/buyHouse.event")(socket);
+    require("./events/turn.event")(socket, io);
+    require("./events/move.event")(socket);
 
-module.exports= event
+    // user event
+    require("./userEvents/online.event")(socket, io);
+};
+
+module.exports = event;

@@ -6,20 +6,25 @@ import InviteWorld from "./components/InviteWorld/InviteWorld";
 import Waitting from "./components/Waitting/Waitting";
 import styles from "./Home.module.scss";
 import classNames from "classnames/bind";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SocketContext } from "../../SocketService";
 import { useContext } from "react";
 const cx = classNames.bind(styles);
 
 function Home() {
-    const [waitting, setWaitting] = useState(false)
+    const [waitting, setWaitting] = useState(false);
+
+    const user = JSON.parse(localStorage.getItem("user"));
 
     const changeWaitting = (value) => {
-        setWaitting(value)
-    }
+        setWaitting(value);
+    };
 
-    const socket = useContext(SocketContext)
+    const socket = useContext(SocketContext);
 
+    useEffect(() => {
+        socket.emit("online", { username: user.username });
+    }, []);
 
     return (
         <div className={cx("wrapper")}>
@@ -35,4 +40,4 @@ function Home() {
     );
 }
 
-export default Home
+export default Home;
