@@ -14,16 +14,10 @@ import { SocketContext } from "../../SocketService";
 const cx = classNames.bind(styles);
 
 function PrivateRoom() {
-    const socket = useContext(SocketContext)
     const navigate = useNavigate();
     const handleGoBackHome = () => {
         navigate("/");
     };
-    useEffect(()=>{
-        socket.on("online",(data)=>{
-            console.log(data)
-        })
-    },[])
     return (
         <div className={cx("wrapper")}>
             {/* SHOW AVATAR + NAME */}

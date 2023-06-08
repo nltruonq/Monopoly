@@ -9,12 +9,14 @@ import classNames from "classnames/bind";
 import { useEffect, useState } from "react";
 import { SocketContext } from "../../SocketService";
 import { useContext } from "react";
+import { useNavigate } from "react-router-dom";
+
 const cx = classNames.bind(styles);
 
 function Home() {
     const [waitting, setWaitting] = useState(false);
-
-    const user = JSON.parse(localStorage.getItem("user"));
+    const navigate = useNavigate();
+    const user = JSON.parse(localStorage.getItem("user-monopoly"));
 
     const changeWaitting = (value) => {
         setWaitting(value);
@@ -23,10 +25,10 @@ function Home() {
     const socket = useContext(SocketContext);
 
     useEffect(() => {
-        socket.emit("online", { username: user?.username });
-        return ()=>{
-            socket.off("online")
+        if (!user) {
+            navigate("/login");
         }
+        socket.emit("online", { username: user?.username });
     }, []);
 
     return (

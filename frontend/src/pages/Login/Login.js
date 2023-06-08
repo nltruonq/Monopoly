@@ -13,7 +13,6 @@ function Login() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
-    
 
     const handleEmailChange = (e) => {
         setUsername(e.target.value);
@@ -41,7 +40,7 @@ function Login() {
                         icon: "success",
                         title: "Login success!",
                     });
-                    localStorage.setItem("user", JSON.stringify(res.data.user));
+                    localStorage.setItem("user-monopoly", JSON.stringify(res.data.user));
                     navigate("/");
                 } else {
                     await Swal.fire({
@@ -65,6 +64,13 @@ function Login() {
         setUsername("");
         setPassword("");
     };
+
+    useEffect(() => {
+        const user = JSON.parse(localStorage.getItem("user-monopoly"));
+        if (user) {
+            navigate("/");
+        }
+    }, []);
 
     return (
         <div className={cx("login-container")}>

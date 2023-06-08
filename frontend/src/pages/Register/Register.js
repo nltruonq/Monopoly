@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./Register.module.scss";
 import classNames from "classnames/bind";
@@ -68,6 +68,13 @@ function Register() {
         setEmail("");
         setPassword("");
     };
+
+    useEffect(() => {
+        const user = JSON.parse(localStorage.getItem("user-monopoly"));
+        if (user) {
+            navigate("/");
+        }
+    }, []);
     return (
         <div className={cx("register-container")}>
             <div className={cx("register-form")}>

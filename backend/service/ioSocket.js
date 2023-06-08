@@ -2,7 +2,6 @@ const socketIO = require("socket.io");
 const contants = require("../constant/constant");
 const handleEvent = require(".");
 const Queue = require("./queqe");
-const Online = require("../models/online.model")
 
 module.exports = (server) => {
   const io = socketIO(server,{
@@ -22,7 +21,6 @@ module.exports = (server) => {
     
     socket.on('disconnect',async () => {
         queue.delete(socket.id)
-        await Online.deleteOne({socketId:socket.id})
         console.log(`A client with id ${socket.id} disconnected`);
     });
 })

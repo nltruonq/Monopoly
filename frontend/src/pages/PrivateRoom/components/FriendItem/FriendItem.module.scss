@@ -1,0 +1,39 @@
+.wrapper {
+    display: flex;
+    gap: 10px;
+    margin: 10px 0;
+    cursor: pointer;
+
+    &:hover  {
+        .title .name {
+            color: red;
+        }
+        img {
+            border-color: red;
+        }
+    }
+}
+
+.avatar {
+    overflow: hidden;
+    img {
+        width: 50px;
+        border: 2px solid white;
+        border-radius: 8px;
+        object-fit: cover;
+    }
+}
+
+.title {
+    .name {
+        color: black;
+        max-width: 140px;
+        overflow: hidden;
+        font-weight: 600;
+    }
+
+    .status {
+        color: #333;
+        font-weight: 500;
+    }
+}
