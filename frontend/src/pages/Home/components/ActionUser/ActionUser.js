@@ -18,7 +18,7 @@ function ActionUser({ changeWaitting, socket, user }) {
 
     const handleCreatePrivateRoom = () => {
         socket.emit("create-private-room", { username: user?.username });
-        navigate("/private-room");
+        navigate(`/private-room/${user.username}`);
     };
 
     useEffect(() => {

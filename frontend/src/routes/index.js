@@ -8,7 +8,7 @@ import PrivateRoom from "../pages/PrivateRoom/PrivateRoom";
 import Register from "./../pages/Register/Register";
 
 const publicRoutes = [
-    { path: "/private-room", component: PrivateRoom },
+    { path: "/private-room/:username", component: PrivateRoom },
     { path: "/login", component: Login },
     { path: "/register", component: Register },
     { path: "/", component: Home },

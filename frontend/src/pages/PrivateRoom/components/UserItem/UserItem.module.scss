@@ -14,11 +14,13 @@
         top: -6px;
         left: -2px;
         width: 60px;
+        height: 60px;
         overflow: hidden;
         border: 2px solid white;
         border-radius: 8px;
         img {
             width: 60px;
+            height: 60px;
             object-fit: cover;
         }
     }
@@ -42,9 +44,11 @@
     margin-top: 40px;
     .char {
         width: 120px;
+        height: 210px;
         overflow: hidden;
         img {
             width: 120px;
+            height: 210px;
             object-fit: cover;
         }
     }

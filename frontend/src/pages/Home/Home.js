@@ -11,6 +11,8 @@ import { SocketContext } from "../../SocketService";
 import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 
+import Swal from "sweetalert2";
+
 const cx = classNames.bind(styles);
 
 function Home() {
@@ -31,6 +33,22 @@ function Home() {
             navigate("/login");
         }
         socket.emit("online", { username: user?.username });
+        socket.on("invite-private-room", (data) => {
+            const { from, players } = data;
+            Swal.fire({
+                title: `${from} đã mời bạn vào phòng`,
+                icon: "info",
+                showCancelButton: true,
+                confirmButtonText: "Đồng ý",
+                cancelButtonText: `Hủy`,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    socket.emit("join-private-room", { roomName: from, ...user });
+                    players.push(user);
+                    navigate(`/private-room/${from}`, { state: players });
+                }
+            });
+        });
     }, []);
 
     return (

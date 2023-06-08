@@ -7,7 +7,7 @@ import UserItem from "./components/UserItem/UserItem";
 import InviteFriends from "./components/InviteFriends/InviteFriends";
 
 import { colors } from "../../pages/ChessBoard/constants/Color/color";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import { SocketContext } from "../../SocketService";
 import axios from "axios";
@@ -16,18 +16,47 @@ const cx = classNames.bind(styles);
 
 function PrivateRoom() {
     const [friends, setFriends] = useState([]);
+    const location = useLocation();
+    const [players, setPlayers] = useState(location.state || [JSON.parse(localStorage.getItem("user-monopoly"))]);
     const user = JSON.parse(localStorage.getItem("user-monopoly"));
     const navigate = useNavigate();
+    const params = useParams();
     const handleGoBackHome = () => {
+        if (params.username === user.username) {
+            socket.emit("delete-private-room", { roomName: user.username });
+        } else {
+            socket.emit("leave-private-room", { roomName: params.username, ...user });
+        }
         navigate("/");
     };
     const getFriends = async () => {
         const rs = await axios.get(`${process.env.REACT_APP_SERVER_API}/api/friend/list-friends/${user.username}`);
-        console.log(rs.data);
         setFriends(rs.data);
     };
 
     const socket = useContext(SocketContext);
+
+    socket.on("user-join-private-room", (data) => {
+        const { player } = data;
+        const newPlayers = [...players];
+        newPlayers.push(player);
+        setPlayers(newPlayers);
+    });
+
+    socket.on("user-leave-private-room", (data) => {
+        const { player } = data;
+        const newPlayers = players.filter((e) => e.username !== player.username);
+        setPlayers(newPlayers);
+    });
+
+    socket.on("user-disconnect", (data) => {
+        const { username } = data;
+        if (params.username === username) {
+            socket.emit("delete-private-room", { roomName: user.username });
+        }
+        const newPlayers = players.filter((e) => e.username !== username);
+        setPlayers(newPlayers);
+    });
 
     socket.on("online", (data) => {
         const { username } = data;
@@ -81,11 +110,11 @@ function PrivateRoom() {
                 </div>
             </div>
             <div className={cx("main")}>
-                <UserItem color={colors[0]} />
-                <UserItem color={colors[1]} />
-                <UserItem color={colors[2]} />
-                <UserItem color={colors[3]} />
-                <InviteFriends friends={friends} />
+                <UserItem player={players[0]} color={colors[0]} />
+                <UserItem player={players.length > 1 && players[1]} color={colors[1]} />
+                <UserItem player={players.length > 2 && players[2]} color={colors[2]} />
+                <UserItem player={players.length > 3 && players[3]} color={colors[3]} />
+                <InviteFriends host={params.username} players={[...players]} socket={socket} friends={friends} />
             </div>
             <div className={cx("footer")}>
                 <div className={cx("play")}>

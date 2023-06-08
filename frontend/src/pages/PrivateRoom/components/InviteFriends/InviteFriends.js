@@ -2,9 +2,26 @@ import styles from "./InviteFriends.module.scss";
 import classNames from "classnames/bind";
 import FriendItem from "./../FriendItem/FriendItem";
 
+import Swal from "sweetalert2";
+
 const cx = classNames.bind(styles);
 
-function InviteFriends({ friends }) {
+function InviteFriends({ host, friends, socket, players }) {
+    const handleInvite = (e) => {
+        Swal.fire({
+            title: `Mời ${e} vào phòng?`,
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonText: "Mời",
+            cancelButtonText: `Hủy`,
+        }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+                socket.emit("invite-private-room", { from: host, to: e, players });
+                Swal.fire("Mời thành công!", "", "success");
+            }
+        });
+    };
     return (
         <div className={cx("wrapper")}>
             <div className={cx("header")}>
@@ -12,7 +29,7 @@ function InviteFriends({ friends }) {
             </div>
             <div className={cx("main")}>
                 {friends.map((e, i) => {
-                    return <FriendItem key={i} {...e} />;
+                    return <FriendItem handleInvite={handleInvite} key={i} {...e} />;
                 })}
             </div>
         </div>

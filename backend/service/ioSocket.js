@@ -24,6 +24,7 @@ module.exports = (server) => {
             console.log(socket.username, "is offline!");
             await User.findOneAndUpdate({ username: socket.username }, { $set: { isOnline: false } });
             io.emit("offline", { username: socket.username });
+            io.to(socket.room).emit("user-disconnect", { username: socket.username });
             console.log(`A client with id ${socket.id} disconnected`);
         });
     });
