@@ -49,6 +49,9 @@ function Home() {
                 }
             });
         });
+        return () => {
+            socket.off("invite-private-room");
+        };
     }, []);
 
     return (
