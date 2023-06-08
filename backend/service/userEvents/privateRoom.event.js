@@ -5,11 +5,19 @@ const privateRoom = (socket, io) => {
             const sockets = await io.fetchSockets();
             for (const socket of sockets) {
                 if (socket.username === to) {
-                    console.log(socket.id, socket.username);
                     io.to(socket.id).emit("invite-private-room", { from, players });
                     break;
                 }
             }
+        } catch (error) {
+            console.log(error);
+        }
+    });
+
+    socket.on("kick-user-private-room", async (data) => {
+        try {
+            const { roomName, player } = data;
+            io.to(roomName).emit("kick-private-room", { player });
         } catch (error) {
             console.log(error);
         }

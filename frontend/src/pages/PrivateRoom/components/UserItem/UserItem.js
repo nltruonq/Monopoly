@@ -7,7 +7,7 @@ import { GrSubtract } from "react-icons/gr";
 
 const cx = classNames.bind(styles);
 
-function UserItem({ color, player }) {
+function UserItem({ color, player, handleKick, host, user }) {
     return player ? (
         <div className={cx("wrapper")}>
             <div className={cx("header")} style={{ backgroundColor: `${color}` }}>
@@ -22,9 +22,11 @@ function UserItem({ color, player }) {
                 </div>
             </div>
             <div className={cx("footer")}>
-                <div className={cx("kick")} style={{ backgroundColor: `${color}` }}>
-                    <GrSubtract size={30} color="white" />
-                </div>
+                {user.username === host && player.username !== host && (
+                    <div onClick={() => handleKick(player)} className={cx("kick")} style={{ backgroundColor: `${color}` }}>
+                        <GrSubtract size={30} color="white" />
+                    </div>
+                )}
             </div>
         </div>
     ) : (
