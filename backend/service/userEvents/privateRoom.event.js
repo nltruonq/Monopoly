@@ -43,7 +43,11 @@ const privateRoom = (socket, io) => {
 
             socket.host = false;
 
+            io.to(roomName).emit("host-delete-room");
             io.in(roomName).socketsLeave([roomName]);
+
+            // const room = io.sockets.adapter.rooms.get(roomName);
+            // console.log(room);
 
             console.log(roomName, "deleted a private room!");
         } catch (error) {

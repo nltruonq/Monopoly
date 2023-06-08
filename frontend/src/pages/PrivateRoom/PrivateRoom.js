@@ -44,6 +44,10 @@ function PrivateRoom() {
 
     const socket = useContext(SocketContext);
 
+    socket.on("host-delete-room", () => {
+        navigate("/");
+    });
+
     socket.on("kick-private-room", (data) => {
         const { player } = data;
         if (player.username === user.username) {
