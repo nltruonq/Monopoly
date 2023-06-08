@@ -53,10 +53,11 @@ const authController = {
             }
             const isValid = await user.isRightPassword(password);
             if (isValid) {
+                const { password, ...returnUser } = user;
                 return res.json({
                     status: 200,
                     message: "Đăng nhập thành công",
-                    user: user, // chua tat ca thong tin. tra ve cho client qua response
+                    user: returnUser._doc, // chua tat ca thong tin. tra ve cho client qua response
                 });
             } else {
                 return res.json({

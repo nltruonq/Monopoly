@@ -8,16 +8,52 @@ import InviteFriends from "./components/InviteFriends/InviteFriends";
 
 import { colors } from "../../pages/ChessBoard/constants/Color/color";
 import { useNavigate } from "react-router-dom";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { SocketContext } from "../../SocketService";
+import axios from "axios";
 
 const cx = classNames.bind(styles);
 
 function PrivateRoom() {
+    const [friends, setFriends] = useState([]);
+    const user = JSON.parse(localStorage.getItem("user-monopoly"));
     const navigate = useNavigate();
     const handleGoBackHome = () => {
         navigate("/");
     };
+    const getFriends = async () => {
+        const rs = await axios.get(`${process.env.REACT_APP_SERVER_API}/api/friend/list-friends/${user.username}`);
+        console.log(rs.data);
+        setFriends(rs.data);
+    };
+
+    const socket = useContext(SocketContext);
+
+    socket.on("online", (data) => {
+        const { username } = data;
+        const updateFriends = friends.map((e) => {
+            if (e.username === username) {
+                e.isOnline = true;
+            }
+            return e;
+        });
+        setFriends(updateFriends);
+    });
+
+    socket.on("offline", (data) => {
+        const { username } = data;
+        const updateFriends = friends.map((e) => {
+            if (e.username === username) {
+                e.isOnline = false;
+            }
+            return e;
+        });
+        setFriends(updateFriends);
+    });
+
+    useEffect(() => {
+        getFriends();
+    }, []);
     return (
         <div className={cx("wrapper")}>
             {/* SHOW AVATAR + NAME */}
@@ -49,7 +85,7 @@ function PrivateRoom() {
                 <UserItem color={colors[1]} />
                 <UserItem color={colors[2]} />
                 <UserItem color={colors[3]} />
-                <InviteFriends />
+                <InviteFriends friends={friends} />
             </div>
             <div className={cx("footer")}>
                 <div className={cx("play")}>

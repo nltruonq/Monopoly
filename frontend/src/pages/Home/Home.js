@@ -15,14 +15,16 @@ const cx = classNames.bind(styles);
 
 function Home() {
     const [waitting, setWaitting] = useState(false);
+
     const navigate = useNavigate();
+
     const user = JSON.parse(localStorage.getItem("user-monopoly"));
+
+    const socket = useContext(SocketContext);
 
     const changeWaitting = (value) => {
         setWaitting(value);
     };
-
-    const socket = useContext(SocketContext);
 
     useEffect(() => {
         if (!user) {
@@ -40,7 +42,7 @@ function Home() {
                 <Event />
             </div>
             <InviteWorld />
-            <ActionUser changeWaitting={changeWaitting} socket={socket} />
+            <ActionUser changeWaitting={changeWaitting} socket={socket} user={user} />
         </div>
     );
 }

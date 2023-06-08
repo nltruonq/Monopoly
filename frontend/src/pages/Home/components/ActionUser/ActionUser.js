@@ -8,7 +8,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 const cx = classNames.bind(styles);
 
-function ActionUser({ changeWaitting, socket }) {
+function ActionUser({ changeWaitting, socket, user }) {
     const navigate = useNavigate();
 
     const ranking = () => {
@@ -17,6 +17,7 @@ function ActionUser({ changeWaitting, socket }) {
     };
 
     const handleCreatePrivateRoom = () => {
+        socket.emit("create-private-room", { username: user?.username });
         navigate("/private-room");
     };
 

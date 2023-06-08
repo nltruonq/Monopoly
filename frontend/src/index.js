@@ -8,16 +8,6 @@ import store from "./redux/store";
 import { Provider } from "react-redux";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
-const unloadCallback = (event) => {
-    event.preventDefault();
-    const user = JSON.parse(localStorage.getItem("user-monopoly"));
-    if (user) {
-        socket.emit("offline", { username: user.username });
-    }
-    return;
-};
-
-window.addEventListener("beforeunload", unloadCallback);
 
 root.render(
     // <React.StrictMode>

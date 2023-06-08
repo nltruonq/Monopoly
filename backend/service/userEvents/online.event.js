@@ -1,18 +1,13 @@
+const User = require("../../models/user.model");
+
 const onlineEvent = (socket, io) => {
-    socket.on("online", (data) => {
+    socket.on("online", async (data) => {
         try {
             const { username } = data;
+            await User.findOneAndUpdate({ username: username }, { $set: { isOnline: true } });
+            socket.username = username;
             io.emit("online", { username });
             console.log(username, "is online!");
-        } catch (error) {
-            console.log(error);
-        }
-    });
-    socket.on("offline", (data) => {
-        try {
-            const { username } = data;
-            console.log(username, "is offline!");
-            io.emit("offline", { username });
         } catch (error) {
             console.log(error);
         }

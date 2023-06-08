@@ -7,6 +7,7 @@ const event = (socket, io, queue) => {
 
     // user event
     require("./userEvents/online.event")(socket, io);
+    require("./userEvents/privateRoom.event")(socket, io);
 };
 
 module.exports = event;

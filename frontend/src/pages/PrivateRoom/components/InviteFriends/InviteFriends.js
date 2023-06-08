@@ -4,18 +4,16 @@ import FriendItem from "./../FriendItem/FriendItem";
 
 const cx = classNames.bind(styles);
 
-function InviteFriends() {
+function InviteFriends({ friends }) {
     return (
         <div className={cx("wrapper")}>
             <div className={cx("header")}>
                 <div className={cx("title")}>Bạn bè</div>
             </div>
             <div className={cx("main")}>
-                <FriendItem />
-                <FriendItem status={true} />
-                <FriendItem />
-                <FriendItem />
-                <FriendItem />
+                {friends.map((e, i) => {
+                    return <FriendItem key={i} {...e} />;
+                })}
             </div>
         </div>
     );
