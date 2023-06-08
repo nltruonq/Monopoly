@@ -15,7 +15,6 @@ const FriendRequestController = {
                 friendRequests[i] = {...friendRequests[i]._doc,user}
             }
 
-            console.log(friendRequests)
             res.status(200).json(friendRequests);
         } catch (error) {
             res.status(500).json({ error: error.message });

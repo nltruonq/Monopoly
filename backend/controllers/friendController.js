@@ -36,7 +36,15 @@ const FriendController = {
             res.status(500).json({ error: 'Failed to fetch friends' });
         }
     },
-
+    createFriend:async(req,res)=>{
+        try {
+            const friend = new Friend(req.body)
+            await friend.save()
+            res.status(200).json({"message":"success"})
+        } catch (error) {
+            console.log(err)
+        }
+    }
 
 }
 

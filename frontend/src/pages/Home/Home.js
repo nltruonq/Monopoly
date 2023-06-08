@@ -23,7 +23,10 @@ function Home() {
     const socket = useContext(SocketContext);
 
     useEffect(() => {
-        socket.emit("online", { username: user.username });
+        socket.emit("online", { username: user?.username });
+        return ()=>{
+            socket.off("online")
+        }
     }, []);
 
     return (

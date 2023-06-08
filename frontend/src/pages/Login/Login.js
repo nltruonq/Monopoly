@@ -1,11 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./Login.module.scss";
 import classNames from "classnames/bind";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFacebookF, faGoogle } from "@fortawesome/free-brands-svg-icons";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-
 import Swal from "sweetalert2";
 
 const cx = classNames.bind(styles);
@@ -14,6 +13,7 @@ function Login() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
+    
 
     const handleEmailChange = (e) => {
         setUsername(e.target.value);
