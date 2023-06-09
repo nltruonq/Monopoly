@@ -22,7 +22,9 @@ function BuySelection({ show, changeShow, possition,title,turnOfUser,socket,game
   const [select,setSelect]=useState()
   
   const buyHouse=()=>{
-     socket.emit("bought",{gameRoom,select,price:cells[possition[turnOfUser]].fPriceToBuy(select)})
+    if(select){
+      socket.emit("bought",{gameRoom,select,price:cells[possition[turnOfUser]].fPriceToBuy(select)})
+    }
   }
 
   return (
