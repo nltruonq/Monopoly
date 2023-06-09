@@ -12,7 +12,7 @@ import { City } from "../../class/city";
 
 const cx = classNames.bind(styles);
 
-function BuySelection({ show, changeShow, possition,title,turnOfUser,socket,gameRoom }) {
+function BuySelection({ show, changeShow, possition,turnOfUser,socket,gameRoom }) {
   const handleClose = () => {
     changeShow(false);
     socket.emit("close",{gameRoom})
@@ -20,17 +20,22 @@ function BuySelection({ show, changeShow, possition,title,turnOfUser,socket,game
     socket.emit("turn",{gameRoom})
   };
   const [select,setSelect]=useState()
+  const currentCity= cells[possition[turnOfUser]]
   
   const buyHouse=()=>{
     if(select){
-      socket.emit("bought",{gameRoom,select,price:cells[possition[turnOfUser]].fPriceToBuy(select)})
+      socket.emit("bought",{
+        gameRoom,
+        select,
+        price:currentCity.fPriceToBuy(select),
+        inuse:cells.indexOf(currentCity)})
     }
   }
 
   return (
     <Modal show={show}>
       <Modal.Header closeButton onClick={handleClose} style={{backgroundColor:colors[turnOfUser],color:"white"}}>
-        <Modal.Title>{cells[possition[turnOfUser]].city}</Modal.Title>
+        <Modal.Title>{currentCity.city}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <div className={cx("house-all")}>
@@ -51,8 +56,8 @@ function BuySelection({ show, changeShow, possition,title,turnOfUser,socket,game
             handleClose()
           }} 
           variant="secondary">
-          Buy {cells[possition[turnOfUser]] instanceof City 
-          ? cells[possition[turnOfUser]].fPriceToBuy(select)
+          Buy {currentCity instanceof City 
+          ? currentCity.fPriceToBuy(select)
           : ""
         } <RiCoinFill color="yellow" />
         </Button>

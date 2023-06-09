@@ -36,7 +36,12 @@ function OtherHouse({ show, changeShow, possition,title,turnOfUser,socket,gameRo
   }
 
   const handleReBought=()=>{
-    socket.emit("re-bought",{gameRoom,price: currentCity.fRedemptionPrice(currentLevel),owner:currentCell.owner})
+    socket.emit("re-bought",{gameRoom,
+                            price: currentCity.fRedemptionPrice(currentLevel),
+                            owner:currentCell.owner,
+                            inuse:cells.indexOf(currentCity),
+                            currentLevel
+                          })
   }
 
   return (

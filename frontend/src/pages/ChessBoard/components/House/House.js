@@ -5,7 +5,6 @@ import { buyHouse } from "../../../../redux/cellSlice"
 
 
 function House({houses,houseRefs,cx,socket,possition,turnOfUser,cellRefs}){
-    const [inuse,setInuse]=useState(0)
     const dispatch=useDispatch()
     
     useEffect(()=>{
@@ -16,8 +15,10 @@ function House({houses,houseRefs,cx,socket,possition,turnOfUser,cellRefs}){
                 level:data.select,
                 turnOfUser
             }))
-            houseRefs.current[inuse].current.firstChild.src=houses[`house${turnOfUser}_${data.select}`]
-            const houseNode=houseRefs.current[inuse].current
+            const inuse=data.inuse
+            const houseNode=houseRefs.current[cityBoardIndex.indexOf(inuse)].current
+            houseNode.firstChild.src=houses[`house${turnOfUser}_${data.select}`]
+            
             cellRefs.current[possition[turnOfUser]].current.appendChild(houseNode)
 
             houseNode.style.display="block"
@@ -36,7 +37,6 @@ function House({houses,houseRefs,cx,socket,possition,turnOfUser,cellRefs}){
             else if (24 < possition[turnOfUser] && possition[turnOfUser] < 32) {
               houseNode.style.top="-40px"
               houseNode.style.left="-20px"}
-            setInuse(inuse+1)
 
         })
 
@@ -46,9 +46,12 @@ function House({houses,houseRefs,cx,socket,possition,turnOfUser,cellRefs}){
         })
 
         socket.on("re-bought-result",(data)=>{
-            console.log(data.price)
-            dispatch(updateBalance({amount:-data.price,turnOfUser}))
-            dispatch(updateBalance({amount:data.price,turnOfUser: data.owner}))
+            const {inuse,owner,currentLevel,price} =data 
+            dispatch(updateBalance({amount:-price,turnOfUser}))
+            dispatch(updateBalance({amount:price,turnOfUser: owner}))
+            
+            const houseNode=houseRefs.current[cityBoardIndex.indexOf(inuse)].current
+            houseNode.firstChild.src=houses[`house${owner}_${currentLevel}`]
         })
 
         return ()=>{
@@ -56,7 +59,7 @@ function House({houses,houseRefs,cx,socket,possition,turnOfUser,cellRefs}){
             socket.off("pay-result")
             socket.off("re-bought-result")
         }
-    },[inuse,turnOfUser,possition])
+    },[turnOfUser,possition])
     return(
         <>
         {
@@ -73,3 +76,5 @@ function House({houses,houseRefs,cx,socket,possition,turnOfUser,cellRefs}){
 }
 
 export default House
+
+const cityBoardIndex=[1,2,3,5,7,9,10,13,14,15,17,19,21,23,25,26,27,30,31]

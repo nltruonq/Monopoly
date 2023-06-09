@@ -2,8 +2,8 @@ const buyEvent = (socket) => {
     // mua nhà
     socket.on("bought", (data) => {
         try {
-            const { gameRoom, select,price } = data
-            socket.nsp.in(gameRoom).emit("bought-result", { gameRoom, select,price })
+            const { gameRoom, select,price,inuse } = data
+            socket.nsp.in(gameRoom).emit("bought-result", { gameRoom, select,price,inuse })
         } catch (error) {
             console.log(error)            
         }
@@ -24,10 +24,12 @@ const buyEvent = (socket) => {
 
     socket.on("re-bought",(data)=>{
         try {
-            const {gameRoom,price,owner}=data
+            const {gameRoom,price,owner,inuse,currentLevel}=data
             socket.nsp.in(gameRoom).emit("re-bought-result",{
               price,
-              owner  
+              owner,
+              inuse,
+              currentLevel  
             })
         } catch (error) {
             console.log(error)            
