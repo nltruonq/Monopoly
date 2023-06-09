@@ -99,6 +99,18 @@ const privateRoom = (socket, io) => {
             console.log(error);
         }
     });
+
+    socket.on("play-private-room",(data)=>{
+        try {
+            const {roomName}=data
+            console.log(roomName)
+            socket.nsp.in(roomName).emit("play-private-room-result",{gameRoom:roomName})
+            // socket.to(roomName).emit("play-private-room-result",{gameRoom:roomName})
+        } catch (error) {
+            console.log(error)
+        }
+    })
+
 };
 
 module.exports = privateRoom;

@@ -37,12 +37,21 @@ function PrivateRoom() {
         }
     };
 
+    const handleClickPlay=()=>{
+        socket.emit("play-private-room",{roomName:user.username})
+    }
+
     const getFriends = async () => {
         const rs = await axios.get(`${process.env.REACT_APP_SERVER_API}/api/friend/list-friends/${user.username}`);
         setFriends(rs.data);
     };
 
     const socket = useContext(SocketContext);
+
+    socket.on("play-private-room-result",(data)=>{
+        console.log(data)
+        navigate(`/game?room=${data.gameRoom}`)
+    })
 
     socket.on("host-delete-room", () => {
         navigate("/");
@@ -141,33 +150,27 @@ function PrivateRoom() {
             </div>
             <div className={cx("main")}>
                 <UserItem host={params.username} user={user} player={players[0]} color={colors[0]} />
-                <UserItem
-                    host={params.username}
-                    user={user}
-                    player={players.length > 1 && players[1]}
-                    color={colors[1]}
-                    handleKick={handleKick}
-                />
-                <UserItem
-                    host={params.username}
-                    user={user}
-                    player={players.length > 2 && players[2]}
-                    color={colors[2]}
-                    handleKick={handleKick}
-                />
-                <UserItem
-                    host={params.username}
-                    user={user}
-                    player={players.length > 3 && players[3]}
-                    color={colors[3]}
-                    handleKick={handleKick}
-                />
+                {
+                    [...Array(3)].map((_,index)=>{
+                        return (
+                            <UserItem
+                                key={index}
+                                host={params.username}
+                                user={user}
+                                player={players.length > index+1 && players[index+1]}
+                                color={colors[index+1]}
+                                handleKick={handleKick}
+                            />
+                        )
+                    })
+                }
+                
                 <InviteFriends user={user} host={params.username} players={[...players]} socket={socket} friends={friends} />
             </div>
             <div className={cx("footer")}>
-                <div className={cx("play")}>
+                { user.username===params.username&& <div className={cx("play")} onClick={handleClickPlay}>
                     <button>PLAY</button>
-                </div>
+                </div>}
             </div>
         </div>
     );
