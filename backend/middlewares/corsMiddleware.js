@@ -2,7 +2,7 @@ const constants = require("../constant/constant");
 
 module.exports = function (req, res, next) {
     // Website you wish to allow to connect
-    res.setHeader("Access-Control-Allow-Origin", [constants.CLIENT_API, process.env.CLIENT_URL]);
+    res.setHeader("Access-Control-Allow-Origin", constants.CLIENT_API);
 
     // Request methods you wish to allow
     res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, PATCH, DELETE");
