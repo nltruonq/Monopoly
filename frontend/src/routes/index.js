@@ -5,9 +5,11 @@ import SearchFriend from "../pages/Friend/SearchFriends/SearchFriends";
 import Home from "../pages/Home/Home";
 import Login from "../pages/Login/Login";
 import PrivateRoom from "../pages/PrivateRoom/PrivateRoom";
+import Profile from "../pages/Profile/Profile";
 import Register from "./../pages/Register/Register";
 
 const publicRoutes = [
+    { path: "/profile/:username", component: Profile },
     { path: "/private-room/:username", component: PrivateRoom },
     { path: "/login", component: Login },
     { path: "/register", component: Register },
