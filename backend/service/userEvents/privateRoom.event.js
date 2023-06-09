@@ -14,6 +14,15 @@ const privateRoom = (socket, io) => {
         }
     });
 
+    socket.on("sync-player-private-room", async (data) => {
+        try {
+            const { roomName, players } = data;
+            io.to(roomName).emit("sync-player-private-room", { players });
+        } catch (error) {
+            console.log(error);
+        }
+    });
+
     socket.on("kick-user-private-room", async (data) => {
         try {
             const { roomName, player } = data;
@@ -58,12 +67,17 @@ const privateRoom = (socket, io) => {
     socket.on("join-private-room", (data) => {
         try {
             const { roomName, ...player } = data;
-
+            const room = io.sockets.adapter.rooms.get(roomName);
+            if (room?.size === 4) {
+                io.to(socket.id).emit("full-player-private-room");
+                return;
+            }
             socket.join(roomName);
 
             socket.host = false;
             socket.room = roomName;
 
+            io.to(socket.id).emit("can-join-private-room");
             socket.to(roomName).emit("user-join-private-room", { player });
 
             console.log(socket.username, "join", roomName);

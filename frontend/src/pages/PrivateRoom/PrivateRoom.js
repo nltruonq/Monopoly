@@ -62,7 +62,15 @@ function PrivateRoom() {
         const { player } = data;
         const newPlayers = [...players];
         newPlayers.push(player);
+        if (user.username === params.username) {
+            socket.emit("sync-player-private-room", { roomName: params.username, players: newPlayers });
+        }
         setPlayers(newPlayers);
+    });
+
+    socket.on("sync-player-private-room", (data) => {
+        const { players } = data;
+        setPlayers(players);
     });
 
     socket.on("user-leave-private-room", (data) => {
@@ -154,7 +162,7 @@ function PrivateRoom() {
                     color={colors[3]}
                     handleKick={handleKick}
                 />
-                <InviteFriends host={params.username} players={[...players]} socket={socket} friends={friends} />
+                <InviteFriends user={user} host={params.username} players={[...players]} socket={socket} friends={friends} />
             </div>
             <div className={cx("footer")}>
                 <div className={cx("play")}>

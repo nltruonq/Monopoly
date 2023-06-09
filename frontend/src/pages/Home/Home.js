@@ -51,8 +51,19 @@ function Home() {
             }).then((result) => {
                 if (result.isConfirmed) {
                     socket.emit("join-private-room", { roomName: from, ...user });
-                    players.push(user);
-                    navigate(`/private-room/${from}`, { state: players });
+                    socket.on("full-player-private-room", () => {
+                        Swal.fire({
+                            title: `Phòng đã đầy!`,
+                            icon: "info",
+                            confirmButtonText: "HỦY",
+                        });
+                        return;
+                    });
+                    socket.on("can-join-private-room", () => {
+                        players.push(user);
+                        navigate(`/private-room/${from}`, { state: players });
+                        socket.off("can-join-private-room");
+                    });
                 }
             });
         });

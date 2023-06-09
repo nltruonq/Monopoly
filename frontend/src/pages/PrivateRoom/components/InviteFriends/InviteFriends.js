@@ -6,8 +6,19 @@ import Swal from "sweetalert2";
 
 const cx = classNames.bind(styles);
 
-function InviteFriends({ host, friends, socket, players }) {
+function InviteFriends({ host, friends, socket, players, user }) {
     const handleInvite = (e) => {
+        if (host !== user.username) {
+            return;
+        }
+        if (players.length === 4) {
+            return;
+        }
+        for (let i = 0; i < players.length; i++) {
+            if (players[i].username === e) {
+                return;
+            }
+        }
         Swal.fire({
             title: `Mời ${e} vào phòng?`,
             icon: "question",
