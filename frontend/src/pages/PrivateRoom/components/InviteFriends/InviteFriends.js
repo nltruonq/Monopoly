@@ -15,7 +15,6 @@ function InviteFriends({ host, friends, socket, players }) {
             confirmButtonText: "Mời",
             cancelButtonText: `Hủy`,
         }).then((result) => {
-            /* Read more about isConfirmed, isDenied below */
             if (result.isConfirmed) {
                 socket.emit("invite-private-room", { from: host, to: e, players });
                 Swal.fire("Mời thành công!", "", "success");

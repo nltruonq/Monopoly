@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Modal from 'react-modal';
+import Modal from "react-modal";
 
 import classNames from "classnames/bind";
 import styles from "./Friend.module.scss";
@@ -7,18 +7,16 @@ import styles from "./Friend.module.scss";
 import { CgUserList } from "react-icons/cg";
 import { FaUserFriends } from "react-icons/fa";
 import { BiWorld } from "react-icons/bi";
-import { useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom";
 
 const cx = classNames.bind(styles);
 
-function Friend() {
-
-    const naviate = useNavigate()
+function Friend({ friends }) {
+    const naviate = useNavigate();
     // logic
     const changePage = () => {
-        naviate("/search-friend")
-    }
-
+        naviate("/search-friend");
+    };
 
     return (
         <div className={cx("wrapper")}>
@@ -31,30 +29,14 @@ function Friend() {
                 </div>
             </div>
             <div className={cx("body")}>
-                <div className={cx("item")}>
-                    <img src="https://i.pinimg.com/564x/f3/5b/5f/f35b5fc97d0ab92af45ac181021006cc.jpg" />
-                    <span>Display Name1</span>
-                </div>
-                <div className={cx("item")}>
-                    <img src="https://i.pinimg.com/564x/f3/5b/5f/f35b5fc97d0ab92af45ac181021006cc.jpg" />
-                    <span>Display Name2</span>
-                </div>
-                <div className={cx("item")}>
-                    <img src="https://i.pinimg.com/564x/f3/5b/5f/f35b5fc97d0ab92af45ac181021006cc.jpg" />
-                    <span>Display Name3</span>
-                </div>
-                <div className={cx("item")}>
-                    <img src="https://i.pinimg.com/564x/f3/5b/5f/f35b5fc97d0ab92af45ac181021006cc.jpg" />
-                    <span>Display Name4</span>
-                </div>
-                <div className={cx("item")}>
-                    <img src="https://i.pinimg.com/564x/f3/5b/5f/f35b5fc97d0ab92af45ac181021006cc.jpg" />
-                    <span>Display Name5</span>
-                </div>
-                <div className={cx("item")}>
-                    <img src="https://i.pinimg.com/564x/f3/5b/5f/f35b5fc97d0ab92af45ac181021006cc.jpg" />
-                    <span>Display Name6</span>
-                </div>
+                {friends.map((e, i) => {
+                    return (
+                        <div key={i} className={cx("item")}>
+                            <img src="https://i.pinimg.com/564x/f3/5b/5f/f35b5fc97d0ab92af45ac181021006cc.jpg" />
+                            <span>{e.username}</span>
+                        </div>
+                    );
+                })}
             </div>
 
             {/* btn Friend */}
@@ -62,11 +44,8 @@ function Friend() {
                 <div onClick={changePage} className={cx("btn_friend")}>
                     <FaUserFriends size={24} style={{ zIndex: 2 }} color="#ccc" />
                 </div>
-
             </div>
-
-
-        </div >
+        </div>
     );
 }
 

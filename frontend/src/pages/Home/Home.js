@@ -12,6 +12,7 @@ import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 
 import Swal from "sweetalert2";
+import axios from "axios";
 
 const cx = classNames.bind(styles);
 
@@ -20,12 +21,18 @@ function Home() {
 
     const navigate = useNavigate();
 
-    const user = JSON.parse(localStorage.getItem("user-monopoly"));
+    const [user, setUser] = useState(JSON.parse(localStorage.getItem("user-monopoly")));
+    const [friends, setFriends] = useState([]);
 
     const socket = useContext(SocketContext);
 
     const changeWaitting = (value) => {
         setWaitting(value);
+    };
+
+    const getFriends = async () => {
+        const rs = await axios.get(`${process.env.REACT_APP_SERVER_API}/api/friend/list-friends/${user.username}`);
+        setFriends(rs.data);
     };
 
     useEffect(() => {
@@ -49,6 +56,7 @@ function Home() {
                 }
             });
         });
+        getFriends();
         return () => {
             socket.off("invite-private-room");
         };
@@ -57,9 +65,9 @@ function Home() {
     return (
         <div className={cx("wrapper")}>
             {waitting && <Waitting socket={socket} changeWaitting={changeWaitting}></Waitting>}
-            <Header />
+            <Header user={user} />
             <div className={cx("f-e")}>
-                <Friend />
+                <Friend friends={friends} />
                 <Event />
             </div>
             <InviteWorld />

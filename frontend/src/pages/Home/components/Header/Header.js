@@ -6,7 +6,7 @@ import { DiRuby } from "react-icons/di";
 
 const cx = classNames.bind(styles);
 
-function Header() {
+function Header({user}) {
     return (
         <div className={cx("wrapper")}>
             <div className={cx("avatar")}>
@@ -16,11 +16,11 @@ function Header() {
                 <div className={cx("resources")}>
                     <div className={cx("group")}>
                         <RiMoneyDollarCircleLine size={20} color="yellow"/>
-                        <span>123456</span>
+                        <span>{user?.gold}</span>
                     </div>
                     <div className={cx("group")}>
                         <DiRuby size={20} color="red" />
-                        <span>1234</span>
+                        <span>{user?.ruby}</span>
                     </div>
                 </div>
                 {/* <div className={cx("others")}></div> */}
