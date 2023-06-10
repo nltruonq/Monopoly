@@ -29,6 +29,12 @@ function BuySelection({ show, changeShow, possition,turnOfUser,socket,gameRoom }
         select,
         price:currentCity.fPriceToBuy(select),
         inuse:cells.indexOf(currentCity)})
+      socket.emit("change-balance",
+      {gameRoom,
+        amount:currentCity.fPriceToBuy(select),
+        user:turnOfUser,
+        type:"minus"
+      })
     }
   }
 

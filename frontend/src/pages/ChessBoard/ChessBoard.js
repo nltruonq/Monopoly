@@ -48,6 +48,17 @@ function ChessBoard() {
   const changeShow=(a)=>{
     setShow(a)
   }
+  
+  const [changeBalance,setChangeBalance] =useState(false)
+    
+  socket.on("change-balance-result",(data)=>{
+      setChangeBalance( {amount:data.amount, user:data.user,type:data.type})
+      setTimeout(()=>{
+          setChangeBalance(false)
+      },1000)
+  })
+
+  
 
   // vị trí cac nhân vật
   const [possition, setPos] = useState([-1,-1,-1,-1]);
@@ -208,7 +219,7 @@ function ChessBoard() {
                   }
                 </div>
 
-              <UserZone index={index} socket={socket} turnOfUser={turnOfUser}>
+              <UserZone index={index} turnOfUser={turnOfUser} change={changeBalance}>
 
               </UserZone>
             </div>

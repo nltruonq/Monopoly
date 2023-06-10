@@ -33,15 +33,38 @@ function OtherHouse({ show, changeShow, possition,title,turnOfUser,socket,gameRo
   console.log(currentCell)
   const handlePay=()=>{
      socket.emit("pay",{gameRoom,price:currentCity.fPriceToPay(currentLevel),owner:currentCell.owner})
+     socket.emit("change-balance",{gameRoom,
+      amount:currentCity.fPriceToPay(currentLevel),
+      user:turnOfUser,
+      type:"minus"
+    })
+    socket.emit("change-balance",{gameRoom,
+      amount:currentCity.fPriceToPay(currentLevel),
+      user:currentCell.owner,
+      type:"plus"
+    })
+
   }
 
   const handleReBought=()=>{
-    socket.emit("re-bought",{gameRoom,
-                            price: currentCity.fRedemptionPrice(currentLevel),
-                            owner:turnOfUser,
-                            inuse:cells.indexOf(currentCity),
-                            currentLevel
-                          })
+    socket.emit("re-bought",
+        {gameRoom,
+          price: currentCity.fRedemptionPrice(currentLevel),
+          owner:turnOfUser,
+          inuse:cells.indexOf(currentCity),
+          currentLevel
+        })
+        socket.emit("change-balance",{gameRoom,
+          amount:currentCity.fRedemptionPrice(currentLevel),
+          user:turnOfUser,
+          type:"minus"
+        })
+        socket.emit("change-balance",{gameRoom,
+          amount:currentCity.fRedemptionPrice(currentLevel),
+          user:currentCell.owner,
+          type:"plus"
+        })
+    
   }
 
   return (

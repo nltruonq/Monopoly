@@ -32,11 +32,17 @@ function UpgradeHouse({ show, changeShow, possition,title,turnOfUser,socket,game
   const currentLevel= currentCell.level
   const currentCity = cells[possition[turnOfUser]]
   const upgradeHouse=()=>{
-     socket.emit("upgrade",{gameRoom
-                          ,select,
-                          price:currentCity.fPriceToUpgrade(currentLevel,select),
-                          inuse: cells.indexOf(currentCity)
-                        })
+     socket.emit("upgrade",
+          {gameRoom
+            ,select,
+            price:currentCity.fPriceToUpgrade(currentLevel,select),
+            inuse: cells.indexOf(currentCity)
+          })
+    socket.emit("change-balance",{gameRoom,
+      amount:currentCity.fPriceToUpgrade(currentLevel,select),
+      user:currentCell.owner,
+      type:"minus"
+    })
   }
 
   return (
