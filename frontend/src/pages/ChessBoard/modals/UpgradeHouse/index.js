@@ -31,8 +31,12 @@ function UpgradeHouse({ show, changeShow, possition,title,turnOfUser,socket,game
   })
   const currentLevel= currentCell.level
   const currentCity = cells[possition[turnOfUser]]
-  const buyHouse=()=>{
-     socket.emit("bought",{gameRoom,select,price:currentCity.fPriceToUpgrade(currentLevel,select)})
+  const upgradeHouse=()=>{
+     socket.emit("upgrade",{gameRoom
+                          ,select,
+                          price:currentCity.fPriceToUpgrade(currentLevel,select),
+                          inuse: cells.indexOf(currentCity)
+                        })
   }
 
   return (
@@ -55,7 +59,7 @@ function UpgradeHouse({ show, changeShow, possition,title,turnOfUser,socket,game
       <Modal.Footer>
         <Button 
           onClick={()=>{
-            buyHouse()
+            upgradeHouse()
             handleClose()
           }} 
           variant="secondary">

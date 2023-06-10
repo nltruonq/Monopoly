@@ -40,6 +40,18 @@ function House({houses,houseRefs,cx,socket,possition,turnOfUser,cellRefs}){
 
         })
 
+        socket.on("upgrade-result",(data)=>{
+            dispatch(updateBalance({amount:-data.price,turnOfUser}))
+            dispatch(buyHouse({
+                boardIndex:possition[turnOfUser],
+                level:data.select,
+                turnOfUser
+            }))
+            const inuse=data.inuse
+            const houseNode=houseRefs.current[cityBoardIndex.indexOf(inuse)].current
+            houseNode.firstChild.src=houses[`house${turnOfUser}_${data.select}`]
+        })
+
         socket.on("pay-result",(data)=>{
             dispatch(updateBalance({amount:-data.price,turnOfUser}))
             dispatch(updateBalance({amount:data.price,turnOfUser: data.owner}))

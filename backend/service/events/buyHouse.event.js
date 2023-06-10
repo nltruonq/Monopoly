@@ -9,6 +9,15 @@ const buyEvent = (socket) => {
         }
     })
 
+    socket.on("upgrade",(data)=>{
+        try {
+            const { gameRoom, select,price,inuse } = data
+            socket.nsp.in(gameRoom).emit("upgrade-result", { gameRoom, select,price,inuse })
+        } catch (error) {
+            console.log(error)
+        }
+    })
+
 
     socket.on("pay",(data)=>{
         try {
