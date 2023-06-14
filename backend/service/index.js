@@ -4,6 +4,7 @@ const event = (socket, io, queue) => {
     require("./events/buyHouse.event")(socket);
     require("./events/turn.event")(socket, io);
     require("./events/move.event")(socket);
+    require("./events/balance.event")(socket);
 
     // user event
     require("./userEvents/online.event")(socket, io);
