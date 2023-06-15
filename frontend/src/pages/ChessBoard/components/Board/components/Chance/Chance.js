@@ -1,4 +1,4 @@
-import img from "../../../../../assets/images/chance.png"
+import img from "../../../../../../assets/images/chance.png"
 
 function Chance(){
     return (

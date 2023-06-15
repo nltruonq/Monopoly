@@ -1,14 +1,11 @@
-import Dice from "../components/Dice/Dice";
-import seaBG from "../../../assets/images/sea.jpg"
-import { locations } from "../constants/locations/data";
-import { types } from "../constants/locations/type";
+import Dice from "../Dice/Dice";
+import seaBG from "../../../../assets/images/sea.jpg"
+import { locations } from "../../constants/locations/data";
+import { types } from "../../constants/locations/type";
 import Chance from "./components/Chance/Chance";
 
 function Board(props){
     const {yourTurn,cx,roll,diceOne,diceTwo,cellRefs,changeRoll,moveBySteps}=props
-    
-
-
 
     return (
         <>

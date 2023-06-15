@@ -5,12 +5,12 @@ import Image from "react-bootstrap/Image";
 import classNames from "classnames/bind";
 import styles from "../UpgradeHouse/UpgradeHouse.module.scss";
 import { RiCoinFill } from "react-icons/ri";
-import { colors } from "../../constants/Color/color";
-import houses from "../../constants/houses";
-import {cells} from "../../constants/cell/index"
-import { City } from "../../class/city";
+import { colors } from "../../../constants/Color/color";
+import houses from "../../../constants/houses";
+import {cells} from "../../../constants/cell/index"
+import { City } from "../../../class/city";
 import { useSelector } from "react-redux";
-import { selectCell } from "../../../../redux/cellSlice";
+import { selectCell } from "../../../../../redux/cellSlice";
 
 const cx = classNames.bind(styles);
 

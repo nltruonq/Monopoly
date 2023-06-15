@@ -9,13 +9,13 @@ import houses from "./constants/houses";
 import char from "../../assets/images/char.png";
 
 import UserZone from "./components/UserZone/UserZone";
-import Board from "./Board/Board";
-import BuySelection from "./modals/BuySelection/BuySelection";
+import Board from "./components/Board/Board";
+import BuySelection from "./modals/houses/BuySelection/BuySelection";
 import Buying from "./components/Buying/Buying";
 import House from "./components/House/House";
 import Cell from "./components/Cell/Cell";
-import UpgradeHouse from "./modals/UpgradeHouse";
-import OtherHouse from "./modals/OtherHouse";
+import UpgradeHouse from "./modals/houses/UpgradeHouse";
+import OtherHouse from "./modals/houses/OtherHouse";
 
 const cx = classNames.bind(styles);
 

@@ -5,10 +5,10 @@ import Image from "react-bootstrap/Image";
 import classNames from "classnames/bind";
 import styles from "./BuySelection.module.scss";
 import { RiCoinFill } from "react-icons/ri";
-import { colors } from "../../constants/Color/color";
-import houses from "../../constants/houses";
-import {cells} from "../../constants/cell/index"
-import { City } from "../../class/city";
+import { colors } from "../../../constants/Color/color";
+import houses from "../../../constants/houses";
+import {cells} from "../../../constants/cell/index"
+import { City } from "../../../class/city";
 
 const cx = classNames.bind(styles);
 
