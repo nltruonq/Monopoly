@@ -16,8 +16,8 @@ import House from "./components/House/House";
 import Cell from "./components/Cell/Cell";
 import UpgradeHouse from "./modals/houses/UpgradeHouse";
 import OtherHouse from "./modals/houses/OtherHouse";
-import { useDispatch } from "react-redux";
-import { updateBalance } from "../../redux/userSlice";
+import SocketRedux from "./components/SocketRedux";
+import Tax from "./modals/chances/Tax/tax";
 
 const cx = classNames.bind(styles);
 
@@ -26,8 +26,6 @@ function ChessBoard() {
   const location=useLocation()
   const searchParams = new URLSearchParams(location.search);
   const gameRoom = searchParams.get("room");
-
-  const dispatch =useDispatch()
 
   // số user trong phòng
   const [numberUser,setNumberUser]=useState(0)
@@ -52,17 +50,6 @@ function ChessBoard() {
   const changeShow=(a)=>{
     setShow(a)
   }
-  
-  const [changeBalance,setChangeBalance] =useState(false)
-    
-  socket.on("change-balance-result",(data)=>{
-      setChangeBalance( {amount:data.amount, user:data.user,type:data.type})
-      setTimeout(()=>{
-          setChangeBalance(false)
-      },1000)
-  })
-
-  
 
   // vị trí cac nhân vật
   const [possition, setPos] = useState([-1,-1,-1,-1]);
@@ -174,12 +161,7 @@ function ChessBoard() {
         setYourTurn(data.index)
       }
     })
-    
-    socket.on("start-result",(data)=>{
-        console.log("start")
-        dispatch(updateBalance({amount:data.amount,turnOfUser:data.user}))
-    })    
-
+ 
     userRef.current = Array(numberUser)
     .fill()
     .map((_, i) => userRef.current[i] ?? createRef());
@@ -200,7 +182,6 @@ function ChessBoard() {
 
     return () => {
       socket.off("join-room", gameRoom);
-      socket.off("start-result")
     };
   }, [socket,numberUser,yourTurn,userRef,turnOfUser]);
 
@@ -242,7 +223,7 @@ function ChessBoard() {
                   }
                 </div>
 
-              <UserZone index={index} turnOfUser={turnOfUser} change={changeBalance}>
+              <UserZone index={index} turnOfUser={turnOfUser} >
 
               </UserZone>
             </div>
@@ -264,6 +245,8 @@ function ChessBoard() {
 
         ></Board>
 
+
+        {/* MODAL */}
         {turnOfUser===yourTurn
         &&show===BUY_HOUSE?
         <BuySelection
@@ -300,14 +283,29 @@ function ChessBoard() {
           gameRoom={gameRoom}
           possition={possition}
         ></OtherHouse>
+        :show===PAY_TAX
+        ?
+        <Tax 
+          changeShow={changeShow}
+          show={show}
+          turnOfUser={turnOfUser}
+          socket={socket}
+          gameRoom={gameRoom}
+        >
+        </Tax>
         :""
         }
 
-        {/* Xử lí khi di chyển đến ô đích */}
+        {/* Xử lí khi di chyển đến ô đích -> quản lý hiện các modal*/}
         {<Cell
           socket={socket}
           changeShow={changeShow}
+          yourTurn={yourTurn}
+          gameRoom={gameRoom}
         ></Cell>}
+
+        {/* xử lý các sự kiện socket chỉ liên quan đến redux*/}
+        <SocketRedux socket = {socket}></SocketRedux>
       </div>
     </>
   );
@@ -318,3 +316,4 @@ export default ChessBoard;
 const BUY_HOUSE = 1
 const UPGRADE_HOUSE = 2
 const RE_BUY_HOUSE = 3
+const PAY_TAX = 4

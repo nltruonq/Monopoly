@@ -8,15 +8,24 @@ import avatarDefault from "../../../../../src/assets/images/avatar_default.jpg"
 import { colors } from "../../constants/Color/color"
 import { selectUser, updateBalance} from "../../../../redux/userSlice"
 import { socket } from "../../../../SocketService"
+import { useState } from "react"
 const cx=classNames.bind(styles)
 
-function UserZone({index,change}){
+function UserZone({index}){
     const user= useSelector(selectUser)
     // const dispatch= useDispatch()
     
     // socket.on("start-result",(data)=>{
     //     dispatch(updateBalance({amount:data.amount,turnOfUser:data.user}))
     // })
+  const [change,setChangeBalance] =useState(false)
+    
+  socket.on("change-balance-result",(data)=>{
+      setChangeBalance( {amount:data.amount, user:data.user,type:data.type})
+      setTimeout(()=>{
+          setChangeBalance(false)
+      },1000)
+  })
 
     return (
         <>

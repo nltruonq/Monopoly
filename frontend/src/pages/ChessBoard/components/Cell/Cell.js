@@ -7,16 +7,19 @@ import { Chance } from "../../class/chance"
 import { Tax } from "../../class/tax"
 import { useSelector } from "react-redux"
 import { selectCell } from "../../../../redux/cellSlice"
+import { selectUser } from "../../../../redux/userSlice"
+import { Corner } from "../../class/corner"
 
-function Cell({socket,changeShow}){
+function Cell({socket,changeShow,yourTurn,gameRoom}){
     const buyHouse = useSelector(selectCell)
-    
+    const user = useSelector(selectUser)
+
     useEffect(()=>{
         socket.on("moved-result",(data)=>{
             const {possition,turnOfUser}=data
             const cell = cells[possition[turnOfUser]]
             
-            if(cell instanceof City){   
+            if(cell instanceof City){
                 const house = buyHouse?.find((elm)=>{
                     return elm.boardIndex === possition[turnOfUser]
             
@@ -33,7 +36,6 @@ function Cell({socket,changeShow}){
                 else {
                     changeShow(3)
                     //Vào nhà người khác
-
                 }
             }
             else if(cell instanceof Sea){
@@ -43,9 +45,9 @@ function Cell({socket,changeShow}){
 
             }
             else if(cell instanceof Tax){
-
+                changeShow(4)            
             }
-            else {
+            else if(cell instanceof Corner){
 
             }
         })
