@@ -1,5 +1,4 @@
-import {useSelector} from "react-redux"
-import { useContext, useState } from "react"
+import {useDispatch, useSelector} from "react-redux"
 import {ImPlus} from "react-icons/im"
 import {BiMinus} from "react-icons/bi"
 
@@ -7,13 +6,17 @@ import styles from "./UserZone.module.scss"
 import classNames from "classnames/bind"
 import avatarDefault from "../../../../../src/assets/images/avatar_default.jpg"
 import { colors } from "../../constants/Color/color"
-import { selectUser} from "../../../../redux/userSlice"
-
+import { selectUser, updateBalance} from "../../../../redux/userSlice"
+import { socket } from "../../../../SocketService"
 const cx=classNames.bind(styles)
 
 function UserZone({index,change}){
     const user= useSelector(selectUser)
-
+    // const dispatch= useDispatch()
+    
+    // socket.on("start-result",(data)=>{
+    //     dispatch(updateBalance({amount:data.amount,turnOfUser:data.user}))
+    // })
 
     return (
         <>

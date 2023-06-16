@@ -7,7 +7,11 @@ import { buyHouse } from "../../../../redux/cellSlice"
 function House({houses,houseRefs,cx,socket,possition,turnOfUser,cellRefs}){
     const dispatch=useDispatch()
     
+    // socket.on("start-result",(data)=>{
+    //     dispatch(updateBalance({amount:data.amount,turnOfUser:data.user}))
+    // })
     useEffect(()=>{
+        
         socket.on("bought-result",(data)=>{
             dispatch(updateBalance({amount:-data.price,turnOfUser}))
             dispatch(buyHouse({

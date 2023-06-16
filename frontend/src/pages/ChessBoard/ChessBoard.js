@@ -16,6 +16,8 @@ import House from "./components/House/House";
 import Cell from "./components/Cell/Cell";
 import UpgradeHouse from "./modals/houses/UpgradeHouse";
 import OtherHouse from "./modals/houses/OtherHouse";
+import { useDispatch } from "react-redux";
+import { updateBalance } from "../../redux/userSlice";
 
 const cx = classNames.bind(styles);
 
@@ -24,6 +26,8 @@ function ChessBoard() {
   const location=useLocation()
   const searchParams = new URLSearchParams(location.search);
   const gameRoom = searchParams.get("room");
+
+  const dispatch =useDispatch()
 
   // số user trong phòng
   const [numberUser,setNumberUser]=useState(0)
@@ -104,13 +108,25 @@ function ChessBoard() {
     else if (24 < possition[turnOfUser] && possition[turnOfUser] < 32) {
       cellRefs.current[possition[turnOfUser] - 1].current.classList.add(cx("down-bottom"));
     }
-    if (possition[turnOfUser] > 31) {   
+    if (possition[turnOfUser] >= 31) {   
       possition[turnOfUser]=0 
       setPos(possition);
       // handle Start
+      if(yourTurn === turnOfUser) {
+        socket.emit("start",{
+          gameRoom,amount:300,user:turnOfUser
+        })
+        socket.emit("change-balance",
+        {gameRoom,
+          amount:300,
+          user:turnOfUser,
+          type:"plus"
+        })
+      }
     } else {
       possition[turnOfUser]+=1
       setPos(possition);
+    
     }
     userRef.current[turnOfUser].current.style.transform = "translate(20%,-20%) rotate(45deg)";
 
@@ -144,8 +160,9 @@ function ChessBoard() {
 
     return () => {
       clearInterval(interval);
+      socket.off("start")
     };
-  }, [userSteps,roll,turnOfUser,show,possition]);
+  }, [userSteps,roll,turnOfUser,show,possition,socket]);
 
   //socket
   useEffect(() => {
@@ -157,6 +174,11 @@ function ChessBoard() {
         setYourTurn(data.index)
       }
     })
+    
+    socket.on("start-result",(data)=>{
+        console.log("start")
+        dispatch(updateBalance({amount:data.amount,turnOfUser:data.user}))
+    })    
 
     userRef.current = Array(numberUser)
     .fill()
@@ -178,6 +200,7 @@ function ChessBoard() {
 
     return () => {
       socket.off("join-room", gameRoom);
+      socket.off("start-result")
     };
   }, [socket,numberUser,yourTurn,userRef,turnOfUser]);
 

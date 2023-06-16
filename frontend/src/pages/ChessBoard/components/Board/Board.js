@@ -3,6 +3,7 @@ import seaBG from "../../../../assets/images/sea.jpg"
 import { locations } from "../../constants/locations/data";
 import { types } from "../../constants/locations/type";
 import Chance from "./components/Chance/Chance";
+import startImg from "../../../../assets/images/start.png"
 
 function Board(props){
     const {yourTurn,cx,roll,diceOne,diceTwo,cellRefs,changeRoll,moveBySteps}=props
@@ -127,7 +128,9 @@ function Board(props){
               <div
                 className={cx("corner", "square")}
                 ref={cellRefs.current[0]}
-              ></div>
+              >
+                <img src={startImg} width="80" style={{transform:"rotateZ(-60deg)",position:"absolute"}}/>
+              </div>
 
               {/* Đánh dấu từ 31->25*/}
               <div className={cx("row")}>
