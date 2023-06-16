@@ -6,6 +6,8 @@ import { types } from "../locations/type";
 import { locations } from "../locations/data";
 import { Chance } from "../../class/chance";
 
+
+// khởi tạo các ô bàn cờ => gán class
 export const cells= locations.map((location)=>{
     const {type,...rest}=location
 

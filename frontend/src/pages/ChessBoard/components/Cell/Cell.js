@@ -1,18 +1,19 @@
 import { useEffect } from "react"
+import { useSelector } from "react-redux"
+
 import { cells } from "../../constants/cell"
-import { types } from "../../constants/locations/type"
+import modalConstant from "../../constants/modal"
+
 import { City } from "../../class/city"
 import { Sea } from "../../class/sea"
 import { Chance } from "../../class/chance"
 import { Tax } from "../../class/tax"
-import { useSelector } from "react-redux"
-import { selectCell } from "../../../../redux/cellSlice"
-import { selectUser } from "../../../../redux/userSlice"
 import { Corner } from "../../class/corner"
 
-function Cell({socket,changeShow,yourTurn,gameRoom}){
+import { selectCell } from "../../../../redux/cellSlice"
+
+function Cell({socket,changeShow}){
     const buyHouse = useSelector(selectCell)
-    const user = useSelector(selectUser)
 
     useEffect(()=>{
         socket.on("moved-result",(data)=>{
@@ -25,16 +26,16 @@ function Cell({socket,changeShow,yourTurn,gameRoom}){
             
                 })
                 if(!house) {
-                    changeShow(1)
+                    changeShow(modalConstant.BUY_HOUSE)
                     //vào ô trống
                 }
                 else if(house.owner===turnOfUser){
-                    changeShow(2)
+                    changeShow(modalConstant.UPGRADE_HOUSE)
                     //vào nhà mình"
                     
                 }
                 else {
-                    changeShow(3)
+                    changeShow(modalConstant.RE_BUY_HOUSE)
                     //Vào nhà người khác
                 }
             }
@@ -42,10 +43,10 @@ function Cell({socket,changeShow,yourTurn,gameRoom}){
                 
             }
             else if(cell instanceof Chance){
-
+                changeShow(modalConstant.CHANGES)
             }
             else if(cell instanceof Tax){
-                changeShow(4)            
+                changeShow(modalConstant.PAY_TAX)            
             }
             else if(cell instanceof Corner){
 

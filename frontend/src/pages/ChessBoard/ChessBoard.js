@@ -6,6 +6,7 @@ import { useLocation } from "react-router-dom";
 import { SocketContext } from "../../SocketService";
 
 import houses from "./constants/houses";
+import modalConstant from "./constants/modal";
 import char from "../../assets/images/char.png";
 
 import UserZone from "./components/UserZone/UserZone";
@@ -18,6 +19,8 @@ import UpgradeHouse from "./modals/houses/UpgradeHouse";
 import OtherHouse from "./modals/houses/OtherHouse";
 import SocketRedux from "./components/SocketRedux";
 import Tax from "./modals/chances/Tax/tax";
+import Chance from "./components/Board/components/Chance/Chance";
+import ChangesModal from "./modals/chances/Chances";
 
 const cx = classNames.bind(styles);
 
@@ -248,7 +251,7 @@ function ChessBoard() {
 
         {/* MODAL */}
         {turnOfUser===yourTurn
-        &&show===BUY_HOUSE?
+        &&show===modalConstant.BUY_HOUSE?
         <BuySelection
           changeShow={changeShow}
           show={show}
@@ -260,7 +263,7 @@ function ChessBoard() {
 
         </BuySelection>
         :turnOfUser===yourTurn
-        &&show===UPGRADE_HOUSE
+        &&show===modalConstant.UPGRADE_HOUSE
         ?<UpgradeHouse 
           changeShow={changeShow}
           show={show}
@@ -273,7 +276,7 @@ function ChessBoard() {
         </UpgradeHouse>
         :
         turnOfUser===yourTurn
-        &&show===RE_BUY_HOUSE
+        &&show===modalConstant.RE_BUY_HOUSE
         ?
         <OtherHouse
           changeShow={changeShow}
@@ -283,7 +286,10 @@ function ChessBoard() {
           gameRoom={gameRoom}
           possition={possition}
         ></OtherHouse>
-        :show===PAY_TAX
+
+        :
+        turnOfUser===yourTurn
+        &&show===modalConstant.PAY_TAX
         ?
         <Tax 
           changeShow={changeShow}
@@ -293,6 +299,18 @@ function ChessBoard() {
           gameRoom={gameRoom}
         >
         </Tax>
+        :
+        show === modalConstant.CHANGES
+        ?
+        <ChangesModal
+          changeShow={changeShow}
+          show={show}
+          turnOfUser={turnOfUser}
+          socket={socket}
+          gameRoom={gameRoom}
+        >
+
+        </ChangesModal>
         :""
         }
 
@@ -300,12 +318,11 @@ function ChessBoard() {
         {<Cell
           socket={socket}
           changeShow={changeShow}
-          yourTurn={yourTurn}
-          gameRoom={gameRoom}
         ></Cell>}
 
         {/* xử lý các sự kiện socket chỉ liên quan đến redux*/}
         <SocketRedux socket = {socket}></SocketRedux>
+
       </div>
     </>
   );
@@ -313,7 +330,3 @@ function ChessBoard() {
 export default ChessBoard;
 
 
-const BUY_HOUSE = 1
-const UPGRADE_HOUSE = 2
-const RE_BUY_HOUSE = 3
-const PAY_TAX = 4
