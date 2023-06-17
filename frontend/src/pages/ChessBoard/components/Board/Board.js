@@ -1,5 +1,4 @@
 import Dice from "../Dice/Dice";
-import seaBG from "../../../../assets/images/sea.jpg"
 import { locations } from "../../constants/locations/data";
 import { types } from "../../constants/locations/type";
 import Chance from "./components/Chance/Chance";
@@ -7,6 +6,7 @@ import startImg from "../../../../assets/images/start.png"
 import taxImg from "../../../../assets/images/tax.png"
 import prisonImg from "../../../../assets/images/prison.png"
 import seaVideo from "../../../../assets/images/beach.mp4"
+import worldTourImg from "../../../../assets/images/worldtour.png"
 
 function Board(props){
     const {yourTurn,cx,roll,diceOne,diceTwo,cellRefs,changeRoll,moveBySteps}=props
@@ -144,6 +144,7 @@ function Board(props){
               <div
                 className={cx("corner", "square")}
                 ref={cellRefs.current[0]}
+                style={{backgroundColor:"white"}}
               >
                 <img src={startImg} width="90" style={{transform:"rotateZ(-60deg)",position:"absolute"}}/>
               </div>
@@ -183,7 +184,10 @@ function Board(props){
               <div
                 className={cx("corner", "square")}
                 ref={cellRefs.current[24]}
-              ></div>
+                style={{backgroundColor:"black"}}
+              >
+                <img src={worldTourImg} width={120} style={{position:"absolute", transform:"translate(0%,-20%) rotate(60deg) " }}/>
+              </div>
             </div>
           </div>
         </div>
