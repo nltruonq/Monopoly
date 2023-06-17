@@ -176,8 +176,8 @@ function ChessBoard() {
         setDiceOne(data.diceOne);
         setDiceTwo(data.diceTwo);
         setTimeout(() => {
-        // setSteps(data.diceOne + data.diceTwo);
-        setSteps(7)
+        setSteps(data.diceOne + data.diceTwo);
+        // setSteps(7)
     }, 2000);   
     })
     socket.on("turn-result",(data)=>{
@@ -218,7 +218,7 @@ function ChessBoard() {
 
                 {/* nhân vật */}
                 <div className={cx(`char`)} ref={userRef.current[index]} >
-                  <img src={char} width="50px" />
+                  <img src={char} width="100px" />
                   {
                     show  // mua nhà 
                     && turnOfUser!==yourTurn 

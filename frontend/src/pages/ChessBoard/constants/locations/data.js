@@ -55,7 +55,7 @@ export const locations= [
         type:"city"
     },
     {
-        type:"prision",
+        type:"prison",
         boardIndex:8,
     },
     //---------

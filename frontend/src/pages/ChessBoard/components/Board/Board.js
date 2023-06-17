@@ -4,6 +4,9 @@ import { locations } from "../../constants/locations/data";
 import { types } from "../../constants/locations/type";
 import Chance from "./components/Chance/Chance";
 import startImg from "../../../../assets/images/start.png"
+import taxImg from "../../../../assets/images/tax.png"
+import prisonImg from "../../../../assets/images/prison.png"
+import seaVideo from "../../../../assets/images/beach.mp4"
 
 function Board(props){
     const {yourTurn,cx,roll,diceOne,diceTwo,cellRefs,changeRoll,moveBySteps}=props
@@ -17,7 +20,13 @@ function Board(props){
               <div
                 className={cx("corner", "square")}
                 ref={cellRefs.current[8]}
-              ></div>
+                style={{backgroundColor:"white",color:"red"}}
+              >
+                <img src={prisonImg} width={100} 
+                  style={{transform:"translate(-20%,-23%) rotate(20deg,0,60deg)",position:"absolute"}} 
+                />
+
+              </div>
               {/* thẻ đánh dấu từ 9 tới 15 */}
               <div className={cx("row")}>
                 {[...Array(7)].map((_, index) => {
@@ -28,11 +37,14 @@ function Board(props){
                       ref={cellRefs.current[9 + index]}
                     >
                       { locations[9+index].type=== types.SEA 
-                        ? <img src= {seaBG} width="60" height="90" style={{
+                        ? 
+                        <video autoPlay muted loop width="60" height="90" style={{
                           position:"absolute",
                           overflow:"hidden",
                           objectFit:"cover",
-                        }}/>
+                        }}>
+                          <source src={seaVideo} type="video/mp4" />
+                        </video>
                         :
                         locations[9+index].type === types.CITY
                         ? <div className={cx("city-top")}>{locations[9+index].city}</div>
@@ -61,12 +73,14 @@ function Board(props){
                         className={cx("rectangle-column")}
                         ref={cellRefs.current[7 - index]}
                       >
-                        {locations[7-index].type=== types.SEA ? <img src= {seaBG} width="60" height="90" style={{
+                        {locations[7-index].type=== types.SEA ? 
+                        <video autoPlay muted loop width="90" height="60" style={{
                           position:"absolute",
                           overflow:"hidden",
                           objectFit:"cover",
-                          transform: "translate(27%,-18%) rotate(90deg)",
-                        }}/>
+                        }}>
+                          <source src={seaVideo} type="video/mp4" />
+                        </video>
                         :
                         locations[7-index].type===types.CITY
                         ? <div className={cx("city-left")}>{locations[7-index].city}</div>
@@ -82,7 +96,7 @@ function Board(props){
                   MOVE
                 </button>}
                 <Dice
-                  diceOne={7}
+                  diceOne={diceOne}
                   diceTwo={diceTwo}
                   roll={roll}
                   changeRoll={changeRoll}
@@ -102,12 +116,14 @@ function Board(props){
                         className={cx("rectangle-column")}
                         ref={cellRefs.current[17 + index]}
                       >
-                        {locations[17+index].type=== types.SEA ? <img src= {seaBG} width="60" height="90" style={{
+                        {locations[17+index].type=== types.SEA ? 
+                        <video autoPlay muted loop width="90" height="60" style={{
                           position:"absolute",
                           overflow:"hidden",
                           objectFit:"cover",
-                          transform: "translate(27%,-18%) rotate(90deg)",
-                        }}/>
+                        }}>
+                          <source src={seaVideo} type="video/mp4" />
+                        </video>
                         :
                         locations[17+index].type===types.CITY
                         ? <div className={cx("city-left")}>{locations[17+index].city}</div>
@@ -129,7 +145,7 @@ function Board(props){
                 className={cx("corner", "square")}
                 ref={cellRefs.current[0]}
               >
-                <img src={startImg} width="80" style={{transform:"rotateZ(-60deg)",position:"absolute"}}/>
+                <img src={startImg} width="90" style={{transform:"rotateZ(-60deg)",position:"absolute"}}/>
               </div>
 
               {/* Đánh dấu từ 31->25*/}
@@ -141,15 +157,22 @@ function Board(props){
                       className={cx("rectangle")}
                       ref={cellRefs.current[31 - index]}
                     >
-                      {locations[31-index].type=== types.SEA ? <img src= {seaBG} width="60" height="90" style={{
+                      {locations[31-index].type=== types.SEA ? 
+                        <>
+                        <video autoPlay muted loop width="60" height="90" style={{
                           position:"absolute",
                           overflow:"hidden",
                           objectFit:"cover",
-                        }}/>
+                        }}>
+                          <source src={seaVideo} type="video/mp4" />
+                        </video>
+                        </>
                         :
                         locations[31-index].type===types.CITY 
                         ? <div className={cx("city-top")}>{locations[31-index].city}</div>
-                        :"TAX"
+                        :<>
+                          <img src={taxImg} width={50} style={{marginTop:20,position:"absolute"}}/>
+                        </>
                       } 
                     </div>
                   );

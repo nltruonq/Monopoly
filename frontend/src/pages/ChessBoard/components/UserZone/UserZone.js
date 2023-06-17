@@ -50,14 +50,14 @@ function UserZone({index}){
                     <div className={cx("change-balance")} style={{color:change.type==="minus" ?"red":"green"}}>
                         {change.type==="plus"? <ImPlus size="30" />:<BiMinus size="30" /> }
                         <div style={{fontSize:40}}>
-                     {-change.amount}
+                     {Math.abs(change.amount)}
                         </div>
                     </div>}
                     {changes && changes.user!==index&&  
                     <div className={cx("change-balance")} style={{color:changes.type==="minus" ?"red":"green"}}>
                         {changes.type==="plus"? <ImPlus size="30" />:<BiMinus size="30" /> }
                         <div style={{fontSize:40}}>
-                     {changes.amount}
+                     {Math.abs(changes.amount)}
                         </div>
                     </div>}
                 </div>
