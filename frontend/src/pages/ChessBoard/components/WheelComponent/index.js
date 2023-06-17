@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { socket } from '../../../../SocketService'
 
 const WheelComponent = ({
   segments,
@@ -7,12 +8,13 @@ const WheelComponent = ({
   onFinished,
   primaryColor = 'black',
   contrastColor = 'white',
-  buttonText = 'Spin',
+  buttonText ,
   isOnlyOnce ,
   size = 290,
   upDuration = 0,
-  downDuration = 50,
-  fontFamily = 'proxima-nova'
+  downDuration = 150,
+  fontFamily = 'proxima-nova',
+  gameRoom
 }) => {
   let currentSegment = ''
   let isStarted = false
@@ -40,9 +42,17 @@ const WheelComponent = ({
     wheelDraw()
   }
 
+  // useEffect(()=>{
+  //   socket.on("spin-result",()=>{
+  //     spin()
+  //   })
+  //   return ()=>{
+  //     socket.off("spin")
+  //   }
+  // },[socket])
+
   const initCanvas = () => {
     let canvas = document.getElementById('canvas')
-    console.log(navigator)
     if (navigator.userAgent.indexOf('MSIE') !== -1) {
       canvas = document.createElement('canvas')
       canvas.setAttribute('width', 1000)
@@ -50,9 +60,14 @@ const WheelComponent = ({
       canvas.setAttribute('id', 'canvas')
       document.getElementById('wheel').appendChild(canvas)
     }
-    canvas.addEventListener('click', spin, false)
+    canvas.addEventListener('click', handleSpin, false)
     canvasContext = canvas.getContext('2d')
   }
+  const handleSpin=()=>{
+    socket.emit("spin",{gameRoom})
+    spin()
+  }
+
   const spin = () => {
     isStarted = true
     if (timerHandle === 0) {
@@ -201,7 +216,7 @@ const WheelComponent = ({
   }
   const clear = () => {
     const ctx = canvasContext
-    ctx.clearRect(0, 0, 1000, 800)
+    ctx?.clearRect(0, 0, 1000, 800)
   }
   return (
     <div id='wheel'>

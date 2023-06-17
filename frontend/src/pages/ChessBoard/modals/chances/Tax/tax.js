@@ -9,12 +9,15 @@ import { selectUser } from "../../../../../redux/userSlice";
 import { useSelector } from "react-redux";
 import { cells } from "../../../constants/cell";
 // const cx = classNames.bind(styles);
+import { Tax } from "../../../class/tax";
 
-function Tax({ show, changeShow,turnOfUser,socket,gameRoom,possition }) {
+function TaxComponent({ show, changeShow,turnOfUser,socket,gameRoom,possition }) {
 
   const user = useSelector(selectUser)
   const cell = cells[possition[turnOfUser]]
-  const taxValue= cell.payTax(user[turnOfUser].balance)
+  const taxValue= cell instanceof Tax
+                  ?cell?.payTax(user[turnOfUser].balance)
+                  :-0.1*user[turnOfUser].balance
   
   const handleClose = () => {
     socket.emit("pay-tax",{
@@ -41,7 +44,7 @@ function Tax({ show, changeShow,turnOfUser,socket,gameRoom,possition }) {
         <Modal.Title>ĐÓNG THUẾ</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-            bạn bị trừ {- taxValue} 
+            Bạn bị trừ 10% tài sản: {- taxValue} <RiCoinFill color="yellow" />
       </Modal.Body>
       <Modal.Footer>
         <Button 
@@ -49,11 +52,11 @@ function Tax({ show, changeShow,turnOfUser,socket,gameRoom,possition }) {
             handleClose()
           }} 
           variant="secondary">
-         <RiCoinFill color="yellow" />
+         Oke
         </Button>
       </Modal.Footer>
     </Modal>
   );
 }
 
-export default Tax;
+export default TaxComponent;

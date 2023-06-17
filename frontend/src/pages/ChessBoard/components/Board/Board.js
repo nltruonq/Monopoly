@@ -82,7 +82,7 @@ function Board(props){
                   MOVE
                 </button>}
                 <Dice
-                  diceOne={diceOne}
+                  diceOne={7}
                   diceTwo={diceTwo}
                   roll={roll}
                   changeRoll={changeRoll}

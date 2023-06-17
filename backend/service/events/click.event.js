@@ -1,4 +1,4 @@
-const turnEvent = (socket,io) => {
+const clickEvent = (socket,io) => {
     socket.on("roll",(data)=>{
         try {
             const room = io.sockets.adapter.rooms.get(data.gameRoom);
@@ -19,7 +19,12 @@ const turnEvent = (socket,io) => {
         }
     })
 
+    socket.on("spin",(data)=>{
+        const {gameRoom}=data
+        socket.nsp.in(gameRoom).emit("spin-result")
+    })
+
 
   };
   
-module.exports = turnEvent;
+module.exports = clickEvent;

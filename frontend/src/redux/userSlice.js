@@ -17,10 +17,17 @@ const userSlice = createSlice({
         user.balance += amount;
       }
     },
+    secondaryUpdateBalance: (state, action) => {
+      const { turnOfUser, amount } = action.payload;
+      const user = state[turnOfUser]
+      if (user) {
+        user.balance += amount;
+      }
+    },
   },
 });
 
-export const { updateBalance } = userSlice.actions;
+export const { updateBalance,secondaryUpdateBalance } = userSlice.actions;
 
 export const selectUser = createSelector(
   (state) => state.user,

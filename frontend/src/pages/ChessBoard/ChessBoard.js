@@ -18,9 +18,9 @@ import Cell from "./components/Cell/Cell";
 import UpgradeHouse from "./modals/houses/UpgradeHouse";
 import OtherHouse from "./modals/houses/OtherHouse";
 import SocketRedux from "./components/SocketRedux";
-import Tax from "./modals/chances/Tax/tax";
-import Chance from "./components/Board/components/Chance/Chance";
+import TaxComponent from "./modals/chances/Tax/tax";
 import ChangesModal from "./modals/chances/Chances";
+import Birthday from "./modals/chances/BirthDay";
 
 const cx = classNames.bind(styles);
 
@@ -176,7 +176,8 @@ function ChessBoard() {
         setDiceOne(data.diceOne);
         setDiceTwo(data.diceTwo);
         setTimeout(() => {
-        setSteps(data.diceOne + data.diceTwo);
+        // setSteps(data.diceOne + data.diceTwo);
+        setSteps(7)
     }, 2000);   
     })
     socket.on("turn-result",(data)=>{
@@ -291,15 +292,17 @@ function ChessBoard() {
         turnOfUser===yourTurn
         &&show===modalConstant.PAY_TAX
         ?
-        <Tax 
+        <TaxComponent 
           changeShow={changeShow}
           show={show}
           turnOfUser={turnOfUser}
           socket={socket}
           gameRoom={gameRoom}
+          possition={possition}
         >
-        </Tax>
+        </TaxComponent>
         :
+        turnOfUser===yourTurn&&
         show === modalConstant.CHANGES
         ?
         <ChangesModal
@@ -308,9 +311,23 @@ function ChessBoard() {
           turnOfUser={turnOfUser}
           socket={socket}
           gameRoom={gameRoom}
+          yourTurn={yourTurn}
         >
-
         </ChangesModal>
+        :
+        // turnOfUser===yourTurn&&
+        show === modalConstant.HOST_BIRTHDAY
+        ?
+        <Birthday
+          changeShow={changeShow}
+          yourTurn={yourTurn}
+          gameRoom={gameRoom}
+          numberUser={numberUser}
+          show={show}
+          turnOfUser={turnOfUser}
+          socket={socket}
+        >
+        </Birthday>
         :""
         }
 
@@ -321,7 +338,7 @@ function ChessBoard() {
         ></Cell>}
 
         {/* xử lý các sự kiện socket chỉ liên quan đến redux*/}
-        <SocketRedux socket = {socket}></SocketRedux>
+        <SocketRedux socket = {socket} yourTurn={yourTurn}></SocketRedux>
 
       </div>
     </>

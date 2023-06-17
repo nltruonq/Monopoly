@@ -19,11 +19,19 @@ function UserZone({index}){
     //     dispatch(updateBalance({amount:data.amount,turnOfUser:data.user}))
     // })
   const [change,setChangeBalance] =useState(false)
+  const [changes,setChangeBalances]=useState(false)
     
   socket.on("change-balance-result",(data)=>{
       setChangeBalance( {amount:data.amount, user:data.user,type:data.type})
       setTimeout(()=>{
           setChangeBalance(false)
+      },1000)
+  })
+
+  socket.on("change-balance-users-result",data=>{
+    setChangeBalances( {amount:data.amount, user:data.user,type:data.type})
+      setTimeout(()=>{
+          setChangeBalances(false)
       },1000)
   })
 
@@ -40,9 +48,16 @@ function UserZone({index}){
                     </div>
                     {change && change.user===index&&  
                     <div className={cx("change-balance")} style={{color:change.type==="minus" ?"red":"green"}}>
-                        {change.type==="plus"? <ImPlus size="30" />:<BiMinus size="30" /> } 
+                        {change.type==="plus"? <ImPlus size="30" />:<BiMinus size="30" /> }
                         <div style={{fontSize:40}}>
-                     {change.amount}
+                     {-change.amount}
+                        </div>
+                    </div>}
+                    {changes && changes.user!==index&&  
+                    <div className={cx("change-balance")} style={{color:changes.type==="minus" ?"red":"green"}}>
+                        {changes.type==="plus"? <ImPlus size="30" />:<BiMinus size="30" /> }
+                        <div style={{fontSize:40}}>
+                     {changes.amount}
                         </div>
                     </div>}
                 </div>

@@ -1,22 +1,29 @@
 import React from "react";
 import WheelComponent from "../../../components/WheelComponent";
+import modalConstant from "../../../constants/modal";
 
-import Button from "react-bootstrap/Button";
-import Modal from "react-bootstrap/Modal";
-import { colors } from "../../../constants/Color/color";
-
-function ChangesModal({show,changeShow,turnOfUser,socket,gameRoom,possition,
-}) {
+function ChangesModal({changeShow,turnOfUser,gameRoom,yourTurn}) {
   const segments = ["Vào tù", "Phá nhà người khác", "Tổ chức sinh nhật", "Nộp thuế"];
   const segColors = ["#3DA5E0", "#34A24F", "#F9AA1F", "#FF9000"];
   const onFinished = (winner) => {
-    console.log(winner);
-  };
-  const handleClose = () => {
-    changeShow(false);
-    socket.emit("close", { gameRoom });
-    //  sau này sẽ thế thành giá trị 2 xúc xắc để xét double
-    socket.emit("turn", { gameRoom });
+    // 
+    setTimeout(()=>{
+      // dùng để test
+      changeShow(modalConstant.HOST_BIRTHDAY)
+      
+      // if(winner === segments[0] ){
+      //     changeShow(modalConstant.JAIL)
+      // }
+      // else if(winner===segments[1]){
+      //     changeShow(modalConstant.DESTROY_HOUSE)
+      // }
+      // else if(winner===segments[2]){
+      //    changeShow(modalConstant.HOST_BIRTHDAY)
+      // }
+      // else{
+      //   changeShow(modalConstant.PAY_TAX)
+      // }
+    },2000)
   };
 
   return (
@@ -44,7 +51,8 @@ function ChangesModal({show,changeShow,turnOfUser,socket,gameRoom,possition,
             onFinished={(winner) => onFinished(winner)}
             primaryColor="black"
             contrastColor="white"
-            buttonText="Spin"
+            buttonText={turnOfUser===yourTurn? "Spin":""}
+            gameRoom={gameRoom}
             // isOnlyOnce={true}
           />
         </div>
