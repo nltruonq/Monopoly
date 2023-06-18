@@ -1,46 +1,57 @@
-import {useDispatch, useSelector} from "react-redux"
+import {useSelector} from "react-redux"
 import {ImPlus} from "react-icons/im"
 import {BiMinus} from "react-icons/bi"
+import { useState } from "react"
+import classNames from "classnames/bind"
 
 import styles from "./UserZone.module.scss"
-import classNames from "classnames/bind"
 import avatarDefault from "../../../../../src/assets/images/avatar_default.jpg"
 import { colors } from "../../constants/Color/color"
-import { selectUser, updateBalance} from "../../../../redux/userSlice"
+import { selectUser} from "../../../../redux/userSlice"
 import { socket } from "../../../../SocketService"
-import { useState } from "react"
+import jailedImg from "../../../../assets/images/jailed.png"
+
 const cx=classNames.bind(styles)
 
 function UserZone({index}){
     const user= useSelector(selectUser)
-    // const dispatch= useDispatch()
-    
-    // socket.on("start-result",(data)=>{
-    //     dispatch(updateBalance({amount:data.amount,turnOfUser:data.user}))
-    // })
-  const [change,setChangeBalance] =useState(false)
-  const [changes,setChangeBalances]=useState(false)
-    
-  socket.on("change-balance-result",(data)=>{
-      setChangeBalance( {amount:data.amount, user:data.user,type:data.type})
-      setTimeout(()=>{
-          setChangeBalance(false)
-      },1000)
-  })
 
-  socket.on("change-balance-users-result",data=>{
-    setChangeBalances( {amount:data.amount, user:data.user,type:data.type})
-      setTimeout(()=>{
-          setChangeBalances(false)
-      },1000)
-  })
+    const [change,setChangeBalance] =useState(false)
+    const [changes,setChangeBalances]=useState(false)
+
+    const turns = user[index].prison
+    socket.on("change-balance-result",(data)=>{
+        setChangeBalance( {amount:data.amount, user:data.user,type:data.type})
+        setTimeout(()=>{
+            setChangeBalance(false)
+        },1000)
+    })
+
+    socket.on("change-balance-users-result",data=>{
+        setChangeBalances( {amount:data.amount, user:data.user,type:data.type})
+        setTimeout(()=>{
+            setChangeBalances(false)
+        },1000)
+    })
 
     return (
         <>
             <div className={cx("wrapper")}>
                 <div className={cx("player-card")}>
                     <div className={cx("avatar")} >
-                        <img src={avatarDefault} width="50px" height="50px"  alt="Avatar" className="avatar" />
+                        <img src={turns ===0 ? avatarDefault:jailedImg} 
+                        width="50px" height="50px"  alt="Avatar" className="avatar" 
+                        style={{backgroundColor:`${turns !==0 ? "black" : ""}`}}
+                        />
+                        <div style={{
+                            position:"absolute",
+                            top:-20 ,
+                            left:40,
+                            color:"white",
+                            fontSize:30
+                        }}>
+                            {turns>0 ? turns: ''}
+                        </div>
                     </div>
                     <div className={cx("info")}>
                         <h3 className={cx("name")} style={{backgroundColor:colors[index]}}>name</h3>

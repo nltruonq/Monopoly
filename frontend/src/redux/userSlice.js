@@ -4,10 +4,10 @@ import { createSlice, createSelector } from '@reduxjs/toolkit';
 const userSlice = createSlice({
   name: 'user',
   initialState: [
-    { balance: 500 },
-    { balance: 500 },
-    { balance: 500 },
-    { balance: 500 },
+    { balance: 500, prison:0 },
+    { balance: 500, prison:0 },
+    { balance: 500, prison:0 },
+    { balance: 500, prison:0 },
   ],
   reducers: {
     updateBalance: (state, action) => {
@@ -24,10 +24,17 @@ const userSlice = createSlice({
         user.balance += amount;
       }
     },
+    updatePrison: (state,action)=>{
+      const {turnOfUser, turns} = action.payload;
+      const user= state[turnOfUser]
+      if(user){
+        user.prison += turns;
+      }
+    } ,
   },
 });
 
-export const { updateBalance,secondaryUpdateBalance } = userSlice.actions;
+export const { updateBalance,secondaryUpdateBalance,updatePrison } = userSlice.actions;
 
 export const selectUser = createSelector(
   (state) => state.user,

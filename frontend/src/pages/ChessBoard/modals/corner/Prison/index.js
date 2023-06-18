@@ -1,35 +1,24 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import { RiCoinFill } from "react-icons/ri";
 
 import { colors } from "../../../constants/Color/color";
 import { selectUser } from "../../../../../redux/userSlice";
 import { useSelector } from "react-redux";
 import { cells } from "../../../constants/cell";
-import { Tax } from "../../../class/tax";
-import taxImg  from "../../../../../assets/images/tax.png"
+import jailedImg from "../../../../../assets/images/jailed.png"
 
-function TaxComponent({ show, changeShow,turnOfUser,socket,gameRoom,possition }) {
+function Prison({ show, changeShow,turnOfUser,socket,gameRoom,possition }) {
 
   const user = useSelector(selectUser)
   const cell = cells[possition[turnOfUser]]
-  const taxValue= cell instanceof Tax
-                  ?cell?.payTax(user[turnOfUser].balance)
-                  :-0.1*user[turnOfUser].balance
+
   
   const handleClose = () => {
-    socket.emit("pay-tax",{
+    socket.emit("jail",{
         user:turnOfUser,
-        amount:taxValue,
-        gameRoom   
-    })
-
-    socket.emit("change-balance",{
+        turns:3,
         gameRoom,
-        amount:taxValue,
-        user:turnOfUser,
-        type:"minus"
     })
     changeShow(false);
     socket.emit("close",{gameRoom})
@@ -40,11 +29,17 @@ function TaxComponent({ show, changeShow,turnOfUser,socket,gameRoom,possition })
   return (
     <Modal show={show}>
       <Modal.Header closeButton onClick={handleClose} style={{backgroundColor:colors[turnOfUser],color:"white"}}>
-        <Modal.Title>ĐÓNG THUẾ</Modal.Title>
+        <Modal.Title>VÀO TÙ</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-            <img src= {taxImg} width={200} />
-            Bạn bị trừ 10% tài sản: {- taxValue} <RiCoinFill color="yellow" />
+            <div className="col" 
+                style={{display:"flex",flexDirection:"column",justifyContent:"center",alignItems:"center"}}
+            >
+                <img src= {jailedImg} width={200} />
+                <div style={{marginTop:20}}>
+                    Bạn bị vào tù trong 3 lượt kế tiếp
+                </div>
+            </div>
       </Modal.Body>
       <Modal.Footer>
         <Button 
@@ -59,4 +54,4 @@ function TaxComponent({ show, changeShow,turnOfUser,socket,gameRoom,possition })
   );
 }
 
-export default TaxComponent;
+export default Prison;

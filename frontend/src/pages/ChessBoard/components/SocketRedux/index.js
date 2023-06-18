@@ -1,6 +1,6 @@
 import { useEffect } from "react"
 import { useDispatch } from "react-redux"
-import { updateBalance } from "../../../../redux/userSlice"
+import { updateBalance, updatePrison } from "../../../../redux/userSlice"
 
 function SocketRedux({socket}){
     const dispatch =useDispatch()
@@ -20,6 +20,9 @@ function SocketRedux({socket}){
                 dispatch(updateBalance({amount:data.amount,turnOfUser:data.users[i]}))
             }
 
+        })
+        socket.on("jail-result",data=>{
+            dispatch(updatePrison({turnOfUser:data.user,turns:data.turns}))
         })
         return ()=>{
             socket.off("start-result")

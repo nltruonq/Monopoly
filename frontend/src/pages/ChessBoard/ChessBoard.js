@@ -21,6 +21,9 @@ import SocketRedux from "./components/SocketRedux";
 import TaxComponent from "./modals/chances/Tax/tax";
 import ChangesModal from "./modals/chances/Chances";
 import Birthday from "./modals/chances/BirthDay";
+import Prison from "./modals/corner/Prison";
+import { useDispatch, useSelector } from "react-redux";
+import { selectUser, updatePrison } from "../../redux/userSlice";
 
 const cx = classNames.bind(styles);
 
@@ -29,6 +32,9 @@ function ChessBoard() {
   const location=useLocation()
   const searchParams = new URLSearchParams(location.search);
   const gameRoom = searchParams.get("room");
+
+  const userRedux = useSelector(selectUser)
+  const dispatch= useDispatch()
 
   // số user trong phòng
   const [numberUser,setNumberUser]=useState(0)
@@ -175,10 +181,23 @@ function ChessBoard() {
         setRoll(true)
         setDiceOne(data.diceOne);
         setDiceTwo(data.diceTwo);
+
+        console.log(userRedux )
+        // double thì ra tù
+        if(data.diceOne === data.diceTwo){
+          dispatch(updatePrison({turnOfUser,turns:-userRedux[turnOfUser].prison}))
+        }
+
         setTimeout(() => {
-        setSteps(data.diceOne + data.diceTwo);
-        // setSteps(7)
-    }, 2000);   
+          if(userRedux[turnOfUser].prison > 0 && data.diceOne!== data.diceTwo){
+            setSteps(0)
+            dispatch(updatePrison({turnOfUser,turns:-1}))
+          }
+          else {
+            // setSteps(data.diceOne + data.diceTwo);
+            setSteps(9)
+          }
+        }, 2000);   
     })
     socket.on("turn-result",(data)=>{
       setTurnUser(data.user)
@@ -186,8 +205,9 @@ function ChessBoard() {
 
     return () => {
       socket.off("join-room", gameRoom);
+      socket.off("roll-result")
     };
-  }, [socket,numberUser,yourTurn,userRef,turnOfUser]);
+  }, [socket,numberUser,yourTurn,userRef,turnOfUser,userRedux]);
 
 
   return (
@@ -328,6 +348,19 @@ function ChessBoard() {
           socket={socket}
         >
         </Birthday>
+        :
+        turnOfUser===yourTurn&&
+        show === modalConstant.JAIL
+        ?
+        <Prison
+          changeShow={changeShow}
+          possition={possition}
+          gameRoom={gameRoom}
+          show={show}
+          turnOfUser={turnOfUser}
+          socket={socket}
+        >
+        </Prison>
         :""
         }
 

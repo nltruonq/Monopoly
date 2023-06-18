@@ -4,6 +4,7 @@ import Modal from "react-bootstrap/Modal";
 
 import { RiCoinFill } from "react-icons/ri";
 import { colors } from "../../../constants/Color/color";
+import birthdayImg from "../../../../../assets/images/birthday.png"
 
 // numberuser sau này sẽ update thành số user còn tài sản 
 function Birthday({ show, changeShow,turnOfUser,socket,gameRoom,yourTurn,numberUser }) {
@@ -53,7 +54,14 @@ function Birthday({ show, changeShow,turnOfUser,socket,gameRoom,yourTurn,numberU
         <Modal.Title>MỪNG SINH NHẬT</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-            Bạn nhận được  {amount } <RiCoinFill color="yellow" /> từ những người chơi khác
+          <div className="col" 
+            style={{display:"flex",flexDirection:"column",justifyContent:"center",alignItems:"center"}}
+          >
+            <img src= {birthdayImg} width={200}/>
+            <div>
+             Bạn nhận được  {amount } <RiCoinFill color="yellow" /> từ những người chơi khác
+            </div>
+          </div>
       </Modal.Body>
       <Modal.Footer>
         <Button 

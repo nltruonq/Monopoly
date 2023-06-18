@@ -14,6 +14,14 @@ const turnEvent=(socket,io)=>{
         } catch (error) {
             console.log(error)
         }
+    })
+    socket.on("jail",data=>{
+        try {
+            const {gameRoom,user,turns}=data
+            socket.nsp.in(gameRoom).emit("jail-result",{user,turns})
+        } catch (error) {
+            console.log(error)
+        }
     })    
 }
 

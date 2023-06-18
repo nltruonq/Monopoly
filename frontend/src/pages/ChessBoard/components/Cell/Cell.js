@@ -20,6 +20,9 @@ function Cell({socket,changeShow}){
             const {possition,turnOfUser}=data
             const cell = cells[possition[turnOfUser]]
             
+            //dùng để test modal
+            // changeShow(modalConstant.HOST_BIRTHDAY)
+
             if(cell instanceof City){
                 const house = buyHouse?.find((elm)=>{
                     return elm.boardIndex === possition[turnOfUser]
@@ -49,7 +52,16 @@ function Cell({socket,changeShow}){
                 changeShow(modalConstant.PAY_TAX)            
             }
             else if(cell instanceof Corner){
-
+                if(possition[turnOfUser] === 8) {
+                    changeShow(modalConstant.JAIL)
+                }
+                else if(possition[turnOfUser] === 16)
+                {
+                    changeShow(modalConstant.SEAGAME)
+                }
+                else if(possition[turnOfUser] === 24){
+                    changeShow(modalConstant.WORLD_TOUR)
+                }
             }
         })
 
