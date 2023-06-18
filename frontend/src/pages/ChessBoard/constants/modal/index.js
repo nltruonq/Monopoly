@@ -9,5 +9,6 @@ const modalConstant= {
     DESTROY_HOUSE:8,
     WORLD_TOUR:9,
     SEAGAME:10,
+    LOST_TURN:11,
 }
 export default modalConstant

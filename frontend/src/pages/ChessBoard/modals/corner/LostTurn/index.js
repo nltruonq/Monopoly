@@ -3,16 +3,10 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 
 import { colors } from "../../../constants/Color/color";
-import jailedImg from "../../../../../assets/images/jailed.png"
 
-function Prison({ show, changeShow,turnOfUser,socket,gameRoom,possition }) {
+function LostTurn({ show, changeShow,socket,gameRoom,turnOfUser}) {
   
   const handleClose = () => {
-    socket.emit("jail",{
-        user:turnOfUser,
-        turns:3,
-        gameRoom,
-    })
     changeShow(false);
     socket.emit("close",{gameRoom})
     //  sau này sẽ thế thành giá trị 2 xúc xắc để xét double
@@ -22,15 +16,14 @@ function Prison({ show, changeShow,turnOfUser,socket,gameRoom,possition }) {
   return (
     <Modal show={show}>
       <Modal.Header closeButton onClick={handleClose} style={{backgroundColor:colors[turnOfUser],color:"white"}}>
-        <Modal.Title>VÀO TÙ</Modal.Title>
+        <Modal.Title>ĐANG TRONG TÙ</Modal.Title>
       </Modal.Header>
       <Modal.Body>
             <div className="col" 
                 style={{display:"flex",flexDirection:"column",justifyContent:"center",alignItems:"center"}}
             >
-                <img src= {jailedImg} width={200} />
                 <div style={{marginTop:20}}>
-                    Bạn bị vào tù trong 3 lượt kế tiếp
+                    Bạn không thể đi lượt này
                 </div>
             </div>
       </Modal.Body>
@@ -47,4 +40,4 @@ function Prison({ show, changeShow,turnOfUser,socket,gameRoom,possition }) {
   );
 }
 
-export default Prison;
+export default LostTurn;

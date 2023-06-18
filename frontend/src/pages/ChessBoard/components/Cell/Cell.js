@@ -11,9 +11,11 @@ import { Tax } from "../../class/tax"
 import { Corner } from "../../class/corner"
 
 import { selectCell } from "../../../../redux/cellSlice"
+import { selectUser } from "../../../../redux/userSlice"
 
 function Cell({socket,changeShow}){
     const buyHouse = useSelector(selectCell)
+    const user = useSelector(selectUser)
 
     useEffect(()=>{
         socket.on("moved-result",(data)=>{
@@ -53,7 +55,9 @@ function Cell({socket,changeShow}){
             }
             else if(cell instanceof Corner){
                 if(possition[turnOfUser] === 8) {
-                    changeShow(modalConstant.JAIL)
+                    if(user[turnOfUser].prison === 0){
+                        changeShow(modalConstant.JAIL)
+                    }
                 }
                 else if(possition[turnOfUser] === 16)
                 {

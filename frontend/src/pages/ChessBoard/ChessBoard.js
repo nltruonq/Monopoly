@@ -24,6 +24,8 @@ import Birthday from "./modals/chances/BirthDay";
 import Prison from "./modals/corner/Prison";
 import { useDispatch, useSelector } from "react-redux";
 import { selectUser, updatePrison } from "../../redux/userSlice";
+import LostTurn from "./modals/corner/LostTurn";
+import { current } from "@reduxjs/toolkit";
 
 const cx = classNames.bind(styles);
 
@@ -62,7 +64,7 @@ function ChessBoard() {
 
   // vị trí cac nhân vật
   const [possition, setPos] = useState([-1,-1,-1,-1]);
-
+  
   // số bước di chuyển
   const [userSteps, setSteps] = useState(0);
 
@@ -133,8 +135,16 @@ function ChessBoard() {
     cellRefs.current[possition[turnOfUser]].current.classList.remove(cx("down-left"));
     cellRefs.current[possition[turnOfUser]].current.classList.remove(cx("down-bottom"));
   };
+  
+  // dịch chuyển
+  useEffect(()=>{
+    if(show === modalConstant.JAIL && possition[turnOfUser] !==8 ){
+      possition[turnOfUser]=8
+      setPos(possition)
+      cellRefs.current[8].current?.appendChild(userRef.current[turnOfUser].current)
+    }
 
-
+  },[show,possition])
   // di chuyển 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -182,7 +192,6 @@ function ChessBoard() {
         setDiceOne(data.diceOne);
         setDiceTwo(data.diceTwo);
 
-        console.log(userRedux )
         // double thì ra tù
         if(data.diceOne === data.diceTwo){
           dispatch(updatePrison({turnOfUser,turns:-userRedux[turnOfUser].prison}))
@@ -192,10 +201,11 @@ function ChessBoard() {
           if(userRedux[turnOfUser].prison > 0 && data.diceOne!== data.diceTwo){
             setSteps(0)
             dispatch(updatePrison({turnOfUser,turns:-1}))
+            setShow(modalConstant.LOST_TURN)
           }
           else {
             // setSteps(data.diceOne + data.diceTwo);
-            setSteps(9)
+            setSteps(7)
           }
         }, 2000);   
     })
@@ -206,11 +216,12 @@ function ChessBoard() {
     return () => {
       socket.off("join-room", gameRoom);
       socket.off("roll-result")
+      socket.off("turn-result")
     };
-  }, [socket,numberUser,yourTurn,userRef,turnOfUser,userRedux]);
+  }, [socket,numberUser,yourTurn,userRef,turnOfUser,userRedux,show]);
 
 
-  return (
+    return (
     <>
       <div
         className={cx("wrapper")}
@@ -354,13 +365,25 @@ function ChessBoard() {
         ?
         <Prison
           changeShow={changeShow}
-          possition={possition}
           gameRoom={gameRoom}
           show={show}
           turnOfUser={turnOfUser}
           socket={socket}
         >
         </Prison>
+        :
+        turnOfUser===yourTurn&&
+        show === modalConstant.LOST_TURN
+        ?
+        <LostTurn
+          changeShow={changeShow}
+          gameRoom={gameRoom}
+          show={show}
+          socket={socket}
+          turnOfUser={turnOfUser}
+        >
+
+        </LostTurn>
         :""
         }
 
