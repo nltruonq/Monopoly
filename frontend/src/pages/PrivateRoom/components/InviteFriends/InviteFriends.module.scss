@@ -43,3 +43,19 @@
         background-color: #555;
     }
 }
+
+.world {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
+    padding: 2px 0;
+    border-radius: 999px;
+    color: white;
+    background-color: #39a7f0;
+    cursor: pointer;
+
+    &:hover {
+        opacity: 0.8;
+    }
+}

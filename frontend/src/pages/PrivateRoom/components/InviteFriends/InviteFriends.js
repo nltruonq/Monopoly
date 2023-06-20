@@ -32,6 +32,25 @@ function InviteFriends({ host, friends, socket, players, user }) {
             }
         });
     };
+
+    const handleInviteWorld = () => {
+        if (players.length === 4) {
+            return;
+        }
+        Swal.fire({
+            title: `Mời mọi người vào phòng?`,
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonText: "Mời",
+            cancelButtonText: `Hủy`,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                socket.emit("invite-world", { from: host, players });
+                Swal.fire("Mời thành công!", "", "success");
+            }
+        });
+    };
+
     return (
         <div className={cx("wrapper")}>
             <div className={cx("header")}>
@@ -42,6 +61,11 @@ function InviteFriends({ host, friends, socket, players, user }) {
                     return <FriendItem handleInvite={handleInvite} key={i} {...e} />;
                 })}
             </div>
+            {host === user.username && (
+                <div onClick={handleInviteWorld} className={cx("world")}>
+                    Mời thế giới
+                </div>
+            )}
         </div>
     );
 }
