@@ -1,7 +1,9 @@
 import FriendLayout from "../layouts/FriendLayout";
 import ChessBoard from "../pages/ChessBoard/ChessBoard";
+import ListInvites from "../pages/Friend/InviteFriend/InviteFriend";
 import ListFriends from "../pages/Friend/ListFriends/ListFriends";
 import SearchFriend from "../pages/Friend/SearchFriends/SearchFriends";
+import RankFriends from "../pages/Friend/RankFriend/RankFriend";
 import Home from "../pages/Home/Home";
 import Login from "../pages/Login/Login";
 import PrivateRoom from "../pages/PrivateRoom/PrivateRoom";
@@ -17,6 +19,8 @@ const publicRoutes = [
     { path: "/game", component: ChessBoard },
     { path: "search-friend", component: SearchFriend, layout: FriendLayout },
     { path: "list-friends", component: ListFriends, layout: FriendLayout },
+    { path: "list-invites", component: ListInvites, layout: FriendLayout },
+    { path: "rank-friends", component: RankFriends, layout: FriendLayout },
 ];
 
 const privateRoutes = [];

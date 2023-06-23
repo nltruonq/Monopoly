@@ -15,7 +15,7 @@ function Friend({ friends }) {
     const naviate = useNavigate();
     // logic
     const changePage = () => {
-        naviate("/search-friend");
+        naviate("/list-friends");
     };
 
     return (

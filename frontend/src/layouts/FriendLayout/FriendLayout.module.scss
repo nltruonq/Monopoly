@@ -1,4 +1,31 @@
-.content{
+.container{
     display: flex;
-    flex-direction: row;
+    height: 100%;
+    .wrapper
+    {
+        background-color: #c3efae;
+        width: 30%;
+        height: 100vh;
+
+        .text
+        {
+            text-align: center;
+            margin-top: 50px;
+            color: rgb(11, 122, 39);
+        }
+
+        .sidebar
+        {
+            background-color: #a2f08d;
+            margin-top: 160px;
+            margin-left: 40px;
+            margin-right: 40px;
+        }
+    }
+    .content
+    {
+        background-color: #9de689;
+        width: 70%;
+        height: 100vh;
+    }
 }
