@@ -1,25 +1,25 @@
 const express = require("express");
 const cors = require("cors");
-const http = require('http')
+const http = require("http");
 const cookieParser = require("cookie-parser");
 
-const socket = require('./service/ioSocket')
-const db = require("./configs/mongoDB")
-const corsConfig = require("./configs/cors")
+const socket = require("./service/ioSocket");
+const db = require("./configs/mongoDB");
+const corsConfig = require("./configs/cors");
 const corsMiddleware = require("./middlewares/corsMiddleware");
 
 require("dotenv").config();
 
 const app = express();
-const server = http.createServer(app)
-socket(server)
-db.connect()
+const server = http.createServer(app);
+socket(server);
+db.connect();
 
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
 app.use(cors(corsConfig));
-app.use(cookieParser());
 app.use(corsMiddleware);
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: "10mb" }));
+app.use(cookieParser());
 
 require("./routes/index")(app);
 

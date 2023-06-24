@@ -11,6 +11,7 @@ const cx = classNames.bind(styles);
 
 function Profile() {
     const [nav, setNav] = useState("information");
+    const [user, setUser] = useState(JSON.parse(localStorage.getItem("user-monopoly")) || null);
     const navigate = useNavigate();
 
     const handleGoBackHome = () => {
@@ -26,7 +27,7 @@ function Profile() {
             </div>
             <div className={cx("main")}>
                 <NavProfile nav={nav} setNav={setNav} />
-                {nav === "information" && <Information />}
+                {nav === "information" && <Information user = {user} />}
                 {nav === "history" && <Information />}
                 {nav === "character" && <Information />}
             </div>

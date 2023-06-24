@@ -18,6 +18,7 @@ const cx = classNames.bind(styles);
 
 function Home() {
     const [waitting, setWaitting] = useState(false);
+    const [inviteWorld, setInviteWorld] = useState([]);
 
     const navigate = useNavigate();
 
@@ -40,6 +41,7 @@ function Home() {
             navigate("/login");
         }
         socket.emit("online", { username: user?.username });
+
         socket.on("invite-private-room", (data) => {
             const { from, players } = data;
             Swal.fire({
@@ -67,6 +69,7 @@ function Home() {
                 }
             });
         });
+
         getFriends();
         return () => {
             socket.off("invite-private-room");
@@ -81,7 +84,7 @@ function Home() {
                 <Friend friends={friends} />
                 <Event />
             </div>
-            <InviteWorld />
+            <InviteWorld inviteWorld={inviteWorld} setInviteWorld={setInviteWorld} user={user} socket={socket} />
             <ActionUser changeWaitting={changeWaitting} socket={socket} user={user} />
         </div>
     );

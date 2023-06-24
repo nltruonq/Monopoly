@@ -14,6 +14,15 @@ const privateRoom = (socket, io) => {
         }
     });
 
+    socket.on("invite-world", (data) => {
+        try {
+            const { from, players } = data;
+            io.emit("invite-world", { from, players, time: new Date(Date.now()) });
+        } catch (err) {
+            console.log(err);
+        }
+    });
+
     socket.on("sync-player-private-room", async (data) => {
         try {
             const { roomName, players } = data;
@@ -64,7 +73,7 @@ const privateRoom = (socket, io) => {
         }
     });
 
-    socket.on("join-private-room", (data) => {
+    socket.on("join-private-room", async (data) => {
         try {
             const { roomName, ...player } = data;
             const room = io.sockets.adapter.rooms.get(roomName);
@@ -72,6 +81,18 @@ const privateRoom = (socket, io) => {
                 io.to(socket.id).emit("full-player-private-room");
                 return;
             }
+
+            const sockets = await io.fetchSockets();
+            for (const s of sockets) {
+                if (s.username === roomName) {
+                    if (s.play) {
+                        io.to(socket.id).emit("played-private-room");
+                        return;
+                    }
+                    break;
+                }
+            }
+
             socket.join(roomName);
 
             socket.host = false;
@@ -100,17 +121,17 @@ const privateRoom = (socket, io) => {
         }
     });
 
-    socket.on("play-private-room",(data)=>{
+    socket.on("play-private-room", (data) => {
         try {
-            const {roomName}=data
-            console.log(roomName)
-            socket.nsp.in(roomName).emit("play-private-room-result",{gameRoom:roomName})
+            const { roomName } = data;
+            console.log(roomName);
+            socket.nsp.in(roomName).emit("play-private-room-result", { gameRoom: roomName });
+            socket.play = true;
             // socket.to(roomName).emit("play-private-room-result",{gameRoom:roomName})
         } catch (error) {
-            console.log(error)
+            console.log(error);
         }
-    })
-
+    });
 };
 
 module.exports = privateRoom;

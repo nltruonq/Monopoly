@@ -16,8 +16,8 @@ function Sidebar() {
         {
             id: 2,
             name: 'Danh sách lời mời',
-            path: `/list-invite`,
-            admin: true,
+            path: `/list-invites`,
+
         },
         {
             id: 3,
