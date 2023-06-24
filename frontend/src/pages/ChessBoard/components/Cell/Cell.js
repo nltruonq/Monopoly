@@ -17,6 +17,8 @@ function Cell({socket,changeShow}){
     const buyHouse = useSelector(selectCell)
     const user = useSelector(selectUser)
 
+
+
     useEffect(()=>{
         socket.on("moved-result",(data)=>{
             const {possition,turnOfUser}=data

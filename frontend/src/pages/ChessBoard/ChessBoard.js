@@ -4,7 +4,6 @@ import { useEffect, useRef, createRef, useState, useContext } from "react";
 import { useLocation } from "react-router-dom";
 
 import { SocketContext } from "../../SocketService";
-
 import houses from "./constants/houses";
 import modalConstant from "./constants/modal";
 import char from "../../assets/images/char.png";
@@ -25,7 +24,8 @@ import Prison from "./modals/corner/Prison";
 import { useDispatch, useSelector } from "react-redux";
 import { selectUser, updatePrison } from "../../redux/userSlice";
 import LostTurn from "./modals/corner/LostTurn";
-import { current } from "@reduxjs/toolkit";
+import DestroyOtherHouse from "./modals/chances/DestroyOHouse";
+import DestroyHouseSelect from "./modals/chances/DestroyHSelect";
 
 const cx = classNames.bind(styles);
 
@@ -204,8 +204,9 @@ function ChessBoard() {
             setShow(modalConstant.LOST_TURN)
           }
           else {
-            // setSteps(data.diceOne + data.diceTwo);
-            setSteps(7)
+            // if(turnOfUser===1) setSteps(7)
+            // else 
+            setSteps(data.diceOne + data.diceTwo);
           }
         }, 2000);   
     })
@@ -238,6 +239,7 @@ function ChessBoard() {
           turnOfUser={turnOfUser}
           yourTurn={yourTurn}
           cellRefs={cellRefs}
+          gameRoom={gameRoom}
           >
 
           </House>
@@ -277,7 +279,7 @@ function ChessBoard() {
           changeRoll={changeRoll}
           moveBySteps={moveBySteps}
           yourTurn={yourTurn===turnOfUser}
-
+          changeShow={changeShow}
         ></Board>
 
 
@@ -384,6 +386,35 @@ function ChessBoard() {
         >
 
         </LostTurn>
+        :
+        turnOfUser===yourTurn&&
+        show === modalConstant.DESTROY_HOUSE
+        ?
+        <DestroyOtherHouse
+          changeShow={changeShow}
+          yourTurn={yourTurn}
+          gameRoom={gameRoom}
+          numberUser={numberUser}
+          show={show}
+          turnOfUser={turnOfUser}
+          socket={socket}
+        >
+
+        </DestroyOtherHouse>
+        :
+        turnOfUser===yourTurn&&
+        show.state === modalConstant.DESTROY_H_SELECT
+        ?
+        <DestroyHouseSelect
+          show={show}
+          changeShow={changeShow}
+          turnOfUser={turnOfUser}
+          socket={socket}
+          gameRoom={gameRoom}
+          index= {show.data}
+        >
+
+        </DestroyHouseSelect>
         :""
         }
 

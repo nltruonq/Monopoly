@@ -219,6 +219,7 @@
         height: calc(var(--width-cell)*7 + 1*2*7px);
         width: calc(var(--width-cell)*7 + 1*2*7px);
         background-color: aqua;
+        // z-index: -3;
         button {
           padding: 15px 50px;
           color: #fff;
@@ -239,4 +240,31 @@
         }
     }
   }
+
+.able{
+  background-color: #d9d6d6 !important;
+  position: relative;
+  cursor: pointer;
+}
+.able:before{
+  content: "";
+  background-color: #fff;
+  position: absolute;
+  top:-2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  z-index: -1;
+}
+.able:after{
+  content: "";
+  background-color: #fff;
+  position: absolute;
+  top:-2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  z-index: -2;
+  filter: blur(40px);
+}
 

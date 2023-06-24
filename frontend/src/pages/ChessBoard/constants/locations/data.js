@@ -125,7 +125,7 @@ export const locations= [
         type:"city"
     },
     {
-        type: "change",
+        type: "chance",
         boardIndex:18,
         
     },

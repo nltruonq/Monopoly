@@ -23,11 +23,18 @@ const cellSlice = createSlice({
         return elm?.boardIndex === boardIndex
       })
       return bought
+    },
+    destroyHouse:(state,action)=>{
+      const {boardIndex} = action.payload
+      const index = state.findIndex(elm => elm.boardIndex === boardIndex);
+      if (index !== -1) {
+        state.splice(index, 1);
+      }
     }
   },
 });
 
-export const { buyHouse,houseByIndex } = cellSlice.actions;
+export const { buyHouse,houseByIndex,destroyHouse } = cellSlice.actions;
 
 export const selectCell = createSelector(
     (state) => state.cell,

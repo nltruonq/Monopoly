@@ -7,9 +7,70 @@ import taxImg from "../../../../assets/images/tax.png"
 import prisonImg from "../../../../assets/images/prison.png"
 import seaVideo from "../../../../assets/images/beach.mp4"
 import worldTourImg from "../../../../assets/images/worldtour.png"
+import { createRef, useEffect, useRef, useState } from "react";
+import { useSelector } from "react-redux";
+import { selectCell } from "../../../../redux/cellSlice";
+import modalConstant from "../../constants/modal";
+
+
 
 function Board(props){
-    const {yourTurn,cx,roll,diceOne,diceTwo,cellRefs,changeRoll,moveBySteps}=props
+    const {yourTurn,cx,roll,diceOne,diceTwo,cellRefs,changeRoll,moveBySteps,socket,changeShow}=props
+    
+    // phá nhà
+    const [destroy,setDestroy]=useState(false)
+    const [listDestroy,setListDestroy]=useState([])
+
+    const houseOwner= useSelector(selectCell)
+    console.log(houseOwner)
+
+    useEffect(()=>{
+      socket.on("destroy-house-result",data=>{
+         setDestroy({user:data.user})
+      })
+      let list = []
+      for(let i = 0; i < houseOwner.length; i++ ){
+        if(houseOwner[i].owner !== destroy.user){
+          list.push(houseOwner[i].boardIndex)
+        }
+      }
+      setListDestroy(list)
+
+      
+      if(destroy){
+        for(let i=0; i<32; ++i){
+          if(list.includes(i)){
+            cellRefs.current[i].current.addEventListener('click',()=>handleDestroy(i))
+          }
+        }
+      }
+      
+      socket.on("reset-destroy-result",data=>{
+        setListDestroy([])
+        setDestroy(false)
+        for(let i=0; i<32; ++i){
+          if(listDestroy.includes(i)){
+            cellRefs.current[i].current.removeEventListener('click',()=>handleDestroy(i))
+          }
+        }
+        
+      })
+      return ()=>{
+        socket.off("destroy-house-result")
+        socket.off("reset-destroy-result")
+      }
+    },[socket,destroy])
+
+
+    const handleDestroy=(i)=>{
+      // console.log(i)
+      changeShow({state:modalConstant.DESTROY_H_SELECT,data:i})
+    }
+    // world tour
+
+    // bán nhà
+
+    // seagame
 
     return (
         <>
@@ -33,7 +94,7 @@ function Board(props){
                   return (
                     <div
                       key={index}
-                      className={cx("rectangle")}
+                      className={destroy&&listDestroy.includes(9+index)? cx("rectangle","able") :cx("rectangle")}
                       ref={cellRefs.current[9 + index]}
                     >
                       { locations[9+index].type=== types.SEA 
@@ -70,7 +131,9 @@ function Board(props){
                     return (
                       <div
                         key={index}
-                        className={cx("rectangle-column")}
+                        className={destroy&&listDestroy.includes(7-index)
+                                  ? cx("rectangle-column","able") 
+                                  :cx("rectangle-column")}
                         ref={cellRefs.current[7 - index]}
                       >
                         {locations[7-index].type=== types.SEA ? 
@@ -113,7 +176,12 @@ function Board(props){
                     return (
                       <div
                         key={index}
-                        className={cx("rectangle-column")}
+                        className=
+                        {
+                          destroy&&listDestroy.includes(17+index)
+                          ? cx("rectangle-column","able") 
+                          :cx("rectangle-column")
+                        }
                         ref={cellRefs.current[17 + index]}
                       >
                         {locations[17+index].type=== types.SEA ? 
@@ -155,7 +223,8 @@ function Board(props){
                   return (
                     <div
                       key={index}
-                      className={cx("rectangle")}
+                      className={destroy&&listDestroy.includes(31-index)? cx("rectangle","able") :cx("rectangle")}
+                      
                       ref={cellRefs.current[31 - index]}
                     >
                       {locations[31-index].type=== types.SEA ? 

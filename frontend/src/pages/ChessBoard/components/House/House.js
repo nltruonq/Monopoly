@@ -1,15 +1,12 @@
 import { useEffect, useState } from "react"
 import {updateBalance } from "../../../../redux/userSlice"
 import {useDispatch} from "react-redux"
-import { buyHouse } from "../../../../redux/cellSlice"
+import { buyHouse, destroyHouse } from "../../../../redux/cellSlice"
 
 
-function House({houses,houseRefs,cx,socket,possition,turnOfUser,cellRefs}){
+function House({houses,houseRefs,cx,socket,possition,turnOfUser,cellRefs,gameRoom}){
     const dispatch=useDispatch()
     
-    // socket.on("start-result",(data)=>{
-    //     dispatch(updateBalance({amount:data.amount,turnOfUser:data.user}))
-    // })
     useEffect(()=>{
         
         socket.on("bought-result",(data)=>{
@@ -70,10 +67,18 @@ function House({houses,houseRefs,cx,socket,possition,turnOfUser,cellRefs}){
             houseNode.firstChild.src=houses[`house${owner}_${currentLevel}`]
         })
 
+
+        socket.on("destroy-select-result",(data)=>{
+            houseRefs.current[cityBoardIndex.indexOf(data.index)].current.style.display="none";
+            dispatch(destroyHouse({boardIndex:data.index}))
+            socket.emit("reset-destroy",{gameRoom})
+        })
+
         return ()=>{
             socket.off("bought-result")
             socket.off("pay-result")
             socket.off("re-bought-result")
+            socket.off("destroy-select-result")
         }
     },[turnOfUser,possition])
     return(

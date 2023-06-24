@@ -57,6 +57,33 @@ const buyEvent = (socket) => {
             console.log(error)            
         }
     })
+
+    // phá hủy nhà
+    socket.on("destroy-house",data=>{
+        try {
+            socket.nsp.in(data.gameRoom).emit("destroy-house-result",{
+                user:data.turnOfUser
+            })
+        } catch (error) {
+            console.log(error)
+        }
+    })
+    socket.on("destroy-select",data=>{
+        try {
+            socket.nsp.in(data.gameRoom).emit("destroy-select-result",{
+                index:data.index
+            })
+        } catch (error) {
+            console.log(error)
+        }
+    })
+    socket.on("reset-destroy",data=>{
+        try {
+            socket.nsp.in(data.gameRoom).emit("reset-destroy-result",{})
+        } catch (error) {
+            console.log(error)
+        }
+    })
 }
 
 module.exports = buyEvent
