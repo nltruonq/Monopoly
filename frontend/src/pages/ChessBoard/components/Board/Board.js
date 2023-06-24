@@ -15,15 +15,22 @@ import modalConstant from "../../constants/modal";
 
 
 function Board(props){
-    const {yourTurn,cx,roll,diceOne,diceTwo,cellRefs,changeRoll,moveBySteps,socket,changeShow}=props
+    const {
+            yourTurn,cx,roll,diceOne,diceTwo,cellRefs,
+            changeRoll,moveBySteps,socket,changeShow,
+            gameRoom,userRef,turnOfUser,changePos,possition
+          }
+          =props
     
     // phá nhà
     const [destroy,setDestroy]=useState(false)
     const [listDestroy,setListDestroy]=useState([])
 
     const houseOwner= useSelector(selectCell)
-    console.log(houseOwner)
+    // console.log(houseOwner)
+    
 
+    
     useEffect(()=>{
       socket.on("destroy-house-result",data=>{
          setDestroy({user:data.user})
@@ -63,14 +70,52 @@ function Board(props){
 
 
     const handleDestroy=(i)=>{
-      // console.log(i)
       changeShow({state:modalConstant.DESTROY_H_SELECT,data:i})
     }
+
+    const handleWourldTour=(i)=>{
+      socket.emit("select-world-tour",{gameRoom,index:i})
+    }
+
     // world tour
+    useEffect(()=>{
+      socket.on("world-tour-result",()=>{
+        for( let i=0; i<32; ++i){
+          if(i!==24) // khác ô world tour
+          {
+            cellRefs.current[i].current.addEventListener('click',()=>handleWourldTour(i))
+          }
+        }
+      })
+
+      socket.on("select-world-tour-result",data=>{
+        const index=data.index
+        cellRefs.current[index].current.appendChild(userRef.current[turnOfUser].current)
+        possition[turnOfUser]=index
+        changePos(possition)
+        for( let i=0; i<32; ++i){
+          if(i!==24) // khác ô world tour
+          {
+            cellRefs.current[i].current.removeEventListener('click',()=>handleWourldTour(i))
+          }
+        }
+        socket.emit("finish-world-tour",{possition:index,turnOfUser,gameRoom})
+      })
+
+      return ()=>{
+        socket.off("world-tour-result")
+        socket.off("select-world-tour-result")
+      }
+      
+    },[socket])   
+
+
+    // seagame
+    
+
 
     // bán nhà
 
-    // seagame
 
     return (
         <>

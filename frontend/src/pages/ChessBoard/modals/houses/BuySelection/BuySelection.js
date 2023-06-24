@@ -19,7 +19,7 @@ function BuySelection({ show, changeShow, possition,turnOfUser,socket,gameRoom }
     //  sau này sẽ thế thành giá trị 2 xúc xắc để xét double
     socket.emit("turn",{gameRoom})
   };
-  const [select,setSelect]=useState()
+  const [select,setSelect]=useState(1)
   const currentCity= cells[possition[turnOfUser]]
   
   const buyHouse=()=>{

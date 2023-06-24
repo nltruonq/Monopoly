@@ -26,6 +26,7 @@ import { selectUser, updatePrison } from "../../redux/userSlice";
 import LostTurn from "./modals/corner/LostTurn";
 import DestroyOtherHouse from "./modals/chances/DestroyOHouse";
 import DestroyHouseSelect from "./modals/chances/DestroyHSelect";
+import WorldTour from "./modals/corner/WorldTour";
 
 const cx = classNames.bind(styles);
 
@@ -64,6 +65,9 @@ function ChessBoard() {
 
   // vị trí cac nhân vật
   const [possition, setPos] = useState([-1,-1,-1,-1]);
+  const changePos=(a)=>{
+    setPos(a)
+  }
   
   // số bước di chuyển
   const [userSteps, setSteps] = useState(0);
@@ -206,7 +210,8 @@ function ChessBoard() {
           else {
             // if(turnOfUser===1) setSteps(7)
             // else 
-            setSteps(data.diceOne + data.diceTwo);
+            // setSteps(data.diceOne + data.diceTwo);
+            setSteps(25)
           }
         }, 2000);   
     })
@@ -280,6 +285,11 @@ function ChessBoard() {
           moveBySteps={moveBySteps}
           yourTurn={yourTurn===turnOfUser}
           changeShow={changeShow}
+          gameRoom={gameRoom}
+          userRef={userRef}
+          turnOfUser={turnOfUser}
+          possition={possition}
+          changePos={changePos}
         ></Board>
 
 
@@ -415,7 +425,20 @@ function ChessBoard() {
         >
 
         </DestroyHouseSelect>
-        :""
+        :
+        turnOfUser === yourTurn&&
+        show===modalConstant.WORLD_TOUR
+        ?
+        <WorldTour
+          show={show}
+          changeShow={changeShow}
+          socket={socket}
+          gameRoom={gameRoom}
+          turnOfUser={turnOfUser}
+        >
+        </WorldTour>
+        :
+        ""
         }
 
         {/* Xử lí khi di chyển đến ô đích -> quản lý hiện các modal*/}

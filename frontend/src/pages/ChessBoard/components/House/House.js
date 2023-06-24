@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import {updateBalance } from "../../../../redux/userSlice"
 import {useDispatch} from "react-redux"
 import { buyHouse, destroyHouse } from "../../../../redux/cellSlice"
+import { BiCoinStack } from "react-icons/bi"
 
 
 function House({houses,houseRefs,cx,socket,possition,turnOfUser,cellRefs,gameRoom}){
@@ -17,7 +18,8 @@ function House({houses,houseRefs,cx,socket,possition,turnOfUser,cellRefs,gameRoo
                 turnOfUser
             }))
             const inuse=data.inuse
-            const houseNode=houseRefs.current[cityBoardIndex.indexOf(inuse)].current
+            const houseNode=houseRefs?.current[cityBoardIndex.indexOf(inuse)]?.current
+            console.log(cityBoardIndex.indexOf(inuse),inuse,"aa")
             houseNode.firstChild.src=houses[`house${turnOfUser}_${data.select}`]
             
             cellRefs.current[possition[turnOfUser]].current.appendChild(houseNode)
@@ -98,4 +100,4 @@ function House({houses,houseRefs,cx,socket,possition,turnOfUser,cellRefs,gameRoo
 
 export default House
 
-const cityBoardIndex=[1,2,3,5,7,9,10,13,14,15,17,19,21,23,25,26,27,30,31]
+const cityBoardIndex=[1,2,3,5,7,9,10,13,14,15,17,19,21,22,23,25,26,27,30,31]

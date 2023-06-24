@@ -10,7 +10,7 @@ import { Chance } from "../../class/chance"
 import { Tax } from "../../class/tax"
 import { Corner } from "../../class/corner"
 
-import { selectCell } from "../../../../redux/cellSlice"
+import cellSlice, { selectCell } from "../../../../redux/cellSlice"
 import { selectUser } from "../../../../redux/userSlice"
 
 function Cell({socket,changeShow}){
@@ -22,14 +22,17 @@ function Cell({socket,changeShow}){
     useEffect(()=>{
         socket.on("moved-result",(data)=>{
             const {possition,turnOfUser}=data
-            const cell = cells[possition[turnOfUser]]
             
+            // possition là mảng khi di chuyển bình thường 
+            // là 1 số khi di chuyển qua world tour
+            const userIndex = possition[turnOfUser] || possition  
+            const cell = cells[userIndex]
             //dùng để test modal
             // changeShow(modalConstant.HOST_BIRTHDAY)
 
             if(cell instanceof City){
                 const house = buyHouse?.find((elm)=>{
-                    return elm.boardIndex === possition[turnOfUser]
+                    return elm.boardIndex === userIndex
             
                 })
                 if(!house) {
@@ -56,21 +59,23 @@ function Cell({socket,changeShow}){
                 changeShow(modalConstant.PAY_TAX)            
             }
             else if(cell instanceof Corner){
-                if(possition[turnOfUser] === 8) {
+                if(userIndex === 8) {
                     if(user[turnOfUser].prison === 0){
                         changeShow(modalConstant.JAIL)
                     }
                 }
-                else if(possition[turnOfUser] === 16)
+                else if(userIndex === 16)
                 {
                     changeShow(modalConstant.SEAGAME)
                 }
-                else if(possition[turnOfUser] === 24){
+                else if(userIndex === 24){
                     changeShow(modalConstant.WORLD_TOUR)
                 }
             }
         })
-
+        return ()=>{
+            socket.off("moved-result")
+        }
     },[socket,buyHouse])
     return (
         <>
