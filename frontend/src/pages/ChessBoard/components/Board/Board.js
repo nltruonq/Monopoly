@@ -7,12 +7,13 @@ import taxImg from "../../../../assets/images/tax.png"
 import prisonImg from "../../../../assets/images/prison.png"
 import seaVideo from "../../../../assets/images/beach.mp4"
 import worldTourImg from "../../../../assets/images/worldtour.png"
-import { createRef, useEffect, useRef, useState } from "react";
+import { createRef, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { selectCell } from "../../../../redux/cellSlice";
 import modalConstant from "../../constants/modal";
 import bg  from "../../../../assets/images/bg.jpg"
-
+import seagameVideo from "../../../../assets/images/seagame.mov"
+import seagameImg from "../../../../assets/images/seagame.png"
 
 function Board(props){
     const {
@@ -26,8 +27,12 @@ function Board(props){
     const [destroy,setDestroy]=useState(false)
     const [listDestroy,setListDestroy]=useState([])
 
+    const [listOwner,setListOwner]=useState([])
+    
+    const seagameRef= createRef()
+
     const houseOwner= useSelector(selectCell)
-    // console.log(houseOwner)
+    console.log(houseOwner)
     
 
     
@@ -111,7 +116,51 @@ function Board(props){
 
 
     // seagame
-    
+    const handleSeagame=(i)=>{
+      // changeShow({state:modalConstant.SEAGAME_H_SELECT,data:i})
+      socket.emit("host-seagame",{gameRoom,index:i})
+      socket.emit("close",{gameRoom})
+      socket.emit("turn",{gameRoom})
+    }
+
+    useEffect(()=>{
+      socket.on("seagame-result",()=>{
+        let list = []
+        // console.log(houseOwner,turnOfUser)
+        for(let i = 0; i < houseOwner.length; i++ ){
+          if(houseOwner[i].owner === turnOfUser){
+            list.push(houseOwner[i].boardIndex)
+          }
+        }
+        setListOwner(list)
+
+        if(list.length!==0){
+
+          for(let i =0 ; i<32 ; i++){
+            if(list.includes(i)){
+              cellRefs.current[i].current.addEventListener('click',()=>handleSeagame(i))
+            }
+          }
+        }
+        else {
+          socket.emit("close",{gameRoom})
+          socket.emit("turn",{gameRoom})
+        }
+      })
+
+      socket.on("host-seagame-result",data=>{
+        seagameRef.current.style.display="block"
+        cellRefs.current[data.index].current.appendChild(seagameRef.current)
+
+        setListOwner([])
+      })
+
+      return()=>{
+        socket.off("seagame-result")
+        socket.off("host-seagame-result")
+      }
+
+    },[socket,houseOwner,seagameRef])
 
 
     // bán nhà
@@ -120,6 +169,9 @@ function Board(props){
     return (
         <>
           <div className={cx("chess-board")}>
+            <div ref={seagameRef} style={{display:"none",position:"absolute",top:10,left:0,zIndex:13}}> 
+                <img src= {seagameImg} width={75} />
+            </div>
           <div className={cx("content")}>
             {/* 2 góc và 7 hình vuông */}
             <div className={cx("row-board")}>
@@ -139,7 +191,9 @@ function Board(props){
                   return (
                     <div
                       key={index}
-                      className={destroy&&listDestroy.includes(9+index)? cx("rectangle","able") :cx("rectangle")}
+                      className={destroy&&listDestroy.includes(9+index) 
+                                || listOwner.includes(9+index) 
+                                ? cx("rectangle","able") :cx("rectangle")}
                       ref={cellRefs.current[9 + index]}
                     >
                       { locations[9+index].type=== types.SEA 
@@ -164,7 +218,17 @@ function Board(props){
               <div
                 className={cx("corner", "square")}
                 ref={cellRefs.current[16]}
-              ></div>
+                style={{backgroundColor:"white"}}
+              >
+                <video autoPlay muted loop width="90" height="90" 
+                    style={{
+                      position:"absolute",
+                      overflow:"hidden",
+                      objectFit:"cover",
+                    }}>
+                    <source src={seagameVideo} type="video/mp4" />
+                </video>
+              </div>
             </div>
 
             {/* 14 hình vuông: 7 hình bên trái và 7 hình bên phải */}
@@ -177,6 +241,7 @@ function Board(props){
                       <div
                         key={index}
                         className={destroy&&listDestroy.includes(7-index)
+                                  || listOwner.includes(7-index)
                                   ? cx("rectangle-column","able") 
                                   :cx("rectangle-column")}
                         ref={cellRefs.current[7 - index]}
@@ -224,6 +289,7 @@ function Board(props){
                         className=
                         {
                           destroy&&listDestroy.includes(17+index)
+                          || listOwner.includes(17+index)
                           ? cx("rectangle-column","able") 
                           :cx("rectangle-column")
                         }
@@ -268,7 +334,10 @@ function Board(props){
                   return (
                     <div
                       key={index}
-                      className={destroy&&listDestroy.includes(31-index)? cx("rectangle","able") :cx("rectangle")}
+                      className={destroy&&listDestroy.includes(31-index)
+                                ||listOwner.includes(31-index)
+                                ? cx("rectangle","able") 
+                                :cx("rectangle")}
                       
                       ref={cellRefs.current[31 - index]}
                     >

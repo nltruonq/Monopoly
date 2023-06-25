@@ -48,6 +48,9 @@ function Cell({socket,changeShow}){
                     //Vào nhà người khác
                 }
             }
+            else if(1){
+                changeShow(modalConstant.SEAGAME)
+            }
             else if(cell instanceof Sea){
                  const sea = buyHouse?.find(elm=>{
                     return elm.boardIndex === userIndex

@@ -29,6 +29,7 @@ import DestroyHouseSelect from "./modals/chances/DestroyHSelect";
 import WorldTour from "./modals/corner/WorldTour";
 import BuySea from "./modals/seas/BuySea";
 import OtherSea from "./modals/seas/OtherSea";
+import Seagame from "./modals/corner/Seagame";
 
 const cx = classNames.bind(styles);
 
@@ -212,8 +213,8 @@ function ChessBoard() {
           else {
             // if(turnOfUser===1) setSteps(7)
             // else 
-            // setSteps(data.diceOne + data.diceTwo);
-            setSteps(29)
+            setSteps(data.diceOne + data.diceTwo);
+            // setSteps(6)
           }
         }, 2000);   
     })
@@ -470,6 +471,19 @@ function ChessBoard() {
         >
 
         </OtherSea>
+        :
+        turnOfUser===yourTurn&&
+        show===modalConstant.SEAGAME
+        ?
+        <Seagame
+          show={show}
+          changeShow={changeShow}
+          turnOfUser={turnOfUser}
+          socket={socket}
+          gameRoom={gameRoom}
+        >
+
+        </Seagame>
         :""
         }
 

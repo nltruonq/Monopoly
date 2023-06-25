@@ -84,6 +84,25 @@ const buyEvent = (socket) => {
             console.log(error)
         }
     })
+
+    //
+    socket.on("seagame",data=>{
+        try {
+            socket.nsp.in(data.gameRoom).emit("seagame-result")
+        } catch (error) {
+            console.log(error)
+        }
+    })
+
+    socket.on("host-seagame",data=>{
+        try {
+            const {gameRoom,index} = data
+            socket.nsp.in(gameRoom).emit("host-seagame-result",{index})
+        } catch (error) {
+            console.log(error)
+        }
+    })
+
 }
 
 module.exports = buyEvent
