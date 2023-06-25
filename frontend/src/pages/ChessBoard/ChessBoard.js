@@ -27,6 +27,8 @@ import LostTurn from "./modals/corner/LostTurn";
 import DestroyOtherHouse from "./modals/chances/DestroyOHouse";
 import DestroyHouseSelect from "./modals/chances/DestroyHSelect";
 import WorldTour from "./modals/corner/WorldTour";
+import BuySea from "./modals/seas/BuySea";
+import OtherSea from "./modals/seas/OtherSea";
 
 const cx = classNames.bind(styles);
 
@@ -85,7 +87,7 @@ function ChessBoard() {
     .fill()
     .map((_, i) => cellRefs.current[i] ?? createRef());
 
-  houseRefs.current = Array(20)
+  houseRefs.current = Array(24)
     .fill()
     .map((_, i) => houseRefs.current[i] ?? createRef());
 
@@ -211,7 +213,7 @@ function ChessBoard() {
             // if(turnOfUser===1) setSteps(7)
             // else 
             // setSteps(data.diceOne + data.diceTwo);
-            setSteps(25)
+            setSteps(29)
           }
         }, 2000);   
     })
@@ -438,7 +440,37 @@ function ChessBoard() {
         >
         </WorldTour>
         :
-        ""
+        turnOfUser === yourTurn&&
+        show === modalConstant.BUY_SEA
+        ?
+        // show, changeShow, possition,turnOfUser,socket,gameRoom 
+        <BuySea
+          show={show}
+          changeShow={changeShow}
+          possition={possition}
+          turnOfUser={turnOfUser}
+          socket={socket}
+          gameRoom={gameRoom}
+        
+        >
+
+        </BuySea>
+        :
+        turnOfUser===yourTurn&&
+        show === modalConstant.OTHER_SEA
+        ?
+        <OtherSea
+        // show, changeShow, possition,turnOfUser,socket,gameRoom
+          show={show}
+          changeShow={changeShow}
+          possition={possition}
+          turnOfUser={turnOfUser}
+          socket={socket}
+          gameRoom={gameRoom}
+        >
+
+        </OtherSea>
+        :""
         }
 
         {/* Xử lí khi di chyển đến ô đích -> quản lý hiện các modal*/}

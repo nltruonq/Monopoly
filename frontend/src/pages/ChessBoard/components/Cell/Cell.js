@@ -33,7 +33,6 @@ function Cell({socket,changeShow}){
             if(cell instanceof City){
                 const house = buyHouse?.find((elm)=>{
                     return elm.boardIndex === userIndex
-            
                 })
                 if(!house) {
                     changeShow(modalConstant.BUY_HOUSE)
@@ -50,7 +49,20 @@ function Cell({socket,changeShow}){
                 }
             }
             else if(cell instanceof Sea){
-                
+                 const sea = buyHouse?.find(elm=>{
+                    return elm.boardIndex === userIndex
+                 })
+                 
+                 if(!sea){
+                    //vào ô trống
+                    changeShow(modalConstant.BUY_SEA)
+                 }
+                 else if(sea.owner === turnOfUser){
+                    console.log("oke")
+                 }
+                 else {
+                    changeShow(modalConstant.OTHER_SEA)
+                 }
             }
             else if(cell instanceof Chance){
                 changeShow(modalConstant.CHANGES)

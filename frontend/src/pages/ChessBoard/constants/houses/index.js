@@ -14,6 +14,11 @@ import house3_1 from "../../../../assets/images/house3-lv1.png"
 import house3_2 from "../../../../assets/images/house3-lv2.png"
 import house3_3 from "../../../../assets/images/house3-lv3.png"
 
+import sea0 from "../../../../assets/images/sea0.png"
+import sea1 from "../../../../assets/images/sea1.png"
+import sea2 from "../../../../assets/images/sea2.png"
+import sea3 from "../../../../assets/images/sea3.png"
+
 const houses={
 
     // đỏ
@@ -34,7 +39,14 @@ const houses={
     // vàng
     house3_1,
     house3_2,
-    house3_3
+    house3_3,
+
+    //
+    sea0,
+    sea1,
+    sea2,
+    sea3
+    
 }
 
 export default houses

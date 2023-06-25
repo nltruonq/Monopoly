@@ -5,6 +5,7 @@ const event = (socket, io, queue) => {
     require("./events/turn.event")(socket, io);
     require("./events/move.event")(socket);
     require("./events/balance.event")(socket);
+    require("./events/sea.event")(socket);
 
     // user event
     require("./userEvents/online.event")(socket, io);

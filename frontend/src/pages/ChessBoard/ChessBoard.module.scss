@@ -45,11 +45,12 @@
         content: '';
         position: absolute;
         top:10px;
-        left:-20px;
+        left:-21px;
         height: calc(var(--width-cell)*7 + 1*2*8px);
         width: 20px;
-        background-color: red;
+        background-color: gray;
         transform: translate(20%,20%) rotate(-45deg) skew(-45deg);    
+        border: 1px solid black;
     }
     &::after{
         content: '';
@@ -59,8 +60,9 @@
         height: 15px;
         width: calc(var(--width-cell)*7 + var(--length-cell)*2 + 1*2*8px);
         background-size: 300px;
-        background-color: red;
-        transform:  rotate(0) skew(-45deg);   
+        background-color: gray;
+        transform:  rotate(0) skew(-45deg); 
+        border: 1px solid black;  
     }
 }
 
@@ -219,7 +221,7 @@
     .center{
         height: calc(var(--width-cell)*7 + 1*2*7px);
         width: calc(var(--width-cell)*7 + 1*2*7px);
-        background-color: aqua;
+        border: 10px solid #b80f10;
         // z-index: -3;
         button {
           padding: 15px 50px;

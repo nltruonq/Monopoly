@@ -11,7 +11,7 @@ import { createRef, useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { selectCell } from "../../../../redux/cellSlice";
 import modalConstant from "../../constants/modal";
-
+import bg  from "../../../../assets/images/bg.jpg"
 
 
 function Board(props){
@@ -168,7 +168,7 @@ function Board(props){
             </div>
 
             {/* 14 hình vuông: 7 hình bên trái và 7 hình bên phải */}
-            <div className={cx("center-board")}>
+            <div className={cx("center-board")} >
               {/* thẻ đánh dấu từ 7->1 */}
               <div className={cx("col")}>
                 <div className={cx("column")}>
@@ -199,7 +199,7 @@ function Board(props){
                   })}
                 </div>
               </div>
-              <div className={cx("center")}>
+              <div className={cx("center")} style={{backgroundImage:`url(${bg})`,backgroundSize:"cover",padding:"20px"}}>
                 {yourTurn&&<button onClick={() => moveBySteps(diceOne + diceTwo)}>
                   MOVE
                 </button>}

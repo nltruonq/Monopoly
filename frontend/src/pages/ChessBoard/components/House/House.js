@@ -14,33 +14,61 @@ function House({houses,houseRefs,cx,socket,possition,turnOfUser,cellRefs,gameRoo
             dispatch(updateBalance({amount:-data.price,turnOfUser}))
             dispatch(buyHouse({
                 boardIndex:possition[turnOfUser],
-                level:data.select,
+                level:data?.select,
                 turnOfUser
             }))
             const inuse=data.inuse
             const houseNode=houseRefs?.current[cityBoardIndex.indexOf(inuse)]?.current
             console.log(cityBoardIndex.indexOf(inuse),inuse,"aa")
-            houseNode.firstChild.src=houses[`house${turnOfUser}_${data.select}`]
+
+            // có level là City, không có level là Sea
+            if(data?.select){
+                houseNode.firstChild.src=houses[`house${turnOfUser}_${data.select}`]
+            }
+            else {
+                houseNode.firstChild.src= houses[`sea${turnOfUser}`]
+            }
             
             cellRefs.current[possition[turnOfUser]].current.appendChild(houseNode)
 
             houseNode.style.display="block"
-            if (0 < possition[turnOfUser] && possition[turnOfUser] <= 8) {
-                houseNode.style.top="-20px"
-                houseNode.style.left="30px"
-            } 
-            else if (8 < possition[turnOfUser] && possition[turnOfUser] < 16) {
-                houseNode.style.top="-30px"
-                houseNode.style.left="-20px"
-            } 
-            else if (16 < possition[turnOfUser] && possition[turnOfUser] < 24) {
-              houseNode.style.top="-20px"
-              houseNode.style.left="40px"
-            } 
-            else if (24 < possition[turnOfUser] && possition[turnOfUser] < 32) {
-              houseNode.style.top="-40px"
-              houseNode.style.left="-20px"}
+            if(data?.select){
 
+                if (0 < possition[turnOfUser] && possition[turnOfUser] <= 8) {
+                    houseNode.style.top="-20px"
+                    houseNode.style.left="30px"
+                } 
+                else if (8 < possition[turnOfUser] && possition[turnOfUser] < 16) {
+                    houseNode.style.top="-30px"
+                    houseNode.style.left="-20px"
+                } 
+                else if (16 < possition[turnOfUser] && possition[turnOfUser] < 24) {
+                    houseNode.style.top="-20px"
+                    houseNode.style.left="40px"
+                } 
+                else if (24 < possition[turnOfUser] && possition[turnOfUser] < 32) {
+                    houseNode.style.top="-40px"
+                    houseNode.style.left="-20px"
+                }
+            }
+            else {
+                if ( possition[turnOfUser] ===4 ) {
+                    houseNode.style.top="0px"
+                    houseNode.style.left="30px"
+                } 
+                else if (possition[turnOfUser] ===12) {
+                    houseNode.style.top="-20px"
+                    houseNode.style.left="-10px"
+                } 
+                else if (possition[turnOfUser] ===20) {
+                    houseNode.style.top="0px"
+                    houseNode.style.left="30px"
+                } 
+                else if ( possition[turnOfUser] ===28) {
+                    houseNode.style.top="-15px"
+                    houseNode.style.left="-10px"
+                }
+            }
         })
 
         socket.on("upgrade-result",(data)=>{
@@ -66,7 +94,14 @@ function House({houses,houseRefs,cx,socket,possition,turnOfUser,cellRefs,gameRoo
             dispatch(updateBalance({amount:price,turnOfUser: owner}))
             
             const houseNode=houseRefs.current[cityBoardIndex.indexOf(inuse)].current
-            houseNode.firstChild.src=houses[`house${owner}_${currentLevel}`]
+
+            // có level là city, không có là sea
+            if(currentLevel){
+                houseNode.firstChild.src=houses[`house${owner}_${currentLevel}`]
+            }
+            else {
+                houseNode.firstChild.src=houses[`sea${owner}`]
+            }
         })
 
 
@@ -86,7 +121,7 @@ function House({houses,houseRefs,cx,socket,possition,turnOfUser,cellRefs,gameRoo
     return(
         <>
         {
-         [...Array(20)].map((_,index)=>{
+         [...Array(24)].map((_,index)=>{
             return(
                 <div key={index} className={cx("house")} ref={houseRefs.current[index]} style={{display:"none"}}>
                     <img src={houses.house0_1} width="100px"/>
@@ -100,4 +135,4 @@ function House({houses,houseRefs,cx,socket,possition,turnOfUser,cellRefs,gameRoo
 
 export default House
 
-const cityBoardIndex=[1,2,3,5,7,9,10,13,14,15,17,19,21,22,23,25,26,27,30,31]
+const cityBoardIndex=[1,2,3,4,5,7,9,10,12,13,14,15,17,19,20,21,22,23,25,26,27,28,30,31]

@@ -11,5 +11,7 @@ const modalConstant= {
     SEAGAME:10,
     LOST_TURN:11,
     DESTROY_H_SELECT:12,
+    BUY_SEA:13,
+    OTHER_SEA:14,
 }
 export default modalConstant
