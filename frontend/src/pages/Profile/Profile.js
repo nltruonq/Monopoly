@@ -27,7 +27,7 @@ function Profile() {
                 <div className={cx("title")}>Thông tin kiện tướng</div>
             </div>
             <div className={cx("main")}>
-                <NavProfile nav={nav} setNav={setNav} />
+                <NavProfile user={user} nav={nav} setNav={setNav} />
                 {nav === "information" && <Information user={user} />}
                 {nav === "history" && <MatchHistory user={user} />}
                 {nav === "character" && <Information />}
