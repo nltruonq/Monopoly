@@ -213,8 +213,8 @@ function ChessBoard() {
           else {
             // if(turnOfUser===1) setSteps(7)
             // else 
-            setSteps(data.diceOne + data.diceTwo);
-            // setSteps(6)
+            // setSteps(data.diceOne + data.diceTwo);
+            setSteps(25)
           }
         }, 2000);   
     })

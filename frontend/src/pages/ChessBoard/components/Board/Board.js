@@ -14,6 +14,8 @@ import modalConstant from "../../constants/modal";
 import bg  from "../../../../assets/images/bg.jpg"
 import seagameVideo from "../../../../assets/images/seagame.mov"
 import seagameImg from "../../../../assets/images/seagame.png"
+import { cells } from "../../constants/cell";
+import { City } from "../../class/city";
 
 function Board(props){
     const {
@@ -34,7 +36,15 @@ function Board(props){
     const houseOwner= useSelector(selectCell)
     console.log(houseOwner)
     
+    const clickSaveIndex=(i)=>{
+      localStorage.setItem("index",i)
+    }
 
+
+    // hàm lưu vị trí khi click chọn
+    for(let i = 0; i <32 ;++i){
+      cellRefs.current[i].current.addEventListener('click',()=>clickSaveIndex(i))
+    }
     
     useEffect(()=>{
       socket.on("destroy-house-result",data=>{
@@ -52,7 +62,7 @@ function Board(props){
       if(destroy){
         for(let i=0; i<32; ++i){
           if(list.includes(i)){
-            cellRefs.current[i].current.addEventListener('click',()=>handleDestroy(i))
+            cellRefs.current[i].current.addEventListener('click',handleDestroy)
           }
         }
       }
@@ -62,7 +72,7 @@ function Board(props){
         setDestroy(false)
         for(let i=0; i<32; ++i){
           if(listDestroy.includes(i)){
-            cellRefs.current[i].current.removeEventListener('click',()=>handleDestroy(i))
+            cellRefs.current[i].current.removeEventListener('click',handleDestroy)
           }
         }
         
@@ -74,21 +84,24 @@ function Board(props){
     },[socket,destroy])
 
 
-    const handleDestroy=(i)=>{
-      changeShow({state:modalConstant.DESTROY_H_SELECT,data:i})
+    const handleDestroy=()=>{
+      const index = Number(localStorage.getItem("index"))
+      changeShow({state:modalConstant.DESTROY_H_SELECT,data:index})
     }
 
-    const handleWourldTour=(i)=>{
-      socket.emit("select-world-tour",{gameRoom,index:i})
-    }
-
+    
     // world tour
+    const handleWourldTour=()=>{
+      const index= Number(localStorage.getItem("index"))
+      socket.emit("select-world-tour",{gameRoom,index})  
+    }
+    
     useEffect(()=>{
       socket.on("world-tour-result",()=>{
         for( let i=0; i<32; ++i){
           if(i!==24) // khác ô world tour
           {
-            cellRefs.current[i].current.addEventListener('click',()=>handleWourldTour(i))
+            cellRefs.current[i].current.addEventListener('click',handleWourldTour)
           }
         }
       })
@@ -96,14 +109,15 @@ function Board(props){
       socket.on("select-world-tour-result",data=>{
         const index=data.index
         cellRefs.current[index].current.appendChild(userRef.current[turnOfUser].current)
-        possition[turnOfUser]=index
-        changePos(possition)
         for( let i=0; i<32; ++i){
           if(i!==24) // khác ô world tour
           {
-            cellRefs.current[i].current.removeEventListener('click',()=>handleWourldTour(i))
+            cellRefs.current[i].current.removeEventListener('click',handleWourldTour)
+
           }
         }
+        possition[turnOfUser]=index
+        changePos(possition)
         socket.emit("finish-world-tour",{possition:index,turnOfUser,gameRoom})
       })
 
@@ -116,9 +130,10 @@ function Board(props){
 
 
     // seagame
-    const handleSeagame=(i)=>{
+    const handleSeagame=()=>{
+      const index = Number(localStorage.getItem("index"))
       // changeShow({state:modalConstant.SEAGAME_H_SELECT,data:i})
-      socket.emit("host-seagame",{gameRoom,index:i})
+      socket.emit("host-seagame",{gameRoom,index})
       socket.emit("close",{gameRoom})
       socket.emit("turn",{gameRoom})
     }
@@ -138,7 +153,7 @@ function Board(props){
 
           for(let i =0 ; i<32 ; i++){
             if(list.includes(i)){
-              cellRefs.current[i].current.addEventListener('click',()=>handleSeagame(i))
+              cellRefs.current[i].current.addEventListener('click',handleSeagame)
             }
           }
         }
@@ -151,7 +166,11 @@ function Board(props){
       socket.on("host-seagame-result",data=>{
         seagameRef.current.style.display="block"
         cellRefs.current[data.index].current.appendChild(seagameRef.current)
-
+        for(let i =0 ; i<32 ; i++){
+          if(listOwner.includes(i)){
+            cellRefs.current[i].current.removeEventListener('click',handleSeagame)
+          }
+        }
         setListOwner([])
       })
 
@@ -210,7 +229,24 @@ function Board(props){
                         ? <div className={cx("city-top")}>{locations[9+index].city}</div>
                         :<Chance></Chance>
                       }
-
+                      {cells[9+index] instanceof City 
+                        && 
+                        <div 
+                          style={{
+                            position:"absolute",
+                            bottom:0,
+                            left:0,
+                            fontSize:14,
+                            fontWeight:500,
+                            width:"100%",
+                            // backgroundColor:"#e0d7e0",
+                          }}
+                        >
+                          <div style={{display:"flex",justifyContent:"center",color:"#b80f10"}}>
+                            {cells[9+index].basePrice}
+                          </div>
+                        </div>
+                      }
                     </div>
                   );
                 })}
@@ -259,6 +295,23 @@ function Board(props){
                         ? <div className={cx("city-left")}>{locations[7-index].city}</div>
                         :<Chance></Chance>
                       } 
+                      {cells[7-index] instanceof City 
+                        && 
+                        <div style={{
+                          position:"absolute",
+                          left:-20,
+                          top:21,
+                          fontSize:14,
+                          fontWeight:500,
+                          width:"60px",
+                          // backgroundColor:"red",
+                          transform:"rotate(90deg)"}}
+                        >
+                          <div style={{display:"flex",justifyContent:"center",color:"#b80f10"}}>
+                            {cells[7-index].basePrice}
+                          </div>
+                        </div>
+                      }
                       </div>
                     );
                   })}
@@ -308,7 +361,23 @@ function Board(props){
                         ? <div className={cx("city-left")}>{locations[17+index].city}</div>
                         :<Chance></Chance>
                       } 
-
+                      {cells[7-index] instanceof City 
+                        && 
+                        <div style={{
+                          position:"absolute",
+                          left:-20,
+                          top:21,
+                          fontSize:14,
+                          fontWeight:500,
+                          width:"60px",
+                          // backgroundColor:"red",
+                          transform:"rotate(90deg)"}}
+                        >
+                          <div style={{display:"flex",justifyContent:"center",color:"#b80f10"}}>
+                            {cells[7-index].basePrice}
+                          </div>
+                        </div>
+                      }
                       </div>
                     );
                   })}
@@ -358,6 +427,24 @@ function Board(props){
                           <img src={taxImg} width={50} style={{marginTop:20,position:"absolute"}}/>
                         </>
                       } 
+                      {cells[9+index] instanceof City 
+                        && 
+                        <div 
+                          style={{
+                            position:"absolute",
+                            bottom:0,
+                            left:0,
+                            fontSize:14,
+                            fontWeight:500,
+                            width:"100%",
+                            // backgroundColor:"#e0d7e0",
+                          }}
+                        >
+                          <div style={{display:"flex",justifyContent:"center",color:"#b80f10"}}>
+                            {cells[9+index].basePrice}
+                          </div>
+                        </div>
+                      }
                     </div>
                   );
                 })}
