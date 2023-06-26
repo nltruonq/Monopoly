@@ -32,7 +32,7 @@ function Friend({ friends }) {
                 {friends.map((e, i) => {
                     return (
                         <div key={i} className={cx("item")}>
-                            <img src="https://i.pinimg.com/564x/f3/5b/5f/f35b5fc97d0ab92af45ac181021006cc.jpg" />
+                            <img src={e.avatar} />
                             <span>{e.username}</span>
                         </div>
                     );

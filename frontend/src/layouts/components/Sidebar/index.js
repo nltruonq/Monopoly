@@ -27,11 +27,11 @@ function Sidebar() {
         //     name: 'Xếp hạng bạn bè',
         //     path: '/rank-friends',
         // },
-        {
-            id: 5,
-            name: "Thoát",
-            path: "/",
-        },
+        // {
+        //     id: 5,
+        //     name: "Thoát",
+        //     path: "/",
+        // },
     ];
 
     useEffect(() => {
