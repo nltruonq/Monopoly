@@ -23,6 +23,7 @@ function EventLogin({ user }) {
         isReceive.login = true;
         localStorage.setItem("monopoly-reward", JSON.stringify(isReceive));
         setIsReceive({ ...isReceive, login: true });
+        await handleUpdate(user.gold + 200, user.ruby + 50);
         await Swal.fire("Nhận phần thưởng thành công!", "", "success");
     };
 
@@ -30,6 +31,7 @@ function EventLogin({ user }) {
         isReceive.match3 = true;
         localStorage.setItem("monopoly-reward", JSON.stringify(isReceive));
         setIsReceive({ ...isReceive, match3: true });
+        await handleUpdate(user.gold + 400, user.ruby + 100);
         await Swal.fire("Nhận phần thưởng thành công!", "", "success");
     };
 
@@ -37,7 +39,17 @@ function EventLogin({ user }) {
         isReceive.match5 = true;
         localStorage.setItem("monopoly-reward", JSON.stringify(isReceive));
         setIsReceive({ ...isReceive, match5: true });
+        await handleUpdate(user.gold + 900, user.ruby + 250);
         await Swal.fire("Nhận phần thưởng thành công!", "", "success");
+    };
+
+    const handleUpdate = async (gold, ruby) => {
+        const rs = await axios.patch(`${process.env.REACT_APP_SERVER_API}/api/user/update`, {
+            username: user.username,
+            gold,
+            ruby,
+        });
+        localStorage.setItem("user-monopoly", JSON.stringify(rs.data));
     };
 
     return (
