@@ -34,7 +34,6 @@ function Board(props){
     const seagameRef= createRef()
 
     const houseOwner= useSelector(selectCell)
-    console.log(houseOwner)
     
     const clickSaveIndex=(i)=>{
       localStorage.setItem("index",i)
@@ -43,7 +42,7 @@ function Board(props){
 
     // hàm lưu vị trí khi click chọn
     for(let i = 0; i <32 ;++i){
-      cellRefs.current[i].current.addEventListener('click',()=>clickSaveIndex(i))
+      cellRefs?.current[i]?.current?.addEventListener('click',()=>clickSaveIndex(i))
     }
     
     useEffect(()=>{
@@ -58,15 +57,20 @@ function Board(props){
       }
       setListDestroy(list)
 
-      
-      if(destroy){
-        for(let i=0; i<32; ++i){
-          if(list.includes(i)){
-            cellRefs.current[i].current.addEventListener('click',handleDestroy)
+      if(list.length!==0){
+        if(destroy){
+          for(let i=0; i<32; ++i){
+            if(list.includes(i)){
+              cellRefs.current[i].current.addEventListener('click',handleDestroy)
+            }
           }
         }
       }
-      
+      else{
+        socket.emit("close",{gameRoom})
+        socket.emit("turn",{gameRoom})
+      }
+        
       socket.on("reset-destroy-result",data=>{
         setListDestroy([])
         setDestroy(false)
@@ -126,7 +130,7 @@ function Board(props){
         socket.off("select-world-tour-result")
       }
       
-    },[socket])   
+    },[socket,turnOfUser])   
 
 
     // seagame

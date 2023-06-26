@@ -11,6 +11,7 @@ import {cells} from "../../../constants/cell/index"
 import { City } from "../../../class/city";
 import { useSelector } from "react-redux";
 import { selectCell } from "../../../../../redux/cellSlice";
+import { selectUser } from "../../../../../redux/userSlice";
 
 const cx = classNames.bind(styles);
 
@@ -18,6 +19,22 @@ function UpgradeHouse({ show, changeShow, possition,title,turnOfUser,socket,game
 
   const house = useSelector(selectCell);
   const [select,setSelect]=useState(3)
+  const [affortToPay,setAffort] = useState(0)
+  const userIngame= useSelector(selectUser)
+
+  const userBalance = userIngame[turnOfUser].balance
+  
+  const currentCell=house?.find((elm)=>{
+    return elm.boardIndex === possition[turnOfUser]
+  })
+  const currentLevel= currentCell.level
+  
+  const currentCity = cells[possition[turnOfUser]]
+
+  useEffect(()=>{
+    setAffort(userBalance - currentCity.fPriceToUpgrade(currentLevel,select))
+  },[select,affortToPay])
+   
 
   const handleClose = () => {
     changeShow(false);
@@ -26,23 +43,24 @@ function UpgradeHouse({ show, changeShow, possition,title,turnOfUser,socket,game
     socket.emit("turn",{gameRoom})
   };
   
-  const currentCell=house?.find((elm)=>{
-      return elm.boardIndex === possition[turnOfUser]
-  })
-  const currentLevel= currentCell.level
-  const currentCity = cells[possition[turnOfUser]]
+  
+  
   const upgradeHouse=()=>{
-     socket.emit("upgrade",
-          {gameRoom
-            ,select,
-            price:currentCity.fPriceToUpgrade(currentLevel,select),
-            inuse: cells.indexOf(currentCity)
-          })
-    socket.emit("change-balance",{gameRoom,
-      amount:currentCity.fPriceToUpgrade(currentLevel,select),
-      user:currentCell.owner,
-      type:"minus"
-    })
+    if(affortToPay>= 0 ){
+      socket.emit("upgrade",
+           {gameRoom
+             ,select,
+             price:currentCity.fPriceToUpgrade(currentLevel,select),
+             inuse: cells.indexOf(currentCity)
+           })
+     socket.emit("change-balance",{gameRoom,
+       amount:currentCity.fPriceToUpgrade(currentLevel,select),
+       user:currentCell.owner,
+       type:"minus"
+     })
+     handleClose()
+    }
+
   }
 
   return (
@@ -64,11 +82,8 @@ function UpgradeHouse({ show, changeShow, possition,title,turnOfUser,socket,game
       </Modal.Body>
       <Modal.Footer>
         <Button 
-          onClick={()=>{
-            upgradeHouse()
-            handleClose()
-          }} 
-          variant="secondary">
+          onClick={upgradeHouse} 
+          variant="secondary" style={{opacity:`${affortToPay<0 && "0.5"}`}}>
           Upgrade {currentCity instanceof City 
           ? currentCity.fPriceToUpgrade(currentLevel,select)
           : ""

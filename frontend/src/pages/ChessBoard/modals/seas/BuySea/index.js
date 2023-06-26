@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Image from "react-bootstrap/Image";
@@ -7,6 +7,8 @@ import { colors } from "../../../constants/Color/color";
 import houses from "../../../constants/houses";
 import {cells} from "../../../constants/cell/index"
 import { Sea } from "../../../class/sea";
+import { useSelector } from "react-redux";
+import { selectUser } from "../../../../../redux/userSlice";
 
 
 function BuySea({ show, changeShow, possition,turnOfUser,socket,gameRoom }) {
@@ -17,8 +19,16 @@ function BuySea({ show, changeShow, possition,turnOfUser,socket,gameRoom }) {
     socket.emit("turn",{gameRoom})
   };
   const currentSea= cells[possition[turnOfUser]]
-  
+  const userInGame = useSelector(selectUser)
+  const userBalance = userInGame[turnOfUser].balance
+
+  const affortToPay = userBalance - currentSea.basePrice
+  console.log(affortToPay)
+
+
+
   const buySea=()=>{
+    if(affortToPay>=0){
       socket.emit("buy-sea",{
         gameRoom,
         price:currentSea.basePrice,
@@ -29,6 +39,8 @@ function BuySea({ show, changeShow, possition,turnOfUser,socket,gameRoom }) {
         user:turnOfUser,
         type:"minus"
       })
+      handleClose()
+    }
   }
 
   return (
@@ -50,11 +62,8 @@ function BuySea({ show, changeShow, possition,turnOfUser,socket,gameRoom }) {
       </Modal.Body>
       <Modal.Footer>
         <Button 
-          onClick={()=>{
-            buySea()
-            handleClose()
-          }} 
-          variant="secondary">
+          onClick={buySea} 
+          variant="secondary" style={{opacity:`${affortToPay<0 && "0.5"}`}}>
           Buy {currentSea instanceof Sea
           ? currentSea.basePrice
           : ""
