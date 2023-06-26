@@ -68,15 +68,22 @@ function Information({ user }) {
     return (
         <div className={cx("wrapper")}>
             {!loading && (
-                <div className={cx("avatar")}>
-                    <img className={cx("avt")} ref={imgRef} src={selectedImage || user?.avatar} onClick={handleImageClick} />
-                    <input ref={inputRef} style={{ display: "none" }} type="file" accept="image/*" onChange={handleImageChange} />
-                    {selectedImage && (
-                        <button className={cx("btn-change")} onClick={handleSubmit}>
-                            Thay đổi
-                        </button>
-                    )}
-                </div>
+                <>
+                    <div className={cx("avatar")}>
+                        <img className={cx("avt")} ref={imgRef} src={selectedImage || user?.avatar} onClick={handleImageClick} />
+                        <input ref={inputRef} style={{ display: "none" }} type="file" accept="image/*" onChange={handleImageChange} />
+                        {selectedImage && (
+                            <button className={cx("btn-change")} onClick={handleSubmit}>
+                                Thay đổi
+                            </button>
+                        )}
+                    </div>
+                    <div className={cx("info")}>
+                        <div className={cx("info-item")}>Username: {user?.username}</div>
+                        <div className={cx("info-item")}>Số trận đã đấu: ?</div>
+                        <div className={cx("info-item")}>Tỉ lệ thắng: ?</div>
+                    </div>
+                </>
             )}
             {loading && <Loading />}
         </div>

@@ -12,10 +12,14 @@ import { useNavigate } from "react-router-dom";
 const cx = classNames.bind(styles);
 
 function Friend({ friends }) {
-    const naviate = useNavigate();
+    const navigate = useNavigate();
     // logic
     const changePage = () => {
-        naviate("/list-friends");
+        navigate("/list-friends");
+    };
+
+    const handleViewProfileUser = (e) => {
+        navigate(`/profile/${e.username}`);
     };
 
     return (
@@ -31,7 +35,7 @@ function Friend({ friends }) {
             <div className={cx("body")}>
                 {friends.map((e, i) => {
                     return (
-                        <div key={i} className={cx("item")}>
+                        <div onClick={() => handleViewProfileUser(e)} key={i} className={cx("item")}>
                             <img src={e.avatar} />
                             <span>{e.username}</span>
                         </div>

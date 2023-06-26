@@ -38,14 +38,14 @@ function ActionUser({ changeWaitting, socket, user }) {
                     <HiShoppingCart size={30} color="yellow" />
                     <span className={cx("shop")}>Shop</span>
                 </div>
-                <div className={cx("item")}>
+                {/* <div className={cx("item")}>
                     <HiShoppingCart size={30} color="#ccc" />
                     <span>Shop</span>
                 </div>
                 <div className={cx("item")}>
                     <HiShoppingCart size={30} color="#ccc" />
                     <span>Shop</span>
-                </div>
+                </div> */}
             </div>
             <div className={cx("game")}>
                 <div className={cx("normal")} onClick={handleCreatePrivateRoom}>
