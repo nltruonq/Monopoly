@@ -34,6 +34,7 @@ const buyEvent = (socket) => {
     socket.on("re-bought",(data)=>{
         try {
             const {gameRoom,price,owner,inuse,currentLevel}=data
+            console.log(data)
             socket.nsp.in(gameRoom).emit("re-bought-result",{
               price,
               owner,

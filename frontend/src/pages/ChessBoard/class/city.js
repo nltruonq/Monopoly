@@ -25,10 +25,10 @@ export class City extends Cell{
             return this.basePrice
         }
         else if(level===2){
-            return this.basePrice* 1.5
+            return Math.round(this.basePrice* 1.5)
         }
         else if (level===3){
-            return this.basePrice*2.5
+            return Math.round(this.basePrice*2.5)
         }
         else return ""
     }

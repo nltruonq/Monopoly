@@ -12,6 +12,7 @@ const cellSlice = createSlice({
       })
       if(bought) {
         state[state.indexOf(bought)].owner=turnOfUser
+        state[state.indexOf(bought)].level = level // update
       }
       else {
         state.push({owner:turnOfUser,boardIndex,level})

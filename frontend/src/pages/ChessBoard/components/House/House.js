@@ -2,7 +2,6 @@ import { useEffect, useState } from "react"
 import {updateBalance } from "../../../../redux/userSlice"
 import {useDispatch} from "react-redux"
 import { buyHouse, destroyHouse } from "../../../../redux/cellSlice"
-import { BiCoinStack } from "react-icons/bi"
 
 
 function House({houses,houseRefs,cx,socket,possition,turnOfUser,cellRefs,gameRoom}){
@@ -89,7 +88,7 @@ function House({houses,houseRefs,cx,socket,possition,turnOfUser,cellRefs,gameRoo
         })
 
         socket.on("re-bought-result",(data)=>{
-            const {inuse,owner,currentLevel,price} =data 
+            const {inuse,owner,currentLevel,price} =data
             dispatch(updateBalance({amount:-price,turnOfUser}))
             dispatch(updateBalance({amount:price,turnOfUser: owner}))
             
@@ -97,10 +96,10 @@ function House({houses,houseRefs,cx,socket,possition,turnOfUser,cellRefs,gameRoo
 
             // có level là city, không có là sea
             if(currentLevel){
-                houseNode.firstChild.src=houses[`house${owner}_${currentLevel}`]
+                houseNode.firstChild.src=houses[`house${turnOfUser}_${currentLevel}`]
             }
             else {
-                houseNode.firstChild.src=houses[`sea${owner}`]
+                houseNode.firstChild.src=houses[`sea${turnOfUser}`]
             }
         })
 

@@ -12,6 +12,7 @@ const userSlice = createSlice({
   reducers: {
     updateBalance: (state, action) => {
       const { turnOfUser, amount } = action.payload;
+      console.log(turnOfUser)
       const user = state[turnOfUser]
       if (user) {
         user.balance += amount;

@@ -17,8 +17,6 @@ function Cell({socket,changeShow}){
     const buyHouse = useSelector(selectCell)
     const user = useSelector(selectUser)
 
-
-
     useEffect(()=>{
         socket.on("moved-result",(data)=>{
             const {possition,turnOfUser}=data
@@ -29,12 +27,10 @@ function Cell({socket,changeShow}){
             const cell = cells[userIndex]
             //dùng để test modal
             // changeShow(modalConstant.HOST_BIRTHDAY)
-            console.log(turnOfUser)
             if(cell instanceof City){
                 const house = buyHouse?.find((elm)=>{
                     return elm.boardIndex === userIndex
                 })
-                console.log(house)
                 if(!house) {
                     changeShow(modalConstant.BUY_HOUSE)
                     //vào ô trống

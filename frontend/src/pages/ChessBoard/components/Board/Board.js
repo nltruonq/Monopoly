@@ -21,14 +21,14 @@ function Board(props){
     const {
             yourTurn,cx,roll,diceOne,diceTwo,cellRefs,
             changeRoll,moveBySteps,socket,changeShow,
-            gameRoom,userRef,turnOfUser,changePos,possition
+            gameRoom,userRef,turnOfUser,changePos,possition,
+            userSteps
           }
           =props
     
     // phá nhà
     const [destroy,setDestroy]=useState(false)
     const [listDestroy,setListDestroy]=useState([])
-
     const [listOwner,setListOwner]=useState([])
     
     const seagameRef= createRef()
@@ -67,6 +67,7 @@ function Board(props){
         }
       }
       else{
+        changeShow(false)
         socket.emit("close",{gameRoom})
         socket.emit("turn",{gameRoom})
       }
@@ -75,7 +76,7 @@ function Board(props){
         setListDestroy([])
         setDestroy(false)
         for(let i=0; i<32; ++i){
-          if(listDestroy.includes(i)){
+          if(list.includes(i)){
             cellRefs.current[i].current.removeEventListener('click',handleDestroy)
           }
         }
@@ -143,9 +144,9 @@ function Board(props){
     }
 
     useEffect(()=>{
+      // console.log(houseOwner,turnOfUser)
       socket.on("seagame-result",()=>{
         let list = []
-        // console.log(houseOwner,turnOfUser)
         for(let i = 0; i < houseOwner.length; i++ ){
           if(houseOwner[i].owner === turnOfUser){
             list.push(houseOwner[i].boardIndex)
@@ -162,6 +163,7 @@ function Board(props){
           }
         }
         else {
+          changeShow(false)
           socket.emit("close",{gameRoom})
           socket.emit("turn",{gameRoom})
         }
@@ -183,7 +185,7 @@ function Board(props){
         socket.off("host-seagame-result")
       }
 
-    },[socket,houseOwner,seagameRef])
+    },[socket,houseOwner,seagameRef,listOwner])
 
 
     // bán nhà
@@ -322,7 +324,12 @@ function Board(props){
                 </div>
               </div>
               <div className={cx("center")} style={{backgroundImage:`url(${bg})`,backgroundSize:"cover",padding:"20px"}}>
-                {yourTurn&&<button onClick={() => moveBySteps(diceOne + diceTwo)}>
+                {yourTurn&&!roll&&<button 
+                  onClick={() => { 
+                    if(userSteps<=0 ){
+                      moveBySteps(diceOne + diceTwo)
+                    }
+                  }}>
                   MOVE
                 </button>}
                 <Dice

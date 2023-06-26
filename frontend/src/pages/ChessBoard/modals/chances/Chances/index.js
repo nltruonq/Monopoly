@@ -53,7 +53,7 @@ function ChangesModal({changeShow,turnOfUser,gameRoom,yourTurn}) {
             contrastColor="white"
             buttonText={turnOfUser===yourTurn? "Spin":""}
             gameRoom={gameRoom}
-            // isOnlyOnce={true}
+            isOnlyOnce={true}
           />
         </div>
       </div>
