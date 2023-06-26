@@ -18,9 +18,9 @@ function NavProfile({ setNav, nav }) {
             <div onClick={() => setNav("history")} className={cx("item", { active: nav === "history" })}>
                 Lịch sử đấu
             </div>
-            <div onClick={() => setNav("character")} className={cx("item", { active: nav === "character" })}>
+            {/* <div onClick={() => setNav("character")} className={cx("item", { active: nav === "character" })}>
                 Nhân vật
-            </div>
+            </div> */}
             <div onClick={handleLogout} className={cx("item")}>
                 Đăng xuất
             </div>
