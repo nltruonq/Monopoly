@@ -68,11 +68,13 @@ function Information({ user }) {
         <div className={cx("wrapper")}>
             {!loading && (
                 <div className={cx("avatar")}>
-                    <img ref={imgRef} src={selectedImage || user?.avatar} onClick={handleImageClick} />
+                    <img className={cx("avt")} ref={imgRef} src={selectedImage || user?.avatar} onClick={handleImageClick} />
                     <input ref={inputRef} style={{ display: "none" }} type="file" accept="image/*" onChange={handleImageChange} />
-                    <button className={cx("btn-change")} onClick={handleSubmit}>
-                        Thay đổi
-                    </button>
+                    {selectedImage && (
+                        <button className={cx("btn-change")} onClick={handleSubmit}>
+                            Thay đổi
+                        </button>
+                    )}
                 </div>
             )}
             {loading && <Loading />}

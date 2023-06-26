@@ -8,11 +8,11 @@ const userController = {
             let listPropose = [];
             const username = req.params.username;
 
-            //tìm chính xác
-            const user = await User.findOne({ username }); // username: ?
-            if (user) {
-                listPropose.push(user);
-            }
+            // //tìm chính xác
+            // const user = await User.findOne({ username }); // username: ?
+            // if (user) {
+            //     listPropose.push(user);
+            // }
 
             // đề xuất gần đúng
             const list = await User.find({ username: { $regex: username } }).limit(10);
