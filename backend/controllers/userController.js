@@ -39,6 +39,17 @@ const userController = {
             return res.status(500).json({ message: "Failed!" });
         }
     },
+
+    updateGoldandRuby: async (req, res) => {
+        try {
+            const { username, gold, ruby } = req.body;
+            const user = await User.findOneAndUpdate({ username }, { $set: { gold: gold, ruby: ruby } }, { new: true }).select("-password");
+            return res.status(200).json(user);
+        } catch (err) {
+            console.log(err);
+            return res.status(500).json({ message: "Failed!" });
+        }
+    },
 };
 
 module.exports = userController;

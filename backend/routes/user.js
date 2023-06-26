@@ -9,4 +9,6 @@ router.get("/search-friend/:username", userController.getListByUserName);
 //
 router.post("/change-avatar", userController.changeAvatar);
 
+router.patch("/update", userController.updateGoldandRuby);
+
 module.exports = router;
