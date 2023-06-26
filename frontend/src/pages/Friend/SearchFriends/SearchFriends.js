@@ -13,6 +13,7 @@ const cx = classNames.bind(styles);
 function SearchFriend() {
     const [user, setUser] = useState(JSON.parse(localStorage.getItem("user-monopoly")) || null);
     const [friends, setFriends] = useState([]);
+    const [friendrequests, setFriendRequests] = useState([]);
     const [value, setValue] = useState("");
     const [list, setList] = useState([]);
     const handleClickSearch = () => {
@@ -40,8 +41,13 @@ function SearchFriend() {
             const rs = await axios.get(`${process.env.REACT_APP_SERVER_API}/api/friend/list-friends/${user.username}`);
             setFriends(rs.data);
         };
+        const getFriendRequests = async () => {
+            const rs = await axios.get(`${process.env.REACT_APP_SERVER_API}/api/friend-request/get-send/${user.username}`);
+            setFriendRequests(rs.data);
+        };
 
         getFriends();
+        getFriendRequests();
     }, []);
 
     const handleAddFriend = async (e) => {
@@ -57,6 +63,30 @@ function SearchFriend() {
                     sender: user.username,
                     receiver: e.username,
                 });
+                if (rs.data.status === 200) {
+                    await Swal.fire({
+                        title: `Gửi lời mời kết bạn cho ${e.username} thành công`,
+                        icon: "success",
+                        confirmButtonText: "Đồng ý",
+                    });
+                    const newFq = [
+                        ...friendrequests,
+                        {
+                            sender: user.username,
+                            receiver: e.username,
+                        },
+                    ];
+                    console.log(newFq);
+                    setFriendRequests(newFq);
+                    return;
+                } else {
+                    await Swal.fire({
+                        title: `Đã xảy ra lỗi!`,
+                        icon: "error",
+                        confirmButtonText: "Đồng ý",
+                    });
+                    return;
+                }
             }
         });
     };
@@ -91,12 +121,14 @@ function SearchFriend() {
                                 <div className={cx("des")}>
                                     <div className={cx("name")}>{e.username}</div>
                                     <div className={cx("online")}>{e.isOnline ? "✅ Trực tuyến" : "❌ Ngoại tuyến"}</div>
-                                    {friends.filter((f) => f.username === e.username).length === 0 ? (
+                                    {friendrequests.filter((f) => f.receiver === e.username).length === 1 ? (
+                                        <span className={cx("friended")}>Đã gửi lời mời kết bạn</span>
+                                    ) : friends.filter((f) => f.username === e.username).length === 0 ? (
                                         <button onClick={() => handleAddFriend(e)} className={cx("make-friend")}>
                                             Kết bạn
                                         </button>
                                     ) : (
-                                        <span className={cx('friended')}>Đã là bạn bè</span>
+                                        <span className={cx("friended")}>Đã là bạn bè</span>
                                     )}
                                 </div>
                             </div>

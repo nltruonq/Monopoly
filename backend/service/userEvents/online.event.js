@@ -12,6 +12,17 @@ const onlineEvent = (socket, io) => {
             console.log(error);
         }
     });
+
+    socket.on("offline", async (data) => {
+        try {
+            const { username } = data;
+            await User.findOneAndUpdate({ username: username }, { $set: { isOnline: false } });
+            io.emit("offline", { username });
+            console.log(username, "is offline!");
+        } catch (error) {
+            console.log(error);
+        }
+    });
 };
 
 module.exports = onlineEvent;

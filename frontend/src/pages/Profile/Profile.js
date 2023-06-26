@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 import { TiArrowBack } from "react-icons/ti";
 import Information from "./components/Information/Information";
+import MatchHistory from "./components/MatchHistory/MatchHistory";
 
 const cx = classNames.bind(styles);
 
@@ -26,9 +27,9 @@ function Profile() {
                 <div className={cx("title")}>Thông tin kiện tướng</div>
             </div>
             <div className={cx("main")}>
-                <NavProfile nav={nav} setNav={setNav} />
-                {nav === "information" && <Information user = {user} />}
-                {nav === "history" && <Information />}
+                <NavProfile user={user} nav={nav} setNav={setNav} />
+                {nav === "information" && <Information user={user} />}
+                {nav === "history" && <MatchHistory user={user} />}
                 {nav === "character" && <Information />}
             </div>
         </div>
