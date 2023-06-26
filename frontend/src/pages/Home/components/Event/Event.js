@@ -2,10 +2,15 @@ import classNames from "classnames/bind";
 import styles from "./Event.module.scss";
 
 import { VscSymbolEvent } from "react-icons/vsc";
+import { useNavigate } from "react-router-dom";
 
 const cx = classNames.bind(styles);
 
-function Event() {
+function Event({ user }) {
+    const navigate = useNavigate();
+    const handleGoEvent = () => {
+        navigate("/event");
+    };
     return (
         <div className={cx("wrapper")}>
             <div className={cx("banner")}>
@@ -14,7 +19,7 @@ function Event() {
                     alt="banner"
                 />
             </div>
-            <div className={cx("event")}>
+            <div onClick={handleGoEvent} className={cx("event")}>
                 <VscSymbolEvent size={26} color="yellow" />
                 <span>Sự kiện</span>
             </div>

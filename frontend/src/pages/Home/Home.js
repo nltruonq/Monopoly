@@ -82,7 +82,7 @@ function Home() {
             <Header user={user} />
             <div className={cx("f-e")}>
                 <Friend friends={friends} />
-                <Event />
+                <Event user={user} />
             </div>
             <InviteWorld inviteWorld={inviteWorld} setInviteWorld={setInviteWorld} user={user} socket={socket} />
             <ActionUser changeWaitting={changeWaitting} socket={socket} user={user} />

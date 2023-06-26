@@ -9,8 +9,10 @@ import Login from "../pages/Login/Login";
 import PrivateRoom from "../pages/PrivateRoom/PrivateRoom";
 import Profile from "../pages/Profile/Profile";
 import Register from "./../pages/Register/Register";
+import Event from "./../pages/Event/Event";
 
 const publicRoutes = [
+    { path: "/event", component: Event },
     { path: "/profile/:username", component: Profile },
     { path: "/private-room/:username", component: PrivateRoom },
     { path: "/login", component: Login },

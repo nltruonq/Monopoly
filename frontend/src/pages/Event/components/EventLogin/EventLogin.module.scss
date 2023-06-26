@@ -1,0 +1,52 @@
+.wrapper {
+    flex-grow: 10;
+    background-image: linear-gradient(120deg, rgb(231, 60, 60), rgb(228, 132, 132));
+}
+
+.main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 40px;
+    margin-top: 60px;
+    margin-left: 40px;
+
+    .item {
+        display: flex;
+        gap: 20px;
+
+        .title {
+            display: flex;
+            align-items: center;
+            font-weight: 600;
+            min-width: 300px;
+            font-size: 20px;
+            color: white;
+        }
+
+        .reward {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: black;
+            background-color: white;
+            min-width: 400px;
+            padding: 20px 60px;
+            border-radius: 8px;
+        }
+
+        .ok {
+            padding: 4px 12px;
+            border: none;
+            border-radius: 8px;
+            background-color: white;
+            font-weight: 500;
+            text-transform: uppercase;
+            min-width: 120px;
+            color: black;
+            &:hover {
+                opacity: 0.7;
+            }
+        }
+    }
+}
