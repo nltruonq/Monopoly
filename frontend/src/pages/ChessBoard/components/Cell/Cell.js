@@ -29,16 +29,18 @@ function Cell({socket,changeShow}){
             const cell = cells[userIndex]
             //dùng để test modal
             // changeShow(modalConstant.HOST_BIRTHDAY)
-
+            console.log(turnOfUser)
             if(cell instanceof City){
                 const house = buyHouse?.find((elm)=>{
                     return elm.boardIndex === userIndex
                 })
+                console.log(house)
                 if(!house) {
                     changeShow(modalConstant.BUY_HOUSE)
                     //vào ô trống
                 }
                 else if(house.owner===turnOfUser){
+                    console.log("a")
                     changeShow(modalConstant.UPGRADE_HOUSE)
                     //vào nhà mình"
                     

@@ -9,6 +9,8 @@ import { colors } from "../../../constants/Color/color";
 import houses from "../../../constants/houses";
 import {cells} from "../../../constants/cell/index"
 import { City } from "../../../class/city";
+import { useSelector } from "react-redux";
+import { selectUser } from "../../../../../redux/userSlice";
 
 const cx = classNames.bind(styles);
 
@@ -19,11 +21,20 @@ function BuySelection({ show, changeShow, possition,turnOfUser,socket,gameRoom }
     //  sau này sẽ thế thành giá trị 2 xúc xắc để xét double
     socket.emit("turn",{gameRoom})
   };
+
+  const [affortToPay,setAffort]=useState(0)
+
   const [select,setSelect]=useState(1)
   const currentCity= cells[possition[turnOfUser]]
-  
+
+  const userInGame = useSelector(selectUser)
+
+  useEffect(()=>{
+      setAffort( userInGame[turnOfUser].balance - currentCity.fPriceToBuy(select))
+  },[affortToPay,select])
+
   const buyHouse=()=>{
-    if(select){
+    if(select && affortToPay >=0){
       socket.emit("bought",{
         gameRoom,
         select,
@@ -35,6 +46,7 @@ function BuySelection({ show, changeShow, possition,turnOfUser,socket,gameRoom }
         user:turnOfUser,
         type:"minus"
       })
+      handleClose()
     }
   }
 
@@ -57,11 +69,8 @@ function BuySelection({ show, changeShow, possition,turnOfUser,socket,gameRoom }
       </Modal.Body>
       <Modal.Footer>
         <Button 
-          onClick={()=>{
-            buyHouse()
-            handleClose()
-          }} 
-          variant="secondary">
+          onClick={buyHouse} 
+          variant="secondary" style={{opacity:`${affortToPay<0 && "0.5"}`}}>
           Buy {currentCity instanceof City 
           ? currentCity.fPriceToBuy(select)
           : ""
