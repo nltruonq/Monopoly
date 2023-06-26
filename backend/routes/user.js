@@ -11,4 +11,6 @@ router.post("/change-avatar", userController.changeAvatar);
 
 router.patch("/update", userController.updateGoldandRuby);
 
+router.get('/get-one/:username', userController.getOne);
+
 module.exports = router;

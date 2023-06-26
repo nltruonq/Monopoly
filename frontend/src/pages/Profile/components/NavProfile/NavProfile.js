@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import styles from "./NavProfile.module.scss";
 import classNames from "classnames/bind";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { SocketContext } from "../../../../SocketService";
 
 const cx = classNames.bind(styles);
@@ -9,6 +9,7 @@ const cx = classNames.bind(styles);
 function NavProfile({ setNav, nav, user }) {
     const navigate = useNavigate();
     const socket = useContext(SocketContext);
+    const [userCurr, setUserCurr] = useState(JSON.parse(localStorage.getItem("user-monopoly")) || null);
     const handleLogout = () => {
         localStorage.removeItem("user-monopoly");
         navigate("/login");
@@ -25,9 +26,11 @@ function NavProfile({ setNav, nav, user }) {
             {/* <div onClick={() => setNav("character")} className={cx("item", { active: nav === "character" })}>
                 Nhân vật
             </div> */}
-            <div onClick={handleLogout} className={cx("item")}>
-                Đăng xuất
-            </div>
+            {user.username === userCurr.username && (
+                <div onClick={handleLogout} className={cx("item")}>
+                    Đăng xuất
+                </div>
+            )}
         </div>
     );
 }

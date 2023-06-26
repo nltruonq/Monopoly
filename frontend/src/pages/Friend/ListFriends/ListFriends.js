@@ -2,12 +2,18 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import styles from "./ListFriends.module.scss";
 import classNames from "classnames/bind";
+import { useNavigate } from "react-router-dom";
 
 const cx = classNames.bind(styles);
 
 function ListFriends() {
     const [friends, setFriends] = useState([]);
     const [user, setUser] = useState(JSON.parse(localStorage.getItem("user-monopoly")) || null);
+    const navigate = useNavigate();
+
+    const handleViewProfileUser = (e) => {
+        navigate(`/profile/${e.username}`);
+    };
 
     useEffect(() => {
         const getFriends = async () => {
@@ -26,7 +32,7 @@ function ListFriends() {
                 <div className={cx("main")}>
                     {friends.map((e, i) => {
                         return (
-                            <div key={i} className={cx("item")}>
+                            <div onClick={() => handleViewProfileUser(e)} key={i} className={cx("item")}>
                                 <div className={cx("avt")}>
                                     <img src={e.avatar} />
                                 </div>

@@ -50,6 +50,17 @@ const userController = {
             return res.status(500).json({ message: "Failed!" });
         }
     },
+
+    getOne: async (req, res) => {
+        try {
+            const { username } = req.params;
+            const user = await User.findOne({ username }).select("-password");
+            return res.status(200).json(user);
+        } catch (err) {
+            console.log(err);
+            return res.status(500).json({ message: "Failed!" });
+        }
+    },
 };
 
 module.exports = userController;

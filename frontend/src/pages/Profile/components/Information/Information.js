@@ -61,6 +61,7 @@ function Information({ user }) {
     };
 
     const handleImageClick = () => {
+        if (user.username !== JSON.parse(localStorage.getItem("user-monopoly")).username) return;
         inputRef.current.click();
     };
 
