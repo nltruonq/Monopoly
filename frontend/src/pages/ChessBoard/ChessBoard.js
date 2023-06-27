@@ -215,8 +215,8 @@ function ChessBoard() {
             setShow(modalConstant.LOST_TURN)
           }
           else {
-            if(turnOfUser===1) setSteps(8)
-            else 
+            // if(turnOfUser===1) setSteps(8)
+            // else 
             setSteps(data.diceOne + data.diceTwo);
             // setSteps(8)
           }
