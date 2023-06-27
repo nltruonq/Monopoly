@@ -44,6 +44,10 @@ export class City extends Cell{
     fRedemptionPrice(level){
         return Math.round(this.redemptionRatio* this.fPriceToBuy(level))
     }
+
+    fPriceToSell(level){
+        return Math.round(0.8* this.fPriceToBuy(level))
+    }
 }
 
 

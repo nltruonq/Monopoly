@@ -215,10 +215,10 @@ function ChessBoard() {
             setShow(modalConstant.LOST_TURN)
           }
           else {
-            // if(turnOfUser===1) setSteps(5)
-            // else 
-            // setSteps(data.diceOne + data.diceTwo);
-            setSteps(8)
+            if(turnOfUser===1) setSteps(8)
+            else 
+            setSteps(data.diceOne + data.diceTwo);
+            // setSteps(8)
           }
         }, 2000);   
     })

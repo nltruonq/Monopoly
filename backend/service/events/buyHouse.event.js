@@ -104,6 +104,15 @@ const buyEvent = (socket) => {
         }
     })
 
+    socket.on("sell-house",data=>{
+        try {
+            const {gameRoom,affortToPay} = data
+            socket.nsp.in(gameRoom).emit("sell-house-result",{affortToPay})
+        } catch (error) {
+            console.log(error)
+        }
+    })
+
 }
 
 module.exports = buyEvent

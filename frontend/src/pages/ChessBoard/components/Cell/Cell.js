@@ -10,7 +10,7 @@ import { Chance } from "../../class/chance"
 import { Tax } from "../../class/tax"
 import { Corner } from "../../class/corner"
 
-import cellSlice, { selectCell } from "../../../../redux/cellSlice"
+import { selectCell } from "../../../../redux/cellSlice"
 import { selectUser } from "../../../../redux/userSlice"
 
 function Cell({socket,changeShow}){
@@ -25,8 +25,10 @@ function Cell({socket,changeShow}){
             // là 1 số khi di chuyển qua world tour
             const userIndex = possition[turnOfUser] || possition  
             const cell = cells[userIndex]
+
             //dùng để test modal
-            // changeShow(modalConstant.HOST_BIRTHDAY)
+            // changeShow(modalConstant.PAY_TAX)
+            
             if(cell instanceof City){
                 const house = buyHouse?.find((elm)=>{
                     return elm.boardIndex === userIndex
@@ -47,7 +49,7 @@ function Cell({socket,changeShow}){
                 }
             }
             // else if(1){
-            //     changeShow(modalConstant.SEAGAME)
+            //     changeShow(modalConstant.PAY_TAX)
             // }
             else if(cell instanceof Sea){
                  const sea = buyHouse?.find(elm=>{

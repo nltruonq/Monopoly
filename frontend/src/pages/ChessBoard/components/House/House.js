@@ -111,6 +111,7 @@ function House({houses,houseRefs,cx,socket,possition,turnOfUser,cellRefs,gameRoo
         })
 
         return ()=>{
+            socket.off("upgrade-result")
             socket.off("bought-result")
             socket.off("pay-result")
             socket.off("re-bought-result")

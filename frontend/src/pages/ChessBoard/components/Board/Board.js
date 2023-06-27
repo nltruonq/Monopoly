@@ -16,6 +16,7 @@ import seagameVideo from "../../../../assets/images/seagame.mov"
 import seagameImg from "../../../../assets/images/seagame.png"
 import { cells } from "../../constants/cell";
 import { City } from "../../class/city";
+import { selectUser } from "../../../../redux/userSlice";
 
 function Board(props){
     const {
@@ -34,15 +35,22 @@ function Board(props){
     const seagameRef= createRef()
 
     const houseOwner= useSelector(selectCell)
+
+    const userInGame = useSelector(selectUser)
     
     const clickSaveIndex=(i)=>{
       localStorage.setItem("index",i)
     }
-
+    const clickSaveLickIndex=(i)=>{
+      let myArray = JSON.parse(localStorage.getItem('listIndexs')) || [];
+      myArray.push(i)
+      localStorage.setItem("listIndexs",JSON.stringify(myArray))
+    }
 
     // hàm lưu vị trí khi click chọn
     for(let i = 0; i <32 ;++i){
       cellRefs?.current[i]?.current?.addEventListener('click',()=>clickSaveIndex(i))
+      // cellRefs?.current[i]?.current?.addEventListener('click',()=>clickSaveLickIndex(i))
     }
     
     useEffect(()=>{
@@ -188,8 +196,68 @@ function Board(props){
     },[socket,houseOwner,seagameRef,listOwner])
 
 
+    
+    const [listSell,setListSell] = useState([])
+    const [enought,setEnougth] = useState(false)
+    const [sellMonney,setSellMonney]= useState(0) 
     // bán nhà
+    useEffect(()=>{
+      const selectSell=()=>{
+        const index = Number(localStorage.getItem("index"))
 
+        // cộng vào tổng số tiền phải trả
+        sellMonney+=cells[index].fPriceToSell(houseOwner.find(item=>item.boardIndex===index).level)
+        setSellMonney(sellMonney)
+
+        // thêm vào list sell
+        listSell.push(index)
+        setListSell(listSell)
+      }
+
+      socket.on("sell-house-result",data=>{
+        
+        console.log(data)
+
+        let allBalance = userInGame[turnOfUser].balance
+        for(let i=0;i<houseOwner.length;++i){
+          
+          // so sánh phải nhà người chơi này không
+          if(houseOwner[i].owner === turnOfUser){
+            allBalance += cells[houseOwner[i].boardIndex].fPriceToSell(houseOwner[i].level)
+          } 
+          
+        }
+
+        if(allBalance + data.affortToPay < 0){
+          // xử thua
+          console.log("thua")
+        }
+        else {
+          // chọn nhà để bán
+          console.log("bán nhà")
+
+          let list = []
+          // chọn nhà để bán
+          for(let i=0;i<houseOwner.length;++i){
+            if(houseOwner[i].owner === turnOfUser){
+              list.push(houseOwner[i].boardIndex)
+              cellRefs.current[houseOwner[i].boardIndex].current.addEventListener('click',selectSell)
+            }
+          }
+          setListOwner(list)
+          console.log(list)
+          console.log("monney",sellMonney)
+
+
+
+        }
+
+      })
+
+      return ()=>{
+        socket.off("sell-house-result")
+      }
+    },[socket,houseOwner,userInGame,sellMonney])
 
     return (
         <>
@@ -217,7 +285,8 @@ function Board(props){
                     <div
                       key={index}
                       className={destroy&&listDestroy.includes(9+index) 
-                                || listOwner.includes(9+index) 
+                                || listOwner.includes(9+index)
+                                || listSell.includes(9+index) 
                                 ? cx("rectangle","able") :cx("rectangle")}
                       ref={cellRefs.current[9 + index]}
                     >
@@ -284,6 +353,7 @@ function Board(props){
                         key={index}
                         className={destroy&&listDestroy.includes(7-index)
                                   || listOwner.includes(7-index)
+                                  || listSell.includes(7-index)
                                   ? cx("rectangle-column","able") 
                                   :cx("rectangle-column")}
                         ref={cellRefs.current[7 - index]}
@@ -354,6 +424,7 @@ function Board(props){
                         {
                           destroy&&listDestroy.includes(17+index)
                           || listOwner.includes(17+index)
+                          || listSell.includes(17+index)
                           ? cx("rectangle-column","able") 
                           :cx("rectangle-column")
                         }
@@ -416,6 +487,7 @@ function Board(props){
                       key={index}
                       className={destroy&&listDestroy.includes(31-index)
                                 ||listOwner.includes(31-index)
+                                || listSell.includes(31 - index)
                                 ? cx("rectangle","able") 
                                 :cx("rectangle")}
                       
