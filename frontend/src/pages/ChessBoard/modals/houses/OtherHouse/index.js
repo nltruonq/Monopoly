@@ -50,7 +50,7 @@ function OtherHouse({ show, changeShow, possition,title,turnOfUser,socket,gameRo
     socket.emit("re-bought",
         {gameRoom,
           price: currentCity.fRedemptionPrice(currentLevel),
-          owner:turnOfUser,
+          owner:currentCell.owner,
           inuse:cells.indexOf(currentCity),
           currentLevel
         })

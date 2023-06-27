@@ -21,7 +21,7 @@ function SocketRedux({socket}){
             }
 
         })
-        socket.on("jail-result",data=>{
+        socket.on("jail-count",data=>{
             dispatch(updatePrison({turnOfUser:data.user,turns:data.turns}))
         })
         return ()=>{

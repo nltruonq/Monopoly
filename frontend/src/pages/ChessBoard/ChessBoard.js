@@ -145,13 +145,17 @@ function ChessBoard() {
   
   // dịch chuyển
   useEffect(()=>{
-    if(show === modalConstant.JAIL && possition[turnOfUser] !==8 ){
-      possition[turnOfUser]=8
-      setPos(possition)
-      cellRefs.current[8].current?.appendChild(userRef.current[turnOfUser].current)
-    }
 
-  },[show,possition])
+    socket.on("jail-result",data=>{
+
+      possition[data.user]=8
+      setPos(possition)
+      cellRefs.current[8].current?.appendChild(userRef.current[data.user].current)
+    })
+
+
+  },[show,possition,socket])
+
   // di chuyển 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -211,10 +215,10 @@ function ChessBoard() {
             setShow(modalConstant.LOST_TURN)
           }
           else {
-            // if(turnOfUser===1) setSteps(7)
+            // if(turnOfUser===1) setSteps(8)
             // else 
             setSteps(data.diceOne + data.diceTwo);
-            // setSteps(5)
+            // setSteps(8)
           }
         }, 2000);   
     })
@@ -293,6 +297,7 @@ function ChessBoard() {
           turnOfUser={turnOfUser}
           possition={possition}
           changePos={changePos}
+          userSteps={userSteps}
         ></Board>
 
 

@@ -18,19 +18,31 @@ function TaxComponent({ show, changeShow,turnOfUser,socket,gameRoom,possition })
                   ?cell?.payTax(user[turnOfUser].balance)
                   :-0.1*user[turnOfUser].balance
   
+
+  // chỉ để test
+  // const affortToPay = user[turnOfUser].balance - 400
+
+
+
   const handleClose = () => {
-    socket.emit("pay-tax",{
+    // if(affortToPay<0)
+    // {
+    //   socket.emit("sell-house",{gameRoom,affortToPay})
+    // }
+    // else{
+      socket.emit("pay-tax",{
         user:turnOfUser,
         amount:taxValue,
         gameRoom   
-    })
-
-    socket.emit("change-balance",{
+      })
+      
+      socket.emit("change-balance",{
         gameRoom,
         amount:taxValue,
         user:turnOfUser,
         type:"minus"
-    })
+      })
+    // }
     changeShow(false);
     socket.emit("close",{gameRoom})
     //  sau này sẽ thế thành giá trị 2 xúc xắc để xét double
