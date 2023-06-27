@@ -11,6 +11,8 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import { SocketContext } from "../../SocketService";
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import { setUsername } from "../../redux/userSlice";
 
 const cx = classNames.bind(styles);
 
@@ -21,6 +23,8 @@ function PrivateRoom() {
     const [players, setPlayers] = useState(location.state || [JSON.parse(localStorage.getItem("user-monopoly"))]);
     const navigate = useNavigate();
     const params = useParams();
+    const dispatch= useDispatch()
+
 
     const handleGoBackHome = () => {
         if (params.username === user.username) {
@@ -38,7 +42,7 @@ function PrivateRoom() {
     };
 
     const handleClickPlay=()=>{
-        socket.emit("play-private-room",{roomName:user.username})
+        socket.emit("play-private-room",{roomName:user.username, players })
     }
 
     const getFriends = async () => {
@@ -50,6 +54,7 @@ function PrivateRoom() {
 
     socket.on("play-private-room-result",(data)=>{
         console.log(data)
+        dispatch(setUsername({players}))
         navigate(`/game?room=${data.gameRoom}`)
     })
 
