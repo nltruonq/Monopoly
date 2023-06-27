@@ -39,7 +39,7 @@ function UserZone({index}){
             <div className={cx("wrapper")}>
                 <div className={cx("player-card")}>
                     <div className={cx("avatar")} >
-                        <img src={turns ===0 ? avatarDefault:jailedImg} 
+                        <img src={turns ===0 ? user[index].avatar:jailedImg} 
                         width="50px" height="50px"  alt="Avatar" className="avatar" 
                         style={{backgroundColor:`${turns !==0 ? "black" : ""}`}}
                         />

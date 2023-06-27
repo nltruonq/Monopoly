@@ -91,7 +91,7 @@ function House({houses,houseRefs,cx,socket,possition,turnOfUser,cellRefs,gameRoo
             const {inuse,owner,currentLevel,price} =data
             dispatch(updateBalance({amount:-price,turnOfUser}))
             dispatch(updateBalance({amount:price,turnOfUser: owner}))
-            
+            dispatch(buyHouse({turnOfUser,boardIndex:inuse,level:currentLevel}))
             const houseNode=houseRefs.current[cityBoardIndex.indexOf(inuse)].current
 
             // có level là city, không có là sea

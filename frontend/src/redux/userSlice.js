@@ -1,13 +1,13 @@
 import { createSlice, createSelector } from '@reduxjs/toolkit';
-
+import avatarDf from "../assets/images/avatar_default.jpg"
 
 const userSlice = createSlice({
   name: 'user',
   initialState: [
-    { balance: 500, prison:0 ,username:false},
-    { balance: 500, prison:0 ,username:false},
-    { balance: 500, prison:0 ,username:false},
-    { balance: 500, prison:0 ,username:false},
+    { balance: 500, prison:0 ,username:false,avatar:avatarDf},
+    { balance: 500, prison:0 ,username:false,avatar: avatarDf},
+    { balance: 500, prison:0 ,username:false,avatar: avatarDf},
+    { balance: 500, prison:0 ,username:false,avatar: avatarDf},
   ],
   reducers: {
     updateBalance: (state, action) => {
@@ -37,6 +37,7 @@ const userSlice = createSlice({
       const {players}= action.payload;
       for( let i =0 ;i < players.length;++i){
         state[i].username = players[i].username
+        state[i].avatar = players[i].avatar
       }
     }
 
