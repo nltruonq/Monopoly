@@ -136,7 +136,7 @@ function PrivateRoom() {
                     <div className={cx("bow2")}></div>
                     <div className={cx("name")}>{user.username}</div>
                     <div className={cx("img")}>
-                        <img src="https://i.pinimg.com/564x/e8/9d/29/e89d292e76d2ffee19e7f17f7f9c6734.jpg" alt="avatar" />
+                        <img src={user.avatar} alt="avatar" />
                     </div>
                     <div className={cx("bg")}></div>
                 </div>

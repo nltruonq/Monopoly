@@ -12,7 +12,7 @@ function UserItem({ color, player, handleKick, host, user }) {
         <div className={cx("wrapper")}>
             <div className={cx("header")} style={{ backgroundColor: `${color}` }}>
                 <div className={cx("avatar")}>
-                    <img src="https://i.pinimg.com/564x/e8/9d/29/e89d292e76d2ffee19e7f17f7f9c6734.jpg" alt="avatar" />
+                    <img src={player.avatar} alt="avatar" />
                 </div>
                 <div className={cx("name")}>{player.username}</div>
             </div>
