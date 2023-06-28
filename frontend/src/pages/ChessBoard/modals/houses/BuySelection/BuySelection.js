@@ -29,9 +29,11 @@ function BuySelection({ show, changeShow, possition,turnOfUser,socket,gameRoom }
 
   const userInGame = useSelector(selectUser)
 
-  useEffect(()=>{
-      setAffort( userInGame[turnOfUser].balance - currentCity.fPriceToBuy(select))
-  },[select])
+  
+  const handleSelect = (index)=>{
+    setSelect(index+1)
+    setAffort( userInGame[turnOfUser].balance - currentCity.fPriceToBuy(index+1))
+  }
 
   const buyHouse=()=>{
     if(select && affortToPay >=0){
@@ -59,18 +61,17 @@ function BuySelection({ show, changeShow, possition,turnOfUser,socket,gameRoom }
         <div className={cx("house-all")}>
           {[...Array(2)].map((_,index)=>{
               return (
-                <div className={cx("house",select===index+1?"active":"")} key={index} onClick={()=>{setSelect(index+1)}}>
+                <div className={cx("house",select===index+1?"active":"")} key={index} onClick={()=>handleSelect(index)}>
                   <Image src={houses[`house${turnOfUser}_${index+1}`]} style={{ width: "150px" }} />
                 </div>
               )
           })}
-
         </div>
       </Modal.Body>
       <Modal.Footer>
         <Button 
           onClick={buyHouse} 
-          variant="secondary" style={{opacity:`${affortToPay<0 && "0.5"}`}}>
+          variant="secondary" style={{opacity:`${affortToPay<0 ? "0.5":"1"}`}}>
           Buy {currentCity instanceof City 
           ? currentCity.fPriceToBuy(select)
           : ""

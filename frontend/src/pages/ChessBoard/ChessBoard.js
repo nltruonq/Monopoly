@@ -233,10 +233,12 @@ function ChessBoard() {
             setShow(modalConstant.LOST_TURN)
           }
           else {
-            if(turnOfUser===1) setSteps(8)
-            else 
-            // setSteps(data.diceOne + data.diceTwo)
-            setSteps(4)
+
+            // chỉ dùng để test
+            // if(turnOfUser===1) setSteps(8)
+            // else 
+            setSteps(data.diceOne + data.diceTwo)
+            // setSteps(4)
           }
         }, 2000);   
     })

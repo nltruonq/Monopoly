@@ -198,6 +198,10 @@ function Board(props){
 
     
     // bán nhà
+
+    // -> pay house
+    // -> sinh nhật
+
     const [listSell,setListSell] = useState([])
     const [enought,setEnougth] = useState(false)
     const [sellMonney,setSellMonney]= useState(0) 
@@ -248,8 +252,6 @@ function Board(props){
           setListOwner(list)
           console.log(list)
           console.log("monney",sellMonney)
-
-
 
         }
 

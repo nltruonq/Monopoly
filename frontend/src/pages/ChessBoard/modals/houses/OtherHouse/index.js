@@ -100,7 +100,7 @@ function OtherHouse({ show, changeShow, possition,title,turnOfUser,socket,gameRo
           }} 
           variant="secondary">
           Pay {currentCity instanceof City 
-          ? currentCity.fPriceToPay(currentLevel)* possition[turnOfUser]===game.seagame?5:1
+          ? currentCity.fPriceToPay(currentLevel)* (possition[turnOfUser]===game.seagame?5:1)
           : ""
         } <RiCoinFill color="yellow" />
         </Button>
@@ -112,7 +112,7 @@ function OtherHouse({ show, changeShow, possition,title,turnOfUser,socket,gameRo
             variant="secondary"
         >
             Buy {currentCity instanceof City 
-            ? currentCity.fRedemptionPrice(currentLevel)* possition[turnOfUser]===game.seagame?5:1
+            ? currentCity.fRedemptionPrice(currentLevel)* (possition[turnOfUser]===game.seagame?5:1)
             : ""
             } <RiCoinFill color="yellow" />
         </Button>

@@ -53,25 +53,26 @@ function Cell({socket,changeShow}){
             // }
             else if(cell instanceof Sea){
 
-                changeShow(modalConstant.DESTROY_HOUSE)
-                //  const sea = buyHouse?.find(elm=>{
-                //     return elm.boardIndex === userIndex
-                //  })
+                // chỉ dùng để test
+                // changeShow(modalConstant.DESTROY_HOUSE)
+                 const sea = buyHouse?.find(elm=>{
+                    return elm.boardIndex === userIndex
+                 })
                  
-                //  if(!sea){
-                //     //vào ô trống
-                //     changeShow(modalConstant.BUY_SEA)
-                //  }
-                //  else if(sea.owner === turnOfUser){
-                //     console.log("oke")
-                //  }
-                //  else {
-                //     changeShow(modalConstant.OTHER_SEA)
-                //  }
+                 if(!sea){
+                    //vào ô trống
+                    changeShow(modalConstant.BUY_SEA)
+                 }
+                 else if(sea.owner === turnOfUser){
+                    console.log("oke")
+                 }
+                 else {
+                    changeShow(modalConstant.OTHER_SEA)
+                 }
             }
-            else if(1){
-                changeShow(modalConstant.SEAGAME)
-            }
+            // else if(1){
+            //     changeShow(modalConstant.SEAGAME)
+            // }
             else if(cell instanceof Chance){
                 changeShow(modalConstant.CHANGES)
             }

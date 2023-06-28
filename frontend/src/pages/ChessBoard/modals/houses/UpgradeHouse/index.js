@@ -33,11 +33,6 @@ function UpgradeHouse({ show, changeShow, possition,title,turnOfUser,socket,game
 
   
 
-  useEffect(()=>{
-    setAffort(userBalance - currentCity.fPriceToUpgrade(currentLevel,select))
-  },[select])
-   
-
   const handleClose = () => {
     changeShow(false);
     socket.emit("close",{gameRoom})
@@ -45,7 +40,10 @@ function UpgradeHouse({ show, changeShow, possition,title,turnOfUser,socket,game
     socket.emit("turn",{gameRoom})
   };
   
-  
+  const handleSelect=(index)=>{
+    setSelect(index+1+currentLevel)
+    setAffort(userBalance - currentCity.fPriceToUpgrade(currentLevel,index+1+currentLevel))
+  }
   
   const upgradeHouse=()=>{
     if(affortToPay>= 0 ){
@@ -74,11 +72,12 @@ function UpgradeHouse({ show, changeShow, possition,title,turnOfUser,socket,game
         <div className={cx("house-all")}>
           {[...Array(3-currentLevel)].map((_,index)=>{ // current = 1 thì  0-> 1 ==> 0 + 1 +1, 0+1+2
               return (
-                <div className={cx("house",select===index+currentLevel+1?"active":"")} key={index} onClick={()=>{setSelect(index+1+currentLevel)}}>
+                <div className={cx("house",select===index+currentLevel+1?"active":"")} key={index} onClick={()=>handleSelect(index)}>
                   <Image src={houses[`house${turnOfUser}_${index+currentLevel+1}`]} style={{ width: "150px" }} />
                 </div>
               )
           })}
+
           {currentLevel===3 && "Không thể nâng cấp được nữa!"}
         </div>
       </Modal.Body>
@@ -86,7 +85,7 @@ function UpgradeHouse({ show, changeShow, possition,title,turnOfUser,socket,game
         {currentLevel<3 &&<Button 
           onClick={upgradeHouse} 
           variant="secondary" 
-          style={{opacity:`${affortToPay<0 && "0.5"}`}}
+          style={{opacity:`${affortToPay < 0 ? "0.5":"1"}`}}
           >
           Upgrade {currentCity instanceof City 
           ? currentCity.fPriceToUpgrade(currentLevel,select)
