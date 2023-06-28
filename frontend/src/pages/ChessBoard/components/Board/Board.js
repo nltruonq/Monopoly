@@ -7,23 +7,24 @@ import taxImg from "../../../../assets/images/tax.png"
 import prisonImg from "../../../../assets/images/prison.png"
 import seaVideo from "../../../../assets/images/beach.mp4"
 import worldTourImg from "../../../../assets/images/worldtour.png"
-import { createRef, useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { selectCell } from "../../../../redux/cellSlice";
+import { createRef, useCallback, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { selectCell } from "../../../../redux/slices/cellSlice";
 import modalConstant from "../../constants/modal";
 import bg  from "../../../../assets/images/bg.jpg"
 import seagameVideo from "../../../../assets/images/seagame.mov"
 import seagameImg from "../../../../assets/images/seagame.png"
 import { cells } from "../../constants/cell";
 import { City } from "../../class/city";
-import { selectUser } from "../../../../redux/userSlice";
+import { selectUser } from "../../../../redux/slices/userSlice";
+import { selectGame, setSeagame } from "../../../../redux/slices/gameSlice";
 
 function Board(props){
     const {
             yourTurn,cx,roll,diceOne,diceTwo,cellRefs,
             changeRoll,moveBySteps,socket,changeShow,
             gameRoom,userRef,turnOfUser,changePos,possition,
-            userSteps
+            userSteps,show,seagameRef
           }
           =props
     
@@ -32,27 +33,15 @@ function Board(props){
     const [listDestroy,setListDestroy]=useState([])
     const [listOwner,setListOwner]=useState([])
     
-    const seagameRef= createRef()
 
     const houseOwner= useSelector(selectCell)
 
     const userInGame = useSelector(selectUser)
-    
-    const clickSaveIndex=(i)=>{
-      localStorage.setItem("index",i)
-    }
-    const clickSaveLickIndex=(i)=>{
-      let myArray = JSON.parse(localStorage.getItem('listIndexs')) || [];
-      myArray.push(i)
-      localStorage.setItem("listIndexs",JSON.stringify(myArray))
-    }
 
-    // hàm lưu vị trí khi click chọn
-    for(let i = 0; i <32 ;++i){
-      cellRefs?.current[i]?.current?.addEventListener('click',()=>clickSaveIndex(i))
-      // cellRefs?.current[i]?.current?.addEventListener('click',()=>clickSaveLickIndex(i))
-    }
-    
+    const game = useSelector(selectGame)
+
+    const dispatch = useDispatch()
+
     useEffect(()=>{
       socket.on("destroy-house-result",data=>{
          setDestroy({user:data.user})
@@ -66,7 +55,7 @@ function Board(props){
       setListDestroy(list)
 
       if(list.length!==0){
-        if(destroy){
+        if(yourTurn){
           for(let i=0; i<32; ++i){
             if(list.includes(i)){
               cellRefs.current[i].current.addEventListener('click',handleDestroy)
@@ -93,21 +82,23 @@ function Board(props){
       return ()=>{
         socket.off("destroy-house-result")
         socket.off("reset-destroy-result")
+        socket.off("turn")
       }
     },[socket,destroy])
 
 
-    const handleDestroy=()=>{
+    const handleDestroy=useCallback(()=>{
       const index = Number(localStorage.getItem("index"))
+      // const index = game.indexSelect
       changeShow({state:modalConstant.DESTROY_H_SELECT,data:index})
-    }
+    },[])
 
     
     // world tour
-    const handleWourldTour=()=>{
+    const handleWourldTour=useCallback(()=>{
       const index= Number(localStorage.getItem("index"))
       socket.emit("select-world-tour",{gameRoom,index})  
-    }
+    },[gameRoom])
     
     useEffect(()=>{
       socket.on("world-tour-result",()=>{
@@ -143,18 +134,19 @@ function Board(props){
 
 
     // seagame
-    const handleSeagame=()=>{
-      const index = Number(localStorage.getItem("index"))
-      // changeShow({state:modalConstant.SEAGAME_H_SELECT,data:i})
-      socket.emit("host-seagame",{gameRoom,index})
-      socket.emit("close",{gameRoom})
-      socket.emit("turn",{gameRoom})
-    }
 
+
+
+    const handleSeagame=useCallback(()=>{
+      const index = Number(localStorage.getItem("index"))
+        // const index = game.indexSelect
+        // console.log("index",index,game)
+        socket.emit("host-seagame",{gameRoom,index})
+    },[gameRoom])
+    
     useEffect(()=>{
-      // console.log(houseOwner,turnOfUser)
+      let list = []
       socket.on("seagame-result",()=>{
-        let list = []
         for(let i = 0; i < houseOwner.length; i++ ){
           if(houseOwner[i].owner === turnOfUser){
             list.push(houseOwner[i].boardIndex)
@@ -163,29 +155,37 @@ function Board(props){
         setListOwner(list)
 
         if(list.length!==0){
-
-          for(let i =0 ; i<32 ; i++){
-            if(list.includes(i)){
-              cellRefs.current[i].current.addEventListener('click',handleSeagame)
-            }
+          for(let i =0 ; i<list.length ; i++){
+              cellRefs.current[list[i]].current.addEventListener('click',handleSeagame)
           }
         }
+
         else {
+          console.log("không có nhà")
           changeShow(false)
           socket.emit("close",{gameRoom})
           socket.emit("turn",{gameRoom})
         }
       })
 
+      
       socket.on("host-seagame-result",data=>{
-        seagameRef.current.style.display="block"
-        cellRefs.current[data.index].current.appendChild(seagameRef.current)
-        for(let i =0 ; i<32 ; i++){
-          if(listOwner.includes(i)){
-            cellRefs.current[i].current.removeEventListener('click',handleSeagame)
+          console.log(data)
+          seagameRef.current.style.display="block"
+          cellRefs.current[data.index].current.appendChild(seagameRef.current)
+          
+          for(let i =0; i< listOwner.length; ++i){
+            console.log("remove")
+            cellRefs.current[listOwner[i]].current.removeEventListener('click',handleSeagame)
           }
-        }
-        setListOwner([])
+          dispatch(setSeagame({index:data.index}))
+
+          setListOwner([])
+          changeShow(false)
+          if(yourTurn){
+            socket.emit("close",{gameRoom})
+            socket.emit("turn",{gameRoom})
+          }
       })
 
       return()=>{
@@ -193,14 +193,15 @@ function Board(props){
         socket.off("host-seagame-result")
       }
 
-    },[socket,houseOwner,seagameRef,listOwner])
+    },[socket,houseOwner,seagameRef,listOwner,yourTurn])
 
 
     
+    // bán nhà
     const [listSell,setListSell] = useState([])
     const [enought,setEnougth] = useState(false)
     const [sellMonney,setSellMonney]= useState(0) 
-    // bán nhà
+    
     useEffect(()=>{
       const selectSell=()=>{
         const index = Number(localStorage.getItem("index"))
@@ -443,7 +444,7 @@ function Board(props){
                         ? <div className={cx("city-left")}>{locations[17+index].city}</div>
                         :<Chance></Chance>
                       } 
-                      {cells[7-index] instanceof City 
+                      {cells[17+index] instanceof City 
                         && 
                         <div style={{
                           position:"absolute",
@@ -456,7 +457,7 @@ function Board(props){
                           transform:"rotate(90deg)"}}
                         >
                           <div style={{display:"flex",justifyContent:"center",color:"#b80f10"}}>
-                            {cells[7-index].basePrice}
+                            {cells[17+index].basePrice}
                           </div>
                         </div>
                       }
@@ -510,7 +511,7 @@ function Board(props){
                           <img src={taxImg} width={50} style={{marginTop:20,position:"absolute"}}/>
                         </>
                       } 
-                      {cells[9+index] instanceof City 
+                      {cells[31-index] instanceof City 
                         && 
                         <div 
                           style={{
@@ -524,7 +525,7 @@ function Board(props){
                           }}
                         >
                           <div style={{display:"flex",justifyContent:"center",color:"#b80f10"}}>
-                            {cells[9+index].basePrice}
+                            {cells[31-index].basePrice}
                           </div>
                         </div>
                       }

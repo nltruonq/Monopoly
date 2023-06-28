@@ -10,7 +10,7 @@ import houses from "../../../constants/houses";
 import {cells} from "../../../constants/cell/index"
 import { City } from "../../../class/city";
 import { useSelector } from "react-redux";
-import { selectUser } from "../../../../../redux/userSlice";
+import { selectUser } from "../../../../../redux/slices/userSlice";
 
 const cx = classNames.bind(styles);
 
@@ -31,7 +31,7 @@ function BuySelection({ show, changeShow, possition,turnOfUser,socket,gameRoom }
 
   useEffect(()=>{
       setAffort( userInGame[turnOfUser].balance - currentCity.fPriceToBuy(select))
-  },[affortToPay,select])
+  },[select])
 
   const buyHouse=()=>{
     if(select && affortToPay >=0){

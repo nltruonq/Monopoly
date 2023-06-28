@@ -8,7 +8,7 @@ import houses from "../../../constants/houses";
 import {cells} from "../../../constants/cell/index"
 import { Sea } from "../../../class/sea";
 import { useSelector } from "react-redux";
-import { selectUser } from "../../../../../redux/userSlice";
+import { selectUser } from "../../../../../redux/slices/userSlice";
 
 
 function BuySea({ show, changeShow, possition,turnOfUser,socket,gameRoom }) {

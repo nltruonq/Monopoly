@@ -7,7 +7,7 @@ import classNames from "classnames/bind"
 import styles from "./UserZone.module.scss"
 import avatarDefault from "../../../../../src/assets/images/avatar_default.jpg"
 import { colors } from "../../constants/Color/color"
-import { selectUser} from "../../../../redux/userSlice"
+import { selectUser} from "../../../../redux/slices/userSlice"
 import { socket } from "../../../../SocketService"
 import jailedImg from "../../../../assets/images/jailed.png"
 

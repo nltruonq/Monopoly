@@ -10,8 +10,8 @@ import { Chance } from "../../class/chance"
 import { Tax } from "../../class/tax"
 import { Corner } from "../../class/corner"
 
-import { selectCell } from "../../../../redux/cellSlice"
-import { selectUser } from "../../../../redux/userSlice"
+import { selectCell } from "../../../../redux/slices/cellSlice"
+import { selectUser } from "../../../../redux/slices/userSlice"
 
 function Cell({socket,changeShow}){
     const buyHouse = useSelector(selectCell)
@@ -49,23 +49,28 @@ function Cell({socket,changeShow}){
                 }
             }
             // else if(1){
-            //     changeShow(modalConstant.PAY_TAX)
+            //     changeShow(modalConstant.SEAGAME)
             // }
             else if(cell instanceof Sea){
-                 const sea = buyHouse?.find(elm=>{
-                    return elm.boardIndex === userIndex
-                 })
+
+                changeShow(modalConstant.DESTROY_HOUSE)
+                //  const sea = buyHouse?.find(elm=>{
+                //     return elm.boardIndex === userIndex
+                //  })
                  
-                 if(!sea){
-                    //vào ô trống
-                    changeShow(modalConstant.BUY_SEA)
-                 }
-                 else if(sea.owner === turnOfUser){
-                    console.log("oke")
-                 }
-                 else {
-                    changeShow(modalConstant.OTHER_SEA)
-                 }
+                //  if(!sea){
+                //     //vào ô trống
+                //     changeShow(modalConstant.BUY_SEA)
+                //  }
+                //  else if(sea.owner === turnOfUser){
+                //     console.log("oke")
+                //  }
+                //  else {
+                //     changeShow(modalConstant.OTHER_SEA)
+                //  }
+            }
+            else if(1){
+                changeShow(modalConstant.SEAGAME)
             }
             else if(cell instanceof Chance){
                 changeShow(modalConstant.CHANGES)

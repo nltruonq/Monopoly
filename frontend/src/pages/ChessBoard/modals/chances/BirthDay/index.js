@@ -32,12 +32,12 @@ function Birthday({ show, changeShow,turnOfUser,socket,gameRoom,yourTurn,numberU
         }
         socket.emit("pay-birthday",{
             users:users,
-            amount:-amount ,
+            amount:-amount / users.length ,
             gameRoom 
         })
         socket.emit("change-balance-users",{
             gameRoom,
-            amount:-amount ,
+            amount:-amount / users.length  ,
             user:turnOfUser,
             type:"minus"
         })

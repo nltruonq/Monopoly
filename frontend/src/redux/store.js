@@ -1,11 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit';
-import userReducer from './userSlice';
-import cellReducer from './cellSlice';
+import userReducer from './slices/userSlice';
+import cellReducer from './slices/cellSlice';
+import gameReducer from './slices/gameSlice'
 
 const store = configureStore({
   reducer: {
     user: userReducer,
-    cell: cellReducer
+    cell: cellReducer,
+    game:gameReducer,
   },
 });
 

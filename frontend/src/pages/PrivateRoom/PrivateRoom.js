@@ -12,7 +12,7 @@ import { useContext, useEffect, useState } from "react";
 import { SocketContext } from "../../SocketService";
 import axios from "axios";
 import { useDispatch } from "react-redux";
-import { setUsername } from "../../redux/userSlice";
+import { setUsername } from "../../redux/slices/userSlice";
 
 const cx = classNames.bind(styles);
 

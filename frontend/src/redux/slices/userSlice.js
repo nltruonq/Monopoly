@@ -1,5 +1,5 @@
 import { createSlice, createSelector } from '@reduxjs/toolkit';
-import avatarDf from "../assets/images/avatar_default.jpg"
+import avatarDf from "../../assets/images/avatar_default.jpg"
 
 const userSlice = createSlice({
   name: 'user',
@@ -12,7 +12,6 @@ const userSlice = createSlice({
   reducers: {
     updateBalance: (state, action) => {
       const { turnOfUser, amount } = action.payload;
-      console.log(turnOfUser)
       const user = state[turnOfUser]
       if (user) {
         user.balance += amount;

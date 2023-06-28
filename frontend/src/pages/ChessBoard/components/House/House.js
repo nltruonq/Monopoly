@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react"
-import {updateBalance } from "../../../../redux/userSlice"
-import {useDispatch} from "react-redux"
-import { buyHouse, destroyHouse } from "../../../../redux/cellSlice"
+import {updateBalance } from "../../../../redux/slices/userSlice"
+import {useDispatch, useSelector} from "react-redux"
+import { buyHouse, destroyHouse } from "../../../../redux/slices/cellSlice"
+import { destroySeagame, selectGame } from "../../../../redux/slices/gameSlice"
 
 
-function House({houses,houseRefs,cx,socket,possition,turnOfUser,cellRefs,gameRoom}){
+function House({houses,houseRefs,cx,socket,possition,turnOfUser,cellRefs,gameRoom,seagameRef}){
     const dispatch=useDispatch()
     
+    const game = useSelector(selectGame)
+
     useEffect(()=>{
         
         socket.on("bought-result",(data)=>{
@@ -18,7 +21,6 @@ function House({houses,houseRefs,cx,socket,possition,turnOfUser,cellRefs,gameRoo
             }))
             const inuse=data.inuse
             const houseNode=houseRefs?.current[cityBoardIndex.indexOf(inuse)]?.current
-            console.log(cityBoardIndex.indexOf(inuse),inuse,"aa")
 
             // có level là City, không có level là Sea
             if(data?.select){
@@ -107,6 +109,12 @@ function House({houses,houseRefs,cx,socket,possition,turnOfUser,cellRefs,gameRoo
         socket.on("destroy-select-result",(data)=>{
             houseRefs.current[cityBoardIndex.indexOf(data.index)].current.style.display="none";
             dispatch(destroyHouse({boardIndex:data.index}))
+            
+            // nhà này đang tổ chức seagame
+            if(game.seagame === data.index){
+                seagameRef.current.style.display = "none"
+                dispatch(destroySeagame())
+            }
             socket.emit("reset-destroy",{gameRoom})
         })
 
@@ -117,7 +125,7 @@ function House({houses,houseRefs,cx,socket,possition,turnOfUser,cellRefs,gameRoo
             socket.off("re-bought-result")
             socket.off("destroy-select-result")
         }
-    },[turnOfUser,possition])
+    },[turnOfUser,possition,seagameRef])
     return(
         <>
         {

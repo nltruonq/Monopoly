@@ -9,6 +9,7 @@ const turnEvent=(socket,io)=>{
             ===roomArr.length-1
             ?0
             :roomArr.indexOf(socket.id)+1
+            
             socket.nsp.in(gameRoom).emit("turn-result",{gameRoom,user})
             
         } catch (error) {

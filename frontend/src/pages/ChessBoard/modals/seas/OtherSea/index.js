@@ -7,7 +7,7 @@ import { colors } from "../../../constants/Color/color";
 import houses from "../../../constants/houses";
 import {cells} from "../../../constants/cell/index"
 import { useSelector } from "react-redux";
-import { selectCell } from "../../../../../redux/cellSlice";
+import { selectCell } from "../../../../../redux/slices/cellSlice";
 import { Sea } from "../../../class/sea";
 
 

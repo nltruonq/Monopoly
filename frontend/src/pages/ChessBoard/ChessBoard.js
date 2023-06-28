@@ -22,7 +22,7 @@ import ChangesModal from "./modals/chances/Chances";
 import Birthday from "./modals/chances/BirthDay";
 import Prison from "./modals/corner/Prison";
 import { useDispatch, useSelector } from "react-redux";
-import { selectUser, updatePrison } from "../../redux/userSlice";
+import { selectUser, updatePrison } from "../../redux/slices/userSlice";
 import LostTurn from "./modals/corner/LostTurn";
 import DestroyOtherHouse from "./modals/chances/DestroyOHouse";
 import DestroyHouseSelect from "./modals/chances/DestroyHSelect";
@@ -30,6 +30,7 @@ import WorldTour from "./modals/corner/WorldTour";
 import BuySea from "./modals/seas/BuySea";
 import OtherSea from "./modals/seas/OtherSea";
 import Seagame from "./modals/corner/Seagame";
+import { setIndexSelect } from "../../redux/slices/gameSlice";
 
 const cx = classNames.bind(styles);
 
@@ -83,10 +84,27 @@ function ChessBoard() {
   //thẻ chứa nhà
   const houseRefs=useRef([])
 
+  const seagameRef= createRef()
+
   // quản lý các ô trên bàn cờ từ 0->31
   cellRefs.current = Array(32)
     .fill()
     .map((_, i) => cellRefs.current[i] ?? createRef());
+
+  
+      
+  const clickSaveIndex=(i)=>{
+    localStorage.setItem("index",i)
+    // dispatch(setIndexSelect({index:i}))
+  }
+  // hàm lưu vị trí khi click chọn
+
+  useEffect(()=>{
+    for(let i = 0; i <32 ;++i){
+      cellRefs?.current[i]?.current?.addEventListener('click',()=>clickSaveIndex(i))
+      // cellRefs?.current[i]?.current?.addEventListener('click',()=>clickSaveLickIndex(i))
+    }
+  },[])
 
   houseRefs.current = Array(24)
     .fill()
@@ -215,10 +233,10 @@ function ChessBoard() {
             setShow(modalConstant.LOST_TURN)
           }
           else {
-            // if(turnOfUser===1) setSteps(8)
-            // else 
-            setSteps(data.diceOne + data.diceTwo);
-            // setSteps(8)
+            if(turnOfUser===1) setSteps(8)
+            else 
+            // setSteps(data.diceOne + data.diceTwo)
+            setSteps(4)
           }
         }, 2000);   
     })
@@ -252,6 +270,7 @@ function ChessBoard() {
           yourTurn={yourTurn}
           cellRefs={cellRefs}
           gameRoom={gameRoom}
+          seagameRef={seagameRef}
           >
 
           </House>
@@ -293,11 +312,13 @@ function ChessBoard() {
           yourTurn={yourTurn===turnOfUser}
           changeShow={changeShow}
           gameRoom={gameRoom}
+          seagameRef={seagameRef}
           userRef={userRef}
           turnOfUser={turnOfUser}
           possition={possition}
           changePos={changePos}
           userSteps={userSteps}
+          show={show}
         ></Board>
 
 
@@ -499,7 +520,7 @@ function ChessBoard() {
         ></Cell>}
 
         {/* xử lý các sự kiện socket chỉ liên quan đến redux*/}
-        <SocketRedux socket = {socket} yourTurn={yourTurn}></SocketRedux>
+        <SocketRedux socket = {socket} yourTurn={yourTurn} turnOfUser={turnOfUser}></SocketRedux>
 
       </div>
     </>

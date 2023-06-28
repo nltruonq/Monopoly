@@ -9,7 +9,7 @@ function ChangesModal({changeShow,turnOfUser,gameRoom,yourTurn}) {
     // 
     setTimeout(()=>{
       // dùng để test
-      // changeShow(modalConstant.DESTROY_HOUSE)
+      // changeShow(modalConstant.HOST_BIRTHDAY)
 
       if(winner === segments[0] ){
           changeShow(modalConstant.JAIL)

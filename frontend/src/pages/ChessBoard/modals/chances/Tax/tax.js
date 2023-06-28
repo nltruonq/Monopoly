@@ -4,7 +4,7 @@ import Modal from "react-bootstrap/Modal";
 import { RiCoinFill } from "react-icons/ri";
 
 import { colors } from "../../../constants/Color/color";
-import { selectUser } from "../../../../../redux/userSlice";
+import { selectUser } from "../../../../../redux/slices/userSlice";
 import { useSelector } from "react-redux";
 import { cells } from "../../../constants/cell";
 import { Tax } from "../../../class/tax";
@@ -16,7 +16,7 @@ function TaxComponent({ show, changeShow,turnOfUser,socket,gameRoom,possition })
   const cell = cells[possition[turnOfUser]]
   const taxValue= cell instanceof Tax
                   ?cell?.payTax(user[turnOfUser].balance)
-                  :-0.1*user[turnOfUser].balance
+                  :Math.round(-0.1*user[turnOfUser].balance)
   
 
   // chỉ để test

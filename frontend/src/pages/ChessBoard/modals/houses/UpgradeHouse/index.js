@@ -10,8 +10,8 @@ import houses from "../../../constants/houses";
 import {cells} from "../../../constants/cell/index"
 import { City } from "../../../class/city";
 import { useSelector } from "react-redux";
-import { selectCell } from "../../../../../redux/cellSlice";
-import { selectUser } from "../../../../../redux/userSlice";
+import { selectCell } from "../../../../../redux/slices/cellSlice";
+import { selectUser } from "../../../../../redux/slices/userSlice";
 
 const cx = classNames.bind(styles);
 
@@ -35,7 +35,7 @@ function UpgradeHouse({ show, changeShow, possition,title,turnOfUser,socket,game
 
   useEffect(()=>{
     setAffort(userBalance - currentCity.fPriceToUpgrade(currentLevel,select))
-  },[select,affortToPay])
+  },[select])
    
 
   const handleClose = () => {

@@ -10,13 +10,15 @@ import houses from "../../../constants/houses";
 import {cells} from "../../../constants/cell/index"
 import { City } from "../../../class/city";
 import { useSelector } from "react-redux";
-import { selectCell } from "../../../../../redux/cellSlice";
+import { selectCell } from "../../../../../redux/slices/cellSlice";
+import { selectGame } from "../../../../../redux/slices/gameSlice";
 
 const cx = classNames.bind(styles);
 
 function OtherHouse({ show, changeShow, possition,title,turnOfUser,socket,gameRoom }) {
 
   const house = useSelector(selectCell);
+  const game = useSelector(selectGame)
   
   const handleClose = () => {
     changeShow(false);
@@ -30,16 +32,22 @@ function OtherHouse({ show, changeShow, possition,title,turnOfUser,socket,gameRo
   })
   const currentLevel= currentCell.level
   const currentCity = cells[possition[turnOfUser]]
-  console.log(currentCell)
+
   const handlePay=()=>{
-     socket.emit("pay",{gameRoom,price:currentCity.fPriceToPay(currentLevel),owner:currentCell.owner})
+     
+    let amount = currentCity.fPriceToPay(currentLevel)
+    if(game.seagame === possition[turnOfUser]){
+      amount *=5
+    }
+
+     socket.emit("pay",{gameRoom,price:amount,owner:currentCell.owner})
      socket.emit("change-balance",{gameRoom,
-      amount:currentCity.fPriceToPay(currentLevel),
+      amount:amount,
       user:turnOfUser,
       type:"minus"
     })
     socket.emit("change-balance",{gameRoom,
-      amount:currentCity.fPriceToPay(currentLevel),
+      amount:amount,
       user:currentCell.owner,
       type:"plus"
     })
@@ -47,20 +55,25 @@ function OtherHouse({ show, changeShow, possition,title,turnOfUser,socket,gameRo
   }
 
   const handleReBought=()=>{
+
+    let amount = currentCity.fRedemptionPrice(currentLevel)
+    if(game.seagame === possition[turnOfUser]){
+      amount *=5
+    }
     socket.emit("re-bought",
         {gameRoom,
-          price: currentCity.fRedemptionPrice(currentLevel),
+          price: amount,
           owner:currentCell.owner,
           inuse:cells.indexOf(currentCity),
           currentLevel
         })
         socket.emit("change-balance",{gameRoom,
-          amount:currentCity.fRedemptionPrice(currentLevel),
+          amount:amount,
           user:turnOfUser,
           type:"minus"
         })
         socket.emit("change-balance",{gameRoom,
-          amount:currentCity.fRedemptionPrice(currentLevel),
+          amount:amount,
           user:currentCell.owner,
           type:"plus"
         })
@@ -87,7 +100,7 @@ function OtherHouse({ show, changeShow, possition,title,turnOfUser,socket,gameRo
           }} 
           variant="secondary">
           Pay {currentCity instanceof City 
-          ? currentCity.fPriceToPay(currentLevel)
+          ? currentCity.fPriceToPay(currentLevel)* possition[turnOfUser]===game.seagame?5:1
           : ""
         } <RiCoinFill color="yellow" />
         </Button>
@@ -99,7 +112,7 @@ function OtherHouse({ show, changeShow, possition,title,turnOfUser,socket,gameRo
             variant="secondary"
         >
             Buy {currentCity instanceof City 
-            ? currentCity.fRedemptionPrice(currentLevel)
+            ? currentCity.fRedemptionPrice(currentLevel)* possition[turnOfUser]===game.seagame?5:1
             : ""
             } <RiCoinFill color="yellow" />
         </Button>
