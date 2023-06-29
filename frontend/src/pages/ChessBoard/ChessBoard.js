@@ -178,6 +178,9 @@ function ChessBoard() {
       cellRefs.current[8].current?.appendChild(userRef.current[data.user].current)
     })
 
+    return ()=>{
+      socket.off("jail-result")
+    }
 
   },[show,possition,socket])
 
