@@ -41,9 +41,9 @@ function OtherHouse({ show, changeShow, possition,title,turnOfUser,socket,gameRo
   let allBalance = userInGame[turnOfUser].balance
 
   const affortToPay = allBalance - currentCity.fPriceToPay(currentLevel)* isSeagame
-  const affortToBuy = allBalance - currentCity.fPriceToPay(currentLevel)* isSeagame
+  const affortToBuy = allBalance - currentCity.fPriceToBuy(currentLevel)* isSeagame
 
-  
+  console.log(affortToBuy,affortToPay)
 
   // tính tổng tài sản kể cả nhà
   for(let i=0;i<house.length;++i){
@@ -119,7 +119,7 @@ function OtherHouse({ show, changeShow, possition,title,turnOfUser,socket,gameRo
 
   const handleSell =()=>{
     socket.emit("sell-house",{gameRoom,affortToPay,owner:currentCell.owner})
-    changeShow(false)
+    socket.emit("close",{gameRoom})
   }
 
   return (

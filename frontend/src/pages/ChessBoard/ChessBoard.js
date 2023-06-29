@@ -22,7 +22,7 @@ import ChangesModal from "./modals/chances/Chances";
 import Birthday from "./modals/chances/BirthDay";
 import Prison from "./modals/corner/Prison";
 import { useDispatch, useSelector } from "react-redux";
-import { selectUser, updatePrison } from "../../redux/slices/userSlice";
+import { selectUser, setActive, updatePrison } from "../../redux/slices/userSlice";
 import LostTurn from "./modals/corner/LostTurn";
 import DestroyOtherHouse from "./modals/chances/DestroyOHouse";
 import DestroyHouseSelect from "./modals/chances/DestroyHSelect";
@@ -206,6 +206,9 @@ function ChessBoard() {
     // 
     socket.on("room-size",(data)=>{
       setNumberUser(data.size)
+      for(let i =0;i<data.size;i++){
+        dispatch(setActive({yourTurn:i}))
+      }
       if(data.socket===socket.id) {
         setYourTurn(data.index)
       }
@@ -240,7 +243,9 @@ function ChessBoard() {
             // else 
             // setSteps(8)
 
-            setSteps(data.diceOne + data.diceTwo)
+            setSteps(7)
+
+            // setSteps(data.diceOne + data.diceTwo)
           }
         }, 2000);   
     })

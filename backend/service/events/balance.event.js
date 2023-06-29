@@ -24,8 +24,8 @@ const balance = (socket)=>{
         socket.nsp.in(gameRoom).emit("receive-birthday-result",{amount,user})
     })
     socket.on("pay-birthday",data=>{
-        const {gameRoom,amount,users}=data
-        socket.nsp.in(gameRoom).emit("pay-birthday-result",{amount,users})
+        const {gameRoom,users}=data
+        socket.nsp.in(gameRoom).emit("pay-birthday-result",{users})
     })
 
     

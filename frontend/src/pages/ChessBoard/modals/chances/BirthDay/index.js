@@ -5,11 +5,25 @@ import Modal from "react-bootstrap/Modal";
 import { RiCoinFill } from "react-icons/ri";
 import { colors } from "../../../constants/Color/color";
 import birthdayImg from "../../../../../assets/images/birthday.png"
+import { useSelector } from "react-redux";
+import { selectUser } from "../../../../../redux/slices/userSlice";
 
 // numberuser sau này sẽ update thành số user còn tài sản 
 function Birthday({ show, changeShow,turnOfUser,socket,gameRoom,yourTurn,numberUser }) {
 
-  const amount = 100*(numberUser-1)
+  
+  const userInGame = useSelector(selectUser)
+  console.log(userInGame)
+  let amount = 0
+  for(let i = 0;i <userInGame.length;i++){
+    if(i !== turnOfUser && userInGame[i].active === true){
+      amount +=  Math.round(0.05* userInGame[i].balance)
+    }
+  }
+  // console.log(amount)
+  // const amount = 100*(numberUser-1)
+
+  
   
   const handleClose = () => {
     if(yourTurn===turnOfUser) {
@@ -24,6 +38,7 @@ function Birthday({ show, changeShow,turnOfUser,socket,gameRoom,yourTurn,numberU
             user:turnOfUser,
             type:"plus"
         })
+
         const users =[]
         for(let i=0 ; i <numberUser;i++){
             if(yourTurn!==i){
@@ -32,15 +47,15 @@ function Birthday({ show, changeShow,turnOfUser,socket,gameRoom,yourTurn,numberU
         }
         socket.emit("pay-birthday",{
             users:users,
-            amount:-amount / users.length ,
+            // amount:-amount / users.length ,
             gameRoom 
         })
-        socket.emit("change-balance-users",{
-            gameRoom,
-            amount:-amount / users.length  ,
-            user:turnOfUser,
-            type:"minus"
-        })
+        // socket.emit("change-balance-users",{
+        //     gameRoom,
+        //     amount:-amount / users.length  ,
+        //     user:turnOfUser,
+        //     type:"minus"
+        // })
     }
     changeShow(false);
     socket.emit("close",{gameRoom})

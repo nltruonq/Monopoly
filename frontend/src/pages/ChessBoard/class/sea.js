@@ -7,4 +7,7 @@ export class Sea extends Cell{
         this.priceToBuy=priceToBuy
         this.priceToPay=priceToPay
     }
+    fPriceToSell(){
+        return Math.round(0.8 * this.basePrice)
+    }
 }

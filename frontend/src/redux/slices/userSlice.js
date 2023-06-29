@@ -4,10 +4,10 @@ import avatarDf from "../../assets/images/avatar_default.jpg"
 const userSlice = createSlice({
   name: 'user',
   initialState: [
-    { balance: 1000, prison:0 ,username:false,avatar:avatarDf},
-    { balance: 1000, prison:0 ,username:false,avatar: avatarDf},
-    { balance: 400, prison:0 ,username:false,avatar: avatarDf},
-    { balance: 400, prison:0 ,username:false,avatar: avatarDf},
+    { balance: 1000, prison:0 ,username:false,avatar:avatarDf,active:false},
+    { balance: 450, prison:0 ,username:false,avatar: avatarDf,active:false},
+    { balance: 400, prison:0 ,username:false,avatar: avatarDf,active:false},
+    { balance: 400, prison:0 ,username:false,avatar: avatarDf,active:false},
   ],
   reducers: {
     updateBalance: (state, action) => {
@@ -45,12 +45,15 @@ const userSlice = createSlice({
         state[i].username = players[i].username
         state[i].avatar = players[i].avatar
       }
+    },
+    setActive: (state,action)=>{
+      const {yourTurn} = action.payload
+      state[yourTurn].active=true
     }
-
   },
 });
 
-export const { updateBalance,secondaryUpdateBalance,updatePrison,setUsername,setBalance } = userSlice.actions;
+export const { updateBalance,secondaryUpdateBalance,updatePrison,setUsername,setBalance,setActive } = userSlice.actions;
 
 export const selectUser = createSelector(
   (state) => state.user,

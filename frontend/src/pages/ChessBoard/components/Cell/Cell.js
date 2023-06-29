@@ -75,6 +75,9 @@ function Cell({socket,changeShow}){
             // }
             else if(cell instanceof Chance){
                 changeShow(modalConstant.CHANGES)
+
+                // chỉ để test
+                // changeShow(modalConstant.HOST_BIRTHDAY)
             }
             else if(cell instanceof Tax){
                 changeShow(modalConstant.PAY_TAX)            

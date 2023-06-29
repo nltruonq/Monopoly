@@ -20,6 +20,7 @@ import { selectUser } from "../../../../redux/slices/userSlice";
 import { selectGame, setSeagame } from "../../../../redux/slices/gameSlice";
 import Button from "react-bootstrap/esm/Button";
 import {colors} from "../../constants/Color/color"
+import { Sea } from "../../class/sea";
 
 function Board(props){
     const {
@@ -233,7 +234,7 @@ function Board(props){
               gameRoom,
               listSell,
               amountUser: sellMonney + userInGame[turnOfUser].balance + needMoney.monney,
-               //         180 * 0.9    + 20                        - 64
+               //         180 * 0.8   + 20                        - 64
               user:turnOfUser,
               owner:needMoney.owner,
               amountOwner: -needMoney.monney,
@@ -245,10 +246,9 @@ function Board(props){
 
     useEffect(()=>{
 
-      console.log(houseOwner)
       socket.on("sell-house-result",data=>{
         
-        
+      console.log(data,yourTurn)
         if(yourTurn){
 
           setNeedMonney({monney:data.affortToPay - userInGame[turnOfUser].balance,owner:data.owner})
@@ -265,6 +265,7 @@ function Board(props){
             }
           }
           setListOwner(list)
+          console.log(list)
           
         }
           // changeShow(false)
@@ -276,14 +277,28 @@ function Board(props){
           const index= data.index
           console.log(houseOwner)
           if(listSell.includes(index)){
-            const monney = sellMonney - cells[index].fPriceToSell(houseOwner.find(item=>item.boardIndex===index).level)
+            let monney
+            if(cells[index] instanceof Sea){
+              monney = sellMonney - cells[index].fPriceToSell()
+            }
+            else {
+              monney = sellMonney - cells[index].fPriceToSell(houseOwner.find(item=>item.boardIndex===index).level)
+
+            }
             setSellMonney(monney)
             listSell.splice(listSell.indexOf(index),1)
             setListSell(listSell)
           }
           else {
             // cộng vào tổng số tiền phải trả
-            const monney = sellMonney+ cells[index].fPriceToSell(houseOwner.find(item=>item.boardIndex===index).level)
+            let monney
+            if(cells[index] instanceof Sea){
+              monney = sellMonney + cells[index].fPriceToSell()
+            }
+            else {
+              monney = sellMonney + cells[index].fPriceToSell(houseOwner.find(item=>item.boardIndex===index).level)
+
+            }
             setSellMonney(monney)
             
             // thêm vào list sell
@@ -295,6 +310,9 @@ function Board(props){
 
       socket.on("sell-reset-result",data=>{
         if(yourTurn){
+          for(let i =0; i<listOwner;i++){
+            cellRefs.current[houseOwner[i].boardIndex].current.removeEventListener('click',selectSell)
+          }
           setListOwner([])
           setListSell([])
           setNeedMonney(0)
@@ -307,8 +325,9 @@ function Board(props){
         socket.off("select-sell-result")
         socket.off("sell-reset-result")
         socket.off("sell-reset-result")
+
       }
-    },[socket,houseOwner,userInGame,sellMonney,listSell])
+    },[socket,houseOwner,userInGame,sellMonney,listSell,yourTurn])
 
     // 200
     // -180 ->20
