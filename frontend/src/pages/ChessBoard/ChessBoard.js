@@ -271,14 +271,14 @@ function ChessBoard() {
       // g/s data.user = 1 
       console.log(userInGame)
       let i =data.user
-      // while(userInGame[i].active !==true){
-      //   if(i === userInGame.length -1 ){
-      //     i=0
-      //   }
-      //   else {
-      //     i=i+1;
-      //   }
-      // }
+      while(userInGame[i].active !==true){
+        if(i === userInGame.length -1 ){
+          i=0
+        }
+        else {
+          i=i+1;
+        }
+      }
       setTurnUser(i)
     })
 
