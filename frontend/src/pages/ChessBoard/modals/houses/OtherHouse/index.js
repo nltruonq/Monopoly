@@ -41,7 +41,7 @@ function OtherHouse({ show, changeShow, possition,title,turnOfUser,socket,gameRo
   let allBalance = userInGame[turnOfUser].balance
 
   const affortToPay = allBalance - currentCity.fPriceToPay(currentLevel)* isSeagame
-  const affortToBuy = allBalance - currentCity.fPriceToBuy(currentLevel)* isSeagame
+  const affortToBuy = allBalance - currentCity.fRedemptionPrice(currentLevel)* isSeagame
 
   console.log(affortToBuy,affortToPay)
 
