@@ -249,6 +249,10 @@
   position: relative;
   cursor: pointer;
 }
+.sell{
+  background-color: red !important;
+  position: relative;
+}
 .able:before{
   content: "";
   background-color: #fff;
@@ -271,3 +275,15 @@
   filter: blur(40px);
 }
 
+.sell-house{
+  padding: 10px;
+  border-radius: 5px;
+  display: flex;
+  flex-direction:column;
+  width: 300px;
+  position: absolute;
+  top:60vh;
+  left:100px;
+  background-color: white;
+  z-index: 20;
+}

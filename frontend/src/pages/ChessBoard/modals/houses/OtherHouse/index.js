@@ -12,6 +12,8 @@ import { City } from "../../../class/city";
 import { useSelector } from "react-redux";
 import { selectCell } from "../../../../../redux/slices/cellSlice";
 import { selectGame } from "../../../../../redux/slices/gameSlice";
+import { selectUser } from "../../../../../redux/slices/userSlice";
+import modalConstant from "../../../constants/modal";
 
 const cx = classNames.bind(styles);
 
@@ -19,7 +21,8 @@ function OtherHouse({ show, changeShow, possition,title,turnOfUser,socket,gameRo
 
   const house = useSelector(selectCell);
   const game = useSelector(selectGame)
-  
+  const userInGame = useSelector(selectUser)
+
   const handleClose = () => {
     changeShow(false);
     socket.emit("close",{gameRoom})
@@ -33,56 +36,95 @@ function OtherHouse({ show, changeShow, possition,title,turnOfUser,socket,gameRo
   const currentLevel= currentCell.level
   const currentCity = cells[possition[turnOfUser]]
 
-  const handlePay=()=>{
-     
-    let amount = currentCity.fPriceToPay(currentLevel)
-    if(game.seagame === possition[turnOfUser]){
-      amount *=5
-    }
+  const isSeagame =  possition[turnOfUser]===game.seagame ? 5 : 1
 
-     socket.emit("pay",{gameRoom,price:amount,owner:currentCell.owner})
-     socket.emit("change-balance",{gameRoom,
-      amount:amount,
-      user:turnOfUser,
-      type:"minus"
-    })
-    socket.emit("change-balance",{gameRoom,
-      amount:amount,
-      user:currentCell.owner,
-      type:"plus"
-    })
+  let allBalance = userInGame[turnOfUser].balance
 
+  const affortToPay = allBalance - currentCity.fPriceToPay(currentLevel)* isSeagame
+  const affortToBuy = allBalance - currentCity.fPriceToPay(currentLevel)* isSeagame
+
+  
+
+  // tính tổng tài sản kể cả nhà
+  for(let i=0;i<house.length;++i){
+
+    // so sánh phải nhà người chơi này không
+    if(house[i].owner === turnOfUser){
+        allBalance += cells[house[i].boardIndex].fPriceToSell(house[i].level)
+    } 
   }
+
+
+  const isLoss = allBalance + affortToPay -userInGame[turnOfUser].balance <0 ? true: false
+
+
+  const handlePay=()=>{
+    
+    if(affortToPay >=0){
+
+      let amount = currentCity.fPriceToPay(currentLevel)
+      if(game.seagame === possition[turnOfUser]){
+        amount *=5
+      }
+      
+      socket.emit("pay",{gameRoom,price:amount,owner:currentCell.owner})
+      socket.emit("change-balance",{gameRoom,
+        amount:amount,
+        user:turnOfUser,
+        type:"minus"
+      })
+      socket.emit("change-balance",{gameRoom,
+        amount:amount,
+        user:currentCell.owner,
+        type:"plus"
+      })
+      handleClose()
+    }
+  }
+
+  setTimeout(()=>{
+    if(isLoss){
+      changeShow(modalConstant.LOSS)
+    }
+  },2000)
 
   const handleReBought=()=>{
 
-    let amount = currentCity.fRedemptionPrice(currentLevel)
-    if(game.seagame === possition[turnOfUser]){
-      amount *=5
+    if(affortToBuy >=0 ) {
+
+      let amount = currentCity.fRedemptionPrice(currentLevel)
+      if(game.seagame === possition[turnOfUser]){
+        amount *=5
+      }
+      socket.emit("re-bought",
+      {gameRoom,
+        price: amount,
+        owner:currentCell.owner,
+        inuse:cells.indexOf(currentCity),
+        currentLevel
+      })
+      socket.emit("change-balance",{gameRoom,
+        amount:amount,
+        user:turnOfUser,
+        type:"minus"
+      })
+      socket.emit("change-balance",{gameRoom,
+        amount:amount,
+        user:currentCell.owner,
+        type:"plus"
+      })
+      handleClose()
     }
-    socket.emit("re-bought",
-        {gameRoom,
-          price: amount,
-          owner:currentCell.owner,
-          inuse:cells.indexOf(currentCity),
-          currentLevel
-        })
-        socket.emit("change-balance",{gameRoom,
-          amount:amount,
-          user:turnOfUser,
-          type:"minus"
-        })
-        socket.emit("change-balance",{gameRoom,
-          amount:amount,
-          user:currentCell.owner,
-          type:"plus"
-        })
-    
+  }
+
+  const handleSell =()=>{
+    socket.emit("sell-house",{gameRoom,affortToPay,owner:currentCell.owner})
+    changeShow(false)
   }
 
   return (
     <Modal show={show}>
-      <Modal.Header closeButton onClick={handleClose} style={{backgroundColor:colors[turnOfUser],color:"white"}}>
+      <Modal.Header closeButton style={{backgroundColor:colors[turnOfUser],color:"white"}}>
         <Modal.Title>{currentCity.city}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
@@ -94,28 +136,34 @@ function OtherHouse({ show, changeShow, possition,title,turnOfUser,socket,gameRo
       </Modal.Body>
       <Modal.Footer>
         <Button 
-          onClick={()=>{
-            handlePay()
-            handleClose()
-          }} 
-          variant="secondary">
-          Pay {currentCity instanceof City 
-          ? currentCity.fPriceToPay(currentLevel)* (possition[turnOfUser]===game.seagame?5:1)
+          onClick={handlePay} 
+          variant="secondary"
+          style={{opacity:`${affortToPay < 0 ? "0.5" :"1"}`}}
+          >
+          Trà tiền {currentCity instanceof City 
+          ? currentCity.fPriceToPay(currentLevel)* isSeagame
           : ""
         } <RiCoinFill color="yellow" />
         </Button>
         <Button 
-            onClick={()=>{
-                handleReBought()
-                handleClose()
-            }} 
+            onClick={handleReBought} 
             variant="secondary"
+            style={{opacity:`${affortToBuy < 0 ? "0.5" :"1"}`}}
         >
-            Buy {currentCity instanceof City 
-            ? currentCity.fRedemptionPrice(currentLevel)* (possition[turnOfUser]===game.seagame?5:1)
+            Mua lại {currentCity instanceof City 
+            ? currentCity.fRedemptionPrice(currentLevel)* isSeagame
             : ""
             } <RiCoinFill color="yellow" />
         </Button>
+        {
+          affortToPay <0 && !isLoss&&
+          <Button
+            onClick={handleSell}
+            variant="secondary"
+          >
+            Bán tài sản
+          </Button>
+        }
       </Modal.Footer>
     </Modal>
   );

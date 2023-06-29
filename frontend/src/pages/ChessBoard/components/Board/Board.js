@@ -7,7 +7,7 @@ import taxImg from "../../../../assets/images/tax.png"
 import prisonImg from "../../../../assets/images/prison.png"
 import seaVideo from "../../../../assets/images/beach.mp4"
 import worldTourImg from "../../../../assets/images/worldtour.png"
-import { createRef, useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { selectCell } from "../../../../redux/slices/cellSlice";
 import modalConstant from "../../constants/modal";
@@ -18,6 +18,8 @@ import { cells } from "../../constants/cell";
 import { City } from "../../class/city";
 import { selectUser } from "../../../../redux/slices/userSlice";
 import { selectGame, setSeagame } from "../../../../redux/slices/gameSlice";
+import Button from "react-bootstrap/esm/Button";
+import {colors} from "../../constants/Color/color"
 
 function Board(props){
     const {
@@ -198,49 +200,62 @@ function Board(props){
 
     
     // bán nhà
-
+    //cases: 
     // -> pay house
     // -> sinh nhật
 
-    const [listSell,setListSell] = useState([])
-    const [enought,setEnougth] = useState(false)
-    const [sellMonney,setSellMonney]= useState(0) 
+    // tham số:
+    // tổng số tiền bán được: sellMoney 
+    // Số tiền phải trả: affortToPay = balance - pay
+    // Tiền đang chi trả: sellMoney + affortToPay
+    // so sánh thỏa: tiền đang chi trả > 0  
     
+    //xử lý:
+    // thỏa -> bán 
+    // -> phá nhà -> (dispath , ref)
+    // ->trả tiền
+    // -> tiền sau khi bán + trả
+    // emit(turn)
+    
+    const [listSell,setListSell] = useState([])
+    const [sellMonney,setSellMonney]= useState(0) 
+    const [needMoney,setNeedMonney] = useState(0)
+    
+    const selectSell=()=>{
+      const index = Number(localStorage.getItem("index"))
+      socket.emit("select-sell",{index,gameRoom})
+    }
+
+    const handleSellHouse=()=>{
+
+      console.log(sellMonney , userInGame[turnOfUser].balance ,needMoney.monney)
+      socket.emit("sell-click",{
+              gameRoom,
+              listSell,
+              amountUser: sellMonney + userInGame[turnOfUser].balance + needMoney.monney,
+               //         180 * 0.9    + 20                        - 64
+              user:turnOfUser,
+              owner:needMoney.owner,
+              amountOwner: -needMoney.monney,
+            })
+      // reset các biến -> [] , 0 , 0
+      socket.emit("sell-reset",{gameRoom})
+    
+    }
+
     useEffect(()=>{
-      const selectSell=()=>{
-        const index = Number(localStorage.getItem("index"))
 
-        // cộng vào tổng số tiền phải trả
-        sellMonney+=cells[index].fPriceToSell(houseOwner.find(item=>item.boardIndex===index).level)
-        setSellMonney(sellMonney)
-
-        // thêm vào list sell
-        listSell.push(index)
-        setListSell(listSell)
-      }
-
+      console.log(houseOwner)
       socket.on("sell-house-result",data=>{
         
-        console.log(data)
+        
+        if(yourTurn){
 
-        let allBalance = userInGame[turnOfUser].balance
-        for(let i=0;i<houseOwner.length;++i){
+          setNeedMonney({monney:data.affortToPay - userInGame[turnOfUser].balance,owner:data.owner})
           
-          // so sánh phải nhà người chơi này không
-          if(houseOwner[i].owner === turnOfUser){
-            allBalance += cells[houseOwner[i].boardIndex].fPriceToSell(houseOwner[i].level)
-          } 
-          
-        }
-
-        if(allBalance + data.affortToPay < 0){
-          // xử thua
-          console.log("thua")
-        }
-        else {
           // chọn nhà để bán
           console.log("bán nhà")
-
+          
           let list = []
           // chọn nhà để bán
           for(let i=0;i<houseOwner.length;++i){
@@ -250,20 +265,73 @@ function Board(props){
             }
           }
           setListOwner(list)
-          console.log(list)
-          console.log("monney",sellMonney)
-
+          
         }
-
+          // changeShow(false)
+          // socket.emit("turn")
       })
 
+      socket.on("select-sell-result",data=>{
+        if(yourTurn){
+          const index= data.index
+          console.log(houseOwner)
+          if(listSell.includes(index)){
+            const monney = sellMonney - cells[index].fPriceToSell(houseOwner.find(item=>item.boardIndex===index).level)
+            setSellMonney(monney)
+            listSell.splice(listSell.indexOf(index),1)
+            setListSell(listSell)
+          }
+          else {
+            // cộng vào tổng số tiền phải trả
+            const monney = sellMonney+ cells[index].fPriceToSell(houseOwner.find(item=>item.boardIndex===index).level)
+            setSellMonney(monney)
+            
+            // thêm vào list sell
+            listSell.push(index)
+            setListSell(listSell)
+          }
+        }
+      })
+
+      socket.on("sell-reset-result",data=>{
+        if(yourTurn){
+          setListOwner([])
+          setListSell([])
+          setNeedMonney(0)
+          socket.emit("close",{gameRoom})
+          socket.emit("turn",{gameRoom})
+        }
+      })
       return ()=>{
         socket.off("sell-house-result")
+        socket.off("select-sell-result")
+        socket.off("sell-reset-result")
+        socket.off("sell-reset-result")
       }
-    },[socket,houseOwner,userInGame,sellMonney])
+    },[socket,houseOwner,userInGame,sellMonney,listSell])
+
+    // 200
+    // -180 ->20
+    // 20+ 0.8*180 - 64 =  
 
     return (
         <>
+          { 
+          needMoney && 
+          <div className={cx("sell-house")} style={{border:`5px solid ${colors[turnOfUser]}`}}>
+            <div>Tổng số tiền hiện có: {sellMonney + userInGame[turnOfUser].balance}</div>
+            <div>Số tiền cần trả: {-needMoney.monney}</div>
+            {
+            sellMonney + userInGame[turnOfUser].balance + needMoney.monney >=0 && 
+            <Button 
+              variant="secondary"
+              style={{width:"100px"}}
+              onClick={handleSellHouse}
+            >
+            Bán
+            </Button>
+            }
+          </div>}
           <div className={cx("chess-board")}>
             <div ref={seagameRef} style={{display:"none",position:"absolute",top:10,left:0,zIndex:13}}> 
                 <img src= {seagameImg} width={75} />
@@ -289,8 +357,8 @@ function Board(props){
                       key={index}
                       className={destroy&&listDestroy.includes(9+index) 
                                 || listOwner.includes(9+index)
-                                || listSell.includes(9+index) 
-                                ? cx("rectangle","able") :cx("rectangle")}
+                                // || listSell.includes(9+index) 
+                                ? cx("rectangle","able",`${listSell.includes(9+index)?"sell":""}`) :cx("rectangle")}
                       ref={cellRefs.current[9 + index]}
                     >
                       { locations[9+index].type=== types.SEA 
@@ -356,8 +424,8 @@ function Board(props){
                         key={index}
                         className={destroy&&listDestroy.includes(7-index)
                                   || listOwner.includes(7-index)
-                                  || listSell.includes(7-index)
-                                  ? cx("rectangle-column","able") 
+                                  // || listSell.includes(7-index)
+                                  ? cx("rectangle-column","able",`${listSell.includes(7-index)?"sell":""}`) 
                                   :cx("rectangle-column")}
                         ref={cellRefs.current[7 - index]}
                       >
@@ -427,8 +495,8 @@ function Board(props){
                         {
                           destroy&&listDestroy.includes(17+index)
                           || listOwner.includes(17+index)
-                          || listSell.includes(17+index)
-                          ? cx("rectangle-column","able") 
+                          // || listSell.includes(17+index)
+                          ? cx("rectangle-column","able",`${listSell.includes(17+index)?"sell":""}`) 
                           :cx("rectangle-column")
                         }
                         ref={cellRefs.current[17 + index]}
@@ -490,8 +558,8 @@ function Board(props){
                       key={index}
                       className={destroy&&listDestroy.includes(31-index)
                                 ||listOwner.includes(31-index)
-                                || listSell.includes(31 - index)
-                                ? cx("rectangle","able") 
+                                // || listSell.includes(31 - index)
+                                ? cx("rectangle","able",`${listSell.includes(31-index)?"sell":""}`) 
                                 :cx("rectangle")}
                       
                       ref={cellRefs.current[31 - index]}

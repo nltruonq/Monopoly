@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import {updateBalance } from "../../../../redux/slices/userSlice"
+import {setBalance, updateBalance } from "../../../../redux/slices/userSlice"
 import {useDispatch, useSelector} from "react-redux"
 import { buyHouse, destroyHouse } from "../../../../redux/slices/cellSlice"
 import { destroySeagame, selectGame } from "../../../../redux/slices/gameSlice"
@@ -118,12 +118,24 @@ function House({houses,houseRefs,cx,socket,possition,turnOfUser,cellRefs,gameRoo
             socket.emit("reset-destroy",{gameRoom})
         })
 
+        socket.on("sell-click-result",data=>{
+            const {listSell,user,owner,amountUser,amountOwner} = data
+            console.log(data)
+            for(let i=0;i<listSell.length;++i){
+                houseRefs.current[cityBoardIndex.indexOf(listSell[i])].current.style.display="none";
+                dispatch(destroyHouse({boardIndex:listSell[i]}))
+            }
+            dispatch(setBalance({amount:amountUser,turnOfUser: user}))
+            dispatch(updateBalance({amount:amountOwner,turnOfUser: owner}))
+        })
+
         return ()=>{
             socket.off("upgrade-result")
             socket.off("bought-result")
             socket.off("pay-result")
             socket.off("re-bought-result")
             socket.off("destroy-select-result")
+            socket.off("sell-click-result")
         }
     },[turnOfUser,possition,seagameRef])
     return(

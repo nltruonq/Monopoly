@@ -55,7 +55,7 @@ function UserZone({index}){
                     </div>
                     <div className={cx("info")}>
                         <h3 className={cx("name")} style={{backgroundColor:colors[index]}}>{user[index].username || `player${index +1 }`}</h3>
-                        <p className={cx("score")} style={{color:colors[index]}}>Score: {user[index].balance}</p>
+                        <p className={cx("score")} style={{color:colors[index]}}>Tiền mặt: {user[index].balance}</p>
                     </div>
                     {change && change.user===index&&  
                     <div className={cx("change-balance")} style={{color:change.type==="minus" ?"red":"green"}}>

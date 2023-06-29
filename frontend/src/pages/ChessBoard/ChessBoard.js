@@ -31,6 +31,7 @@ import BuySea from "./modals/seas/BuySea";
 import OtherSea from "./modals/seas/OtherSea";
 import Seagame from "./modals/corner/Seagame";
 import { setIndexSelect } from "../../redux/slices/gameSlice";
+import Lost from "./modals/games/Lost";
 
 const cx = classNames.bind(styles);
 
@@ -235,10 +236,11 @@ function ChessBoard() {
           else {
 
             // chỉ dùng để test
-            // if(turnOfUser===1) setSteps(8)
+            // if(turnOfUser===1) setSteps(4)
             // else 
+            // setSteps(8)
+
             setSteps(data.diceOne + data.diceTwo)
-            // setSteps(4)
           }
         }, 2000);   
     })
@@ -512,6 +514,19 @@ function ChessBoard() {
         >
 
         </Seagame>
+        :
+        turnOfUser ===yourTurn &&
+        show === modalConstant.LOSS
+        ?
+        <Lost
+          show={show}
+          changeShow={changeShow}
+          socket={socket}
+          turnOfUser={turnOfUser}
+          gameRoom={gameRoom}
+        >
+
+        </Lost>
         :""
         }
 

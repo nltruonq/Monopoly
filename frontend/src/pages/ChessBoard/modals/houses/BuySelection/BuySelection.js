@@ -22,12 +22,12 @@ function BuySelection({ show, changeShow, possition,turnOfUser,socket,gameRoom }
     socket.emit("turn",{gameRoom})
   };
 
-  const [affortToPay,setAffort]=useState(0)
-
+  
   const [select,setSelect]=useState(1)
   const currentCity= cells[possition[turnOfUser]]
-
+  
   const userInGame = useSelector(selectUser)
+  const [affortToPay,setAffort]=useState(userInGame[turnOfUser].balance - currentCity.fPriceToBuy(1))
 
   
   const handleSelect = (index)=>{
@@ -72,13 +72,13 @@ function BuySelection({ show, changeShow, possition,turnOfUser,socket,gameRoom }
         <Button 
           onClick={buyHouse} 
           variant="secondary" style={{opacity:`${affortToPay<0 ? "0.5":"1"}`}}>
-          Buy {currentCity instanceof City 
+          Mua {currentCity instanceof City 
           ? currentCity.fPriceToBuy(select)
           : ""
         } <RiCoinFill color="yellow" />
         </Button>
         <Button onClick={handleClose} variant="secondary">
-          Cancel
+          Hủy
         </Button>
       </Modal.Footer>
     </Modal>

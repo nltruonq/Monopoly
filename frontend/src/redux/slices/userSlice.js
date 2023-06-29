@@ -6,8 +6,8 @@ const userSlice = createSlice({
   initialState: [
     { balance: 1000, prison:0 ,username:false,avatar:avatarDf},
     { balance: 1000, prison:0 ,username:false,avatar: avatarDf},
-    { balance: 1000, prison:0 ,username:false,avatar: avatarDf},
-    { balance: 1000, prison:0 ,username:false,avatar: avatarDf},
+    { balance: 400, prison:0 ,username:false,avatar: avatarDf},
+    { balance: 400, prison:0 ,username:false,avatar: avatarDf},
   ],
   reducers: {
     updateBalance: (state, action) => {
@@ -15,6 +15,13 @@ const userSlice = createSlice({
       const user = state[turnOfUser]
       if (user) {
         user.balance += amount;
+      }
+    },
+    setBalance:(state,action)=>{
+      const {turnOfUser,amount}=action.payload
+      const user = state[turnOfUser]
+      if(user){
+        user.balance= amount
       }
     },
     secondaryUpdateBalance: (state, action) => {
@@ -43,7 +50,7 @@ const userSlice = createSlice({
   },
 });
 
-export const { updateBalance,secondaryUpdateBalance,updatePrison,setUsername } = userSlice.actions;
+export const { updateBalance,secondaryUpdateBalance,updatePrison,setUsername,setBalance } = userSlice.actions;
 
 export const selectUser = createSelector(
   (state) => state.user,

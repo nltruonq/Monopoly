@@ -13,5 +13,6 @@ const modalConstant= {
     DESTROY_H_SELECT:12,
     BUY_SEA:13,
     OTHER_SEA:14,
+    LOSS:15,
 }
 export default modalConstant

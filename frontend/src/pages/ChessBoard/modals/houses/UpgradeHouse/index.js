@@ -19,18 +19,19 @@ function UpgradeHouse({ show, changeShow, possition,title,turnOfUser,socket,game
 
   const house = useSelector(selectCell);
   const [select,setSelect]=useState(3)
-  const [affortToPay,setAffort] = useState(0)
   const userIngame= useSelector(selectUser)
-
   const userBalance = userIngame[turnOfUser].balance
 
+  
+  
   const currentCell=house?.find((elm)=>{
     return elm.boardIndex === possition[turnOfUser]
   })
   const currentLevel= currentCell.level
   
   const currentCity = cells[possition[turnOfUser]]
-
+  
+  const [affortToPay,setAffort] = useState(userBalance - currentCity.fPriceToBuy(3))
   
 
   const handleClose = () => {
@@ -87,13 +88,13 @@ function UpgradeHouse({ show, changeShow, possition,title,turnOfUser,socket,game
           variant="secondary" 
           style={{opacity:`${affortToPay < 0 ? "0.5":"1"}`}}
           >
-          Upgrade {currentCity instanceof City 
+          Nâng cấp {currentCity instanceof City 
           ? currentCity.fPriceToUpgrade(currentLevel,select)
           : ""
         } <RiCoinFill color="yellow" />
         </Button>}
         <Button onClick={handleClose} variant="secondary">
-          Cancel
+          Hủy
         </Button>
       </Modal.Footer>
     </Modal>

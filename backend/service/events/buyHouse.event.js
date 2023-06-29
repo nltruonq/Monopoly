@@ -106,13 +106,39 @@ const buyEvent = (socket) => {
 
     socket.on("sell-house",data=>{
         try {
-            const {gameRoom,affortToPay} = data
-            socket.nsp.in(gameRoom).emit("sell-house-result",{affortToPay})
+            const {gameRoom,affortToPay,owner} = data
+            socket.nsp.in(gameRoom).emit("sell-house-result",{affortToPay,owner})
         } catch (error) {
             console.log(error)
         }
     })
 
+    socket.on("select-sell",data=>{
+        try {
+            const {gameRoom,index}=data
+            socket.nsp.in(gameRoom).emit("select-sell-result",{index})
+        } catch (error) {
+            console.log(error)
+        }
+    })
+
+    socket.on("sell-click",data=>{
+        try {
+            const { gameRoom,user,owner,amountUser,amountOwner,listSell}=data
+            socket.nsp.in(gameRoom).emit("sell-click-result",{user,owner,amountOwner,amountUser,listSell})
+        } catch (error) {
+            console.log(error)
+        }
+    })
+
+    socket.on("sell-reset",data=>{
+        try {
+            const {gameRoom} = data
+            socket.nsp.in(gameRoom).emit("sell-reset-result")
+        } catch (error) {
+            console.log(error)
+        }
+    })
 }
 
 module.exports = buyEvent
