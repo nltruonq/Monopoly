@@ -256,9 +256,9 @@ function ChessBoard() {
             // else 
             // setSteps(8)
 
-            setSteps(9)
+            // setSteps(9)
 
-            // setSteps(data.diceOne + data.diceTwo)
+            setSteps(data.diceOne + data.diceTwo)
           }
         }, 2000);   
     })
