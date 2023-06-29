@@ -8,6 +8,7 @@ function Lost({ show, changeShow,socket,gameRoom,turnOfUser}) {
   
   const handleClose = () => {
     changeShow(false);
+    socket.emit("loss",{gameRoom})
     socket.emit("close",{gameRoom})
     //  sau này sẽ thế thành giá trị 2 xúc xắc để xét double
     socket.emit("turn",{gameRoom})
@@ -15,7 +16,7 @@ function Lost({ show, changeShow,socket,gameRoom,turnOfUser}) {
 
   return (
     <Modal show={show}>
-      <Modal.Header closeButton onClick={handleClose} style={{backgroundColor:colors[turnOfUser],color:"white"}}>
+      <Modal.Header style={{backgroundColor:colors[turnOfUser],color:"white"}}>
         <Modal.Title>BẠN ĐÃ THUA</Modal.Title>
       </Modal.Header>
       <Modal.Body>

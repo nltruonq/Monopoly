@@ -54,7 +54,7 @@ function BuySelection({ show, changeShow, possition,turnOfUser,socket,gameRoom }
 
   return (
     <Modal show={show}>
-      <Modal.Header closeButton onClick={handleClose} style={{backgroundColor:colors[turnOfUser],color:"white"}}>
+      <Modal.Header closeButton style={{backgroundColor:colors[turnOfUser],color:"white"}}>
         <Modal.Title>{currentCity.city}</Modal.Title>
       </Modal.Header>
       <Modal.Body>

@@ -32,6 +32,7 @@ import OtherSea from "./modals/seas/OtherSea";
 import Seagame from "./modals/corner/Seagame";
 import { setIndexSelect } from "../../redux/slices/gameSlice";
 import Lost from "./modals/games/Lost";
+import Win from "./modals/games/Win";
 
 const cx = classNames.bind(styles);
 
@@ -41,7 +42,7 @@ function ChessBoard() {
   const searchParams = new URLSearchParams(location.search);
   const gameRoom = searchParams.get("room");
 
-  const userRedux = useSelector(selectUser)
+  const userInGame = useSelector(selectUser)
   const dispatch= useDispatch()
 
   // số user trong phòng
@@ -77,6 +78,8 @@ function ChessBoard() {
   // số bước di chuyển
   const [userSteps, setSteps] = useState(0);
 
+  const [winner,setWinner] = useState()
+
   const cellRefs = useRef([]);
 
   // thẻ div chứa nhân vật
@@ -111,6 +114,9 @@ function ChessBoard() {
     .fill()
     .map((_, i) => houseRefs.current[i] ?? createRef());
 
+  userRef.current = Array(numberUser)
+    .fill()
+    .map((_, i) => userRef.current[i] ?? createRef());
   // click btn roll
   const moveBySteps = (step) => {
     socket.emit("roll",{socket:socket.id,gameRoom})
@@ -198,12 +204,20 @@ function ChessBoard() {
       clearInterval(interval);
       socket.off("start")
     };
-  }, [userSteps,roll,turnOfUser,show,possition,socket]);
+  }, [userSteps,turnOfUser,possition,socket,yourTurn]);
 
-  //socket
-  useEffect(() => {
+
+  // render 1 lần duy nhất khi vào phòng
+  useEffect(()=>{
+    console.log("khởi tạo")
     socket.emit("join-room", gameRoom);
     // 
+  },[socket])
+
+
+
+  // xử lý các sự kiện socket
+  useEffect(() => {
     socket.on("room-size",(data)=>{
       setNumberUser(data.size)
       for(let i =0;i<data.size;i++){
@@ -214,10 +228,6 @@ function ChessBoard() {
       }
     })
  
-    userRef.current = Array(numberUser)
-    .fill()
-    .map((_, i) => userRef.current[i] ?? createRef());
-
     // listen event other click btn roll
     socket.on("roll-result",(data)=>{
         setTurnUser(data.user) 
@@ -227,11 +237,11 @@ function ChessBoard() {
 
         // double thì ra tù
         if(data.diceOne === data.diceTwo){
-          dispatch(updatePrison({turnOfUser,turns:-userRedux[turnOfUser].prison}))
+          dispatch(updatePrison({turnOfUser,turns:-userInGame[turnOfUser].prison}))
         }
 
         setTimeout(() => {
-          if(userRedux[turnOfUser].prison > 0 && data.diceOne!== data.diceTwo){
+          if(userInGame[turnOfUser].prison > 0 && data.diceOne!== data.diceTwo){
             setSteps(0)
             dispatch(updatePrison({turnOfUser,turns:-1}))
             setShow(modalConstant.LOST_TURN)
@@ -243,22 +253,45 @@ function ChessBoard() {
             // else 
             // setSteps(8)
 
-            setSteps(7)
+            // setSteps(4)
 
-            // setSteps(data.diceOne + data.diceTwo)
+            setSteps(data.diceOne + data.diceTwo)
           }
         }, 2000);   
     })
     socket.on("turn-result",(data)=>{
-      setTurnUser(data.user)
+      // 0   1   2   3
+      // ac  no  no  ac
+      //kiểm tra active 
+      // g/s data.user = 1 
+      let i =data.user
+      while(userInGame[i].active !==true){
+        if(i === userInGame.length -1 ){
+          i=0
+        }
+        else {
+          i=i+1;
+        }
+      }
+      setTurnUser(i)
+    })
+
+
+    socket.on("winner-result",data=>{
+      setWinner(data.winner)
+      setTimeout(()=>{
+        setShow(modalConstant.WIN)
+      },500)
     })
 
     return () => {
       socket.off("join-room", gameRoom);
       socket.off("roll-result")
       socket.off("turn-result")
+      socket.off("room-size")
+      socket.off("winner-result")
     };
-  }, [socket,numberUser,yourTurn,userRef,turnOfUser,userRedux,show]);
+  }, [socket,turnOfUser,userInGame]);
 
 
     return (
@@ -532,6 +565,19 @@ function ChessBoard() {
         >
 
         </Lost>
+        :
+        show===modalConstant.WIN
+        ?
+        <Win 
+          show={show}
+          changeShow={changeShow}
+          socket={socket}
+          turnOfUser={turnOfUser}
+          gameRoom={gameRoom}
+          winner={winner}
+        >
+
+        </Win>
         :""
         }
 
@@ -542,7 +588,7 @@ function ChessBoard() {
         ></Cell>}
 
         {/* xử lý các sự kiện socket chỉ liên quan đến redux*/}
-        <SocketRedux socket = {socket} yourTurn={yourTurn} turnOfUser={turnOfUser}></SocketRedux>
+        <SocketRedux socket = {socket} gameRoom={gameRoom} turnOfUser={turnOfUser}></SocketRedux>
 
       </div>
     </>

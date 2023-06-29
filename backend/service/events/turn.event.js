@@ -25,6 +25,24 @@ const turnEvent=(socket,io)=>{
             console.log(error)
         }
     })    
+
+    socket.on("loss",(data)=>{
+        try {
+            const {gameRoom} = data
+            socket.nsp.in(gameRoom).emit("loss-result")
+        } catch (error) {
+            console.log(error)
+        }
+    })
+
+    socket.on("winner",(data)=>{
+        try {
+            const {gameRoom,winner} =data
+            socket.nsp.in(gameRoom).emit("winner-result",{winner})
+        } catch (error) {
+            console.log(error)
+        }
+    })
 }
 
 module.exports =turnEvent

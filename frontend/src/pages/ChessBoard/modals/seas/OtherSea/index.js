@@ -11,6 +11,7 @@ import { selectCell } from "../../../../../redux/slices/cellSlice";
 import { Sea } from "../../../class/sea";
 import { selectGame } from "../../../../../redux/slices/gameSlice";
 import { selectUser } from "../../../../../redux/slices/userSlice";
+import modalConstant from "../../../constants/modal";
 
 
 function OtherSea({ show, changeShow, possition,turnOfUser,socket,gameRoom }) {
@@ -33,7 +34,6 @@ function OtherSea({ show, changeShow, possition,turnOfUser,socket,gameRoom }) {
   
   // tính tổng tài sản kể cả nhà
   for(let i=0;i<house.length;++i){
-
     // so sánh phải nhà người chơi này không
     if(house[i].owner === turnOfUser){
         allBalance += cells[house[i].boardIndex].fPriceToSell(house[i].level)
@@ -101,6 +101,12 @@ function OtherSea({ show, changeShow, possition,turnOfUser,socket,gameRoom }) {
     socket.emit("sell-house",{gameRoom,affortToPay,owner:currentCell.owner})
     socket.emit("close",{gameRoom})
   }
+
+  setTimeout(()=>{
+    if(isLoss){
+      changeShow(modalConstant.LOSS)
+    }
+  },2000)
 
   return (
     <Modal show={show}>
