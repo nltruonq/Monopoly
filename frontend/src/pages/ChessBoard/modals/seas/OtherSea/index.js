@@ -77,7 +77,7 @@ function OtherSea({ show, changeShow, possition,turnOfUser,socket,gameRoom }) {
       socket.emit("re-bought",
       {gameRoom,
         price: currentSea.priceToBuy,
-        owner:turnOfUser,
+        owner:currentCell.owner,
         inuse:cells.indexOf(currentSea),
       })
       socket.emit("change-balance",{gameRoom,

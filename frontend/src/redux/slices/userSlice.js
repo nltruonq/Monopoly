@@ -4,10 +4,10 @@ import avatarDf from "../../assets/images/avatar_default.jpg"
 const userSlice = createSlice({
   name: 'user',
   initialState: [
-    { balance: 1000, prison:0 ,username:false,avatar:avatarDf,active:false},
-    { balance: 1000, prison:0 ,username:false,avatar: avatarDf,active:false},
-    { balance: 1000, prison:0 ,username:false,avatar: avatarDf,active:false},
-    { balance: 1000, prison:0 ,username:false,avatar: avatarDf,active:false},
+    { balance: 1000, prison:0 ,username:"player1",avatar:avatarDf,active:false},
+    { balance: 1000, prison:0 ,username:"player2",avatar: avatarDf,active:false},
+    { balance: 1000, prison:0 ,username:"player3",avatar: avatarDf,active:false},
+    { balance: 1000, prison:0 ,username:"player4",avatar: avatarDf,active:false},
   ],
   reducers: {
     updateBalance: (state, action) => {

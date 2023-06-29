@@ -35,7 +35,8 @@ function OtherHouse({ show, changeShow, possition,title,turnOfUser,socket,gameRo
   })
   const currentLevel= currentCell.level
   const currentCity = cells[possition[turnOfUser]]
-
+  
+  console.log(currentLevel)
   const isSeagame =  possition[turnOfUser]===game.seagame ? 5 : 1
 
   let allBalance = userInGame[turnOfUser].balance
@@ -91,7 +92,6 @@ function OtherHouse({ show, changeShow, possition,title,turnOfUser,socket,gameRo
   const handleReBought=()=>{
 
     if(affortToBuy >=0 ) {
-
       let amount = currentCity.fRedemptionPrice(currentLevel)
       if(game.seagame === possition[turnOfUser]){
         amount *=5
@@ -140,12 +140,12 @@ function OtherHouse({ show, changeShow, possition,title,turnOfUser,socket,gameRo
           variant="secondary"
           style={{opacity:`${affortToPay < 0 ? "0.5" :"1"}`}}
           >
-          Trà tiền {currentCity instanceof City 
+          Trả tiền {currentCity instanceof City 
           ? currentCity.fPriceToPay(currentLevel)* isSeagame
           : ""
         } <RiCoinFill color="yellow" />
         </Button>
-        <Button 
+        { currentLevel!==3 && <Button 
             onClick={handleReBought} 
             variant="secondary"
             style={{opacity:`${affortToBuy < 0 ? "0.5" :"1"}`}}
@@ -155,6 +155,7 @@ function OtherHouse({ show, changeShow, possition,title,turnOfUser,socket,gameRo
             : ""
             } <RiCoinFill color="yellow" />
         </Button>
+        }
         {
           affortToPay <0 && !isLoss&&
           <Button

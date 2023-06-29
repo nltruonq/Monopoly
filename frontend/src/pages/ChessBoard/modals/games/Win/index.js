@@ -9,7 +9,12 @@ import { selectUser } from "../../../../../redux/slices/userSlice";
 function Win({ show, changeShow,winner,turnOfUser}) {
 
   const userInGame= useSelector(selectUser)
+
+  console.log(winner)
+
   const index = userInGame.indexOf(winner)
+
+  console.log(index)
   const handleClose = () => {
     changeShow(false);
     //  sau này sẽ thế thành giá trị 2 xúc xắc để xét double
