@@ -182,7 +182,7 @@ function ChessBoard() {
       socket.off("jail-result")
     }
 
-  },[show,possition,socket])
+  },[possition,socket])
 
   // di chuyển 
   useEffect(() => {
@@ -256,9 +256,9 @@ function ChessBoard() {
             // else 
             // setSteps(8)
 
-            // setSteps(4)
+            setSteps(9)
 
-            setSteps(data.diceOne + data.diceTwo)
+            // setSteps(data.diceOne + data.diceTwo)
           }
         }, 2000);   
     })

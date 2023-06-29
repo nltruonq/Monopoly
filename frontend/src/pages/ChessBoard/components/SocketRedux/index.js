@@ -51,6 +51,7 @@ function SocketRedux({socket,gameRoom,turnOfUser}){
             socket.off("receive-birthday-result")
             socket.off("pay-birthday-result")
             socket.off("loss-result")
+            socket.off("jail-count")
         }
     },[socket,turnOfUser,userInGame])
 
