@@ -53,7 +53,7 @@ function OtherSea({ show, changeShow, possition,turnOfUser,socket,gameRoom }) {
 
 
   const handlePay=()=>{
-    if(affortToPay < 0){
+    if(affortToPay >=0){
       socket.emit("pay",{gameRoom,price:currentSea.priceToPay,owner:currentCell.owner})
       socket.emit("change-balance",{gameRoom,
         amount:currentSea.priceToPay,
@@ -72,7 +72,7 @@ function OtherSea({ show, changeShow, possition,turnOfUser,socket,gameRoom }) {
   }
 
   const handleReBought=()=>{
-    if(affortToBuy){
+    if(affortToBuy>=0){
 
       socket.emit("re-bought",
       {gameRoom,

@@ -30,7 +30,6 @@ import WorldTour from "./modals/corner/WorldTour";
 import BuySea from "./modals/seas/BuySea";
 import OtherSea from "./modals/seas/OtherSea";
 import Seagame from "./modals/corner/Seagame";
-import { setIndexSelect } from "../../redux/slices/gameSlice";
 import Lost from "./modals/games/Lost";
 import Win from "./modals/games/Win";
 
@@ -213,14 +212,17 @@ function ChessBoard() {
   // render 1 lần duy nhất khi vào phòng
   useEffect(()=>{
     console.log("khởi tạo")
-    socket.emit("join-room", gameRoom);
     // 
+    socket.emit("join-room", gameRoom);
+
   },[socket])
 
 
 
   // xử lý các sự kiện socket
   useEffect(() => {
+
+
     socket.on("room-size",(data)=>{
       setNumberUser(data.size)
       for(let i =0;i<data.size;i++){
@@ -267,15 +269,16 @@ function ChessBoard() {
       // ac  no  no  ac
       //kiểm tra active 
       // g/s data.user = 1 
+      console.log(userInGame)
       let i =data.user
-      while(userInGame[i].active !==true){
-        if(i === userInGame.length -1 ){
-          i=0
-        }
-        else {
-          i=i+1;
-        }
-      }
+      // while(userInGame[i].active !==true){
+      //   if(i === userInGame.length -1 ){
+      //     i=0
+      //   }
+      //   else {
+      //     i=i+1;
+      //   }
+      // }
       setTurnUser(i)
     })
 
