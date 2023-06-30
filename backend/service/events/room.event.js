@@ -47,7 +47,7 @@ const roomEvent = (socket,io,queue) => {
               size:numSockets,
               index:arr.indexOf(socket.id),
               socket:socket.id,
-              room
+              arr
             })     
       } catch (error) {
         console.log(error)
