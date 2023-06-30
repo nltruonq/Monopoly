@@ -33,7 +33,7 @@ const Shop = () => {
                 <b className={cx("text-rate1")} >
                     <span>Giá: 1000</span>
                     <span className={cx("span1")} >{` `}</span>
-                    <RiMoneyDollarCircleLine size={20} color="yellow" />
+                    <RiMoneyDollarCircleLine size={30} color="yellow" />
                 </b>
                 <button className={cx("btn-buy1")}>
                     Mua
@@ -47,7 +47,7 @@ const Shop = () => {
                 <b className={cx("text-rate2")}>
                     <span>Giá: 2000</span>
                     <span className={cx("span1")}>{` `}</span>
-                    <RiMoneyDollarCircleLine size={20} color="yellow" />
+                    <RiMoneyDollarCircleLine size={30} color="yellow" />
                 </b>
                 <button className={cx("btn-buy2")}>
                     Mua
@@ -56,7 +56,7 @@ const Shop = () => {
                 <b className={cx("text-rate3")}>
                     <span>Giá: 1500</span>
                     <span className={cx("span1")}>{` `}</span>
-                    <RiMoneyDollarCircleLine size={20} color="yellow" />
+                    <RiMoneyDollarCircleLine size={30} color="yellow" />
                 </b>
                 <button className={cx("btn-buy3")}>
                     Mua
@@ -65,7 +65,7 @@ const Shop = () => {
                 <b className={cx("text-rate4")}>
                     <span>Giá: 2500</span>
                     <span className={cx("span1")}>{` `}</span>
-                    <RiMoneyDollarCircleLine size={20} color="yellow" />
+                    <RiMoneyDollarCircleLine size={30} color="yellow" />
                 </b>
                 <button className={cx("btn-buy4")}>
                     Mua

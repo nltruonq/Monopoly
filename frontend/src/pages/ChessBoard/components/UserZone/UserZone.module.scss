@@ -1,5 +1,4 @@
 
-
 .player-card{
     display: flex;
     flex-direction: row;
@@ -18,6 +17,7 @@
 }
 
 .name{
+    width: 230px;
     position: relative;
     padding: 5px 70px;
     background-color: #e83e3e;
