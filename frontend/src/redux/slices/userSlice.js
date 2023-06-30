@@ -1,13 +1,15 @@
 import { createSlice, createSelector } from '@reduxjs/toolkit';
-import avatarDf from "../../assets/images/avatar_default.jpg"
+import avatarDf from "../../assets/images/avatar_default.jpg";
+import char0 from "../../assets/images/char.png"
+import char1 from "../../assets/images/char.png"
 
 const userSlice = createSlice({
   name: 'user',
   initialState: [
-    { balance: 1000, prison:0 ,username:"player1",avatar:avatarDf,active:false},
-    { balance: 1000, prison:0 ,username:"player2",avatar: avatarDf,active:false},
-    { balance: 1000, prison:0 ,username:"player3",avatar: avatarDf,active:false},
-    { balance: 1000, prison:0 ,username:"player4",avatar: avatarDf,active:false},
+    { balance: 1000, prison:0 ,username:"player1",avatar:avatarDf,active:false,char:char0},
+    { balance: 1000, prison:0 ,username:"player2",avatar: avatarDf,active:false,char:char1},
+    { balance: 1000, prison:0 ,username:"player3",avatar: avatarDf,active:false,char:char0},
+    { balance: 1000, prison:0 ,username:"player4",avatar: avatarDf,active:false,char:char0},
   ],
   reducers: {
     updateBalance: (state, action) => {
