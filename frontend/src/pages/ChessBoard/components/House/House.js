@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react"
 import {setBalance, updateBalance } from "../../../../redux/slices/userSlice"
 import {useDispatch, useSelector} from "react-redux"
-import { buyHouse, destroyHouse } from "../../../../redux/slices/cellSlice"
+import { buyHouse, destroyHouse, selectCell } from "../../../../redux/slices/cellSlice"
 import { destroySeagame, selectGame } from "../../../../redux/slices/gameSlice"
 
 
-function House({houses,houseRefs,cx,socket,possition,turnOfUser,cellRefs,gameRoom,seagameRef}){
+function House({houses,houseRefs,cx,socket,possition,turnOfUser,cellRefs,gameRoom,seagameRef,userRef}){
     const dispatch=useDispatch()
     
+    const houseOwner = useSelector(selectCell)
     const game = useSelector(selectGame)
 
     useEffect(()=>{
@@ -129,6 +130,24 @@ function House({houses,houseRefs,cx,socket,possition,turnOfUser,cellRefs,gameRoo
             dispatch(updateBalance({amount:amountOwner,turnOfUser: owner}))
         })
 
+
+        socket.on("loss-reset",(data)=>{
+            const owner = data.owner
+
+            //ẩn người chơi
+            userRef.current[turnOfUser].current.style.display="none"   
+            
+            // ẩn nhà
+
+            for(let i = 0; i<houseOwner.length;i++){
+                if(houseOwner[i].owner === turnOfUser){
+                    houseRefs.current[cityBoardIndex.indexOf(houseOwner[i].boardIndex)].current.style.display="none"
+                }
+            }
+
+            // chuyển tiền 
+
+        })
         return ()=>{
             socket.off("upgrade-result")
             socket.off("bought-result")
@@ -136,8 +155,9 @@ function House({houses,houseRefs,cx,socket,possition,turnOfUser,cellRefs,gameRoo
             socket.off("re-bought-result")
             socket.off("destroy-select-result")
             socket.off("sell-click-result")
+            socket.off("loss-reset")
         }
-    },[turnOfUser,possition,seagameRef])
+    },[turnOfUser,possition,seagameRef,houseRefs,cellRefs,userRef,game,houseOwner])
     return(
         <>
         {

@@ -32,6 +32,13 @@ function SocketRedux({socket,gameRoom,turnOfUser}){
             console.log("lost")
             dispatch(setUnActive({yourTurn:turnOfUser}))
             let isEnded = 0
+
+            // loss -> userRef -> none
+            // house -> quy ra tiền
+            // balance -> 0
+            // + vào balance chủ nợ
+
+            // kiểm tra thắng thua mỗi khi có ngườithua
             let winner 
             for(let i =0;i< userInGame.length;i++){
                if(userInGame[i].active === true && i!==turnOfUser){

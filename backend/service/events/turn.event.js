@@ -28,8 +28,11 @@ const turnEvent=(socket,io)=>{
 
     socket.on("loss",(data)=>{
         try {
-            const {gameRoom} = data
+            const {gameRoom,owner} = data
             socket.nsp.in(gameRoom).emit("loss-result")
+
+            // 
+            socket.nsp.in(gameRoom).emit("loss-reset",{owner})
         } catch (error) {
             console.log(error)
         }

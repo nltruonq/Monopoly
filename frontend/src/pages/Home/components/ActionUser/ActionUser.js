@@ -16,6 +16,10 @@ function ActionUser({ changeWaitting, socket, user }) {
         socket.emit("waitting");
     };
 
+    const handleClickShop=()=>{
+        navigate('/shop')
+    }
+
     const handleCreatePrivateRoom = () => {
         socket.emit("create-private-room", { username: user?.username });
         navigate(`/private-room/${user.username}`);
@@ -34,7 +38,7 @@ function ActionUser({ changeWaitting, socket, user }) {
     return (
         <div className={cx("wrapper")}>
             <div className={cx("user")}>
-                <div className={cx("item")}>
+                <div className={cx("item")} onClick={handleClickShop}>
                     <HiShoppingCart size={30} color="yellow" />
                     <span className={cx("shop")}>Shop</span>
                 </div>

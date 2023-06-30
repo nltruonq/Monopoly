@@ -263,10 +263,13 @@ function ChessBoard() {
             // }
             // else setSteps(4)
 
-            // test khác
-            //...
+            // test step
+            // setSteps(...)
 
-            setSteps(data.diceOne + data.diceTwo)
+            // test thua
+            setSteps(4)            
+
+            // setSteps(data.diceOne + data.diceTwo)
           }
         }, 2000);   
     })
@@ -317,6 +320,7 @@ function ChessBoard() {
         
         {/* houses */}
         <House 
+          userRef={userRef}
           houseRefs={houseRefs} 
           houses={houses} 
           cx={cx} 
@@ -576,6 +580,7 @@ function ChessBoard() {
           socket={socket}
           turnOfUser={turnOfUser}
           gameRoom={gameRoom}
+          possition={possition}
         >
 
         </Lost>

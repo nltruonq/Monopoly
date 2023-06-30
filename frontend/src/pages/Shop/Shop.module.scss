@@ -188,7 +188,7 @@ body {
 }
 .shop {
   position: relative;
-  background-color: #d7e9d0;
+  background-color: #9de689;
   width: 100%;
   height: 100vh;
   overflow: hidden;
@@ -196,4 +196,8 @@ body {
   font-size: var(--font-size-11xl);
   color: var(--color-royalblue);
   font-family: var(--font-inter);
+}
+
+.wrapper{
+  background-color: #4078e5;
 }

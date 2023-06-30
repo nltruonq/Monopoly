@@ -87,7 +87,7 @@ function Board(props){
         socket.off("reset-destroy-result")
         socket.off("turn")
       }
-    },[socket,destroy])
+    },[socket,destroy,cellRefs,yourTurn,houseOwner])
 
 
     const handleDestroy=useCallback(()=>{
@@ -133,7 +133,7 @@ function Board(props){
         socket.off("select-world-tour-result")
       }
       
-    },[socket,turnOfUser])   
+    },[socket,turnOfUser,cellRefs,userRef])   
 
 
     // seagame

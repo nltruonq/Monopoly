@@ -3,12 +3,21 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 
 import { colors } from "../../../constants/Color/color";
+import { useSelector } from "react-redux";
+import { selectCell } from "../../../../../redux/slices/cellSlice";
 
-function Lost({ show, changeShow,socket,gameRoom,turnOfUser}) {
+function Lost({ show, changeShow,socket,gameRoom,turnOfUser,possition}) {
   
+  const houseOwner = useSelector(selectCell)
+
+  const currentCell=houseOwner?.find((elm)=>{
+    return elm.boardIndex === possition[turnOfUser]
+  })
+  const owner = currentCell.owner
+
   const handleClose = () => {
     changeShow(false);
-    socket.emit("loss",{gameRoom})
+    socket.emit("loss",{gameRoom,owner})
     socket.emit("close",{gameRoom})
     //  sau này sẽ thế thành giá trị 2 xúc xắc để xét double
     socket.emit("turn",{gameRoom})
