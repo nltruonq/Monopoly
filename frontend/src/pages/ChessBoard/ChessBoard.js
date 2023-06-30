@@ -214,7 +214,7 @@ function ChessBoard() {
     // 
     socket.emit("join-room", gameRoom);
 
-  },[gameRoom,socket])
+  },[])
 
 
   // xử lý các sự kiện socket
