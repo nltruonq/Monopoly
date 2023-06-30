@@ -144,7 +144,7 @@ function House({houses,houseRefs,cx,socket,possition,turnOfUser,cellRefs,gameRoo
                     houseRefs.current[cityBoardIndex.indexOf(houseOwner[i].boardIndex)].current.style.display="none"
                 }
             }
-            dispatch(updateBalance({turnOfUser,amount:"Phá sản"}))
+            dispatch(setBalance({turnOfUser,amount:"Phá sản"}))
 
             // chuyển tiền 
 

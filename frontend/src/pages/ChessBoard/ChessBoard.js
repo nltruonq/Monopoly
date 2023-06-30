@@ -6,6 +6,8 @@ import { useLocation } from "react-router-dom";
 import { SocketContext } from "../../SocketService";
 import houses from "./constants/houses";
 import modalConstant from "./constants/modal";
+import { colors } from "./constants/Color/color"
+
 
 import UserZone from "./components/UserZone/UserZone";
 import Board from "./components/Board/Board";
@@ -342,7 +344,9 @@ function ChessBoard() {
             <div key={index} className={cx(`user-zone-${index}`)}>
 
                 {/* nhân vật */}
-                <div className={cx(`char`)} ref={userRef.current[index]} >
+                <div className={cx(`char`)} ref={userRef.current[index]} 
+                style={{color:colors[index],display:"flex",flexDirection:"column"}}>
+                  <div>{userInGame[index].username}</div>
                   <img src={userInGame[index].char} height="100px" />
                   {
                     show  // mua nhà 
