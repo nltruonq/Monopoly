@@ -9,20 +9,25 @@ function ChangesModal({changeShow,turnOfUser,gameRoom,yourTurn}) {
     // 
     setTimeout(()=>{
       // dùng để test
-      // changeShow(modalConstant.PAY_TAX)
 
-      if(winner === segments[0] ){
-          changeShow(modalConstant.JAIL)
-      }
-      else if(winner===segments[1]){
-          changeShow(modalConstant.DESTROY_HOUSE)
-      }
-      else if(winner===segments[2]){
-         changeShow(modalConstant.HOST_BIRTHDAY)
-      }
-      else{
-        changeShow(modalConstant.PAY_TAX)
-      }
+      changeShow(modalConstant.DESTROY_HOUSE)
+      //
+
+
+      // if(winner === segments[0] ){
+      //     changeShow(modalConstant.JAIL)
+      // }
+      // else if(winner===segments[1]){
+      //     changeShow(modalConstant.DESTROY_HOUSE)
+      // }
+      // else if(winner===segments[2]){
+      //    changeShow(modalConstant.HOST_BIRTHDAY)
+      // }
+      // else{
+      //   changeShow(modalConstant.PAY_TAX)
+      // }
+
+
     },2000)
   };
 

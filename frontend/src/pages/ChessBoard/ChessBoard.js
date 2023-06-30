@@ -208,13 +208,12 @@ function ChessBoard() {
   }, [userSteps,turnOfUser,possition,socket,yourTurn]);
 
 
-  // render 1 lần duy nhất khi vào phòng
   useEffect(()=>{
     console.log("khởi tạo")
     // 
     socket.emit("join-room", gameRoom);
 
-  },[])
+  },[socket])
 
 
   // xử lý các sự kiện socket
@@ -257,15 +256,16 @@ function ChessBoard() {
             // user 1 : 550
             // if(turnOfUser===0) setSteps(8)
             // else 
-            // // setSteps(8)
             // if(userInGame[1].balance >100){
             //   setSteps(2)
-
             // }
             // else setSteps(4)
 
             // test step
-            // setSteps(...)
+            // if(turnOfUser===0){
+            //   setSteps(7)
+            // }
+            // else setSteps(4)
 
             // test thua
             // setSteps(4)            

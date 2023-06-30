@@ -157,7 +157,8 @@ function House({houses,houseRefs,cx,socket,possition,turnOfUser,cellRefs,gameRoo
             socket.off("sell-click-result")
             socket.off("loss-reset")
         }
-    },[turnOfUser,possition,seagameRef,houseRefs,cellRefs,userRef,game,houseOwner])
+    // },[turnOfUser,possition,seagameRef])
+    },[turnOfUser,possition,seagameRef,game,houseOwner])
     return(
         <>
         {
