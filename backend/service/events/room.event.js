@@ -38,14 +38,16 @@ const roomEvent = (socket,io,queue) => {
       try {
         socket.join(gameRoom)   
         const room = io.sockets.adapter.rooms.get(gameRoom);
-        const numSockets = room ? room.size : 0;;
+        const numSockets = room ? room.size : 0;
         
         const arr= Array.from(room)
+        console.log(room)
         socket.nsp.in(gameRoom).emit("room-size",
             {
               size:numSockets,
               index:arr.indexOf(socket.id),
-              socket:socket.id
+              socket:socket.id,
+              room
             })     
       } catch (error) {
         console.log(error)
