@@ -10,6 +10,8 @@ import PrivateRoom from "../pages/PrivateRoom/PrivateRoom";
 import Profile from "../pages/Profile/Profile";
 import Register from "./../pages/Register/Register";
 import Event from "./../pages/Event/Event";
+import Shop from "../pages/Shop/Shop";
+
 
 const publicRoutes = [
     { path: "/event", component: Event },
@@ -23,6 +25,8 @@ const publicRoutes = [
     { path: "list-friends", component: ListFriends, layout: FriendLayout },
     { path: "list-invites", component: ListInvites, layout: FriendLayout },
     { path: "rank-friends", component: RankFriends, layout: FriendLayout },
+    { path: "/shop", component: Shop},
+
 ];
 
 const privateRoutes = [];
