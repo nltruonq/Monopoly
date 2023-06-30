@@ -223,6 +223,7 @@ function ChessBoard() {
 
     socket.on("room-size",(data)=>{
       setNumberUser(data.size)
+      console.log(data)
       for(let i =0;i<data.size;i++){
         dispatch(setActive({yourTurn:i}))
       }
