@@ -3,12 +3,10 @@ import React from 'react';
 import styles from "./Shop.module.scss";
 import classNames from "classnames/bind";
 
-import char5 from "../../assets/images/char5.png"
+import char1 from "../../assets/images/char5.png"
 import char2 from "../../assets/images/char2.png"
 import char3 from "../../assets/images/char3.png"
 import char4 from "../../assets/images/char4.png"
-import { ArrowLeftOutlined } from '@ant-design/icons';
-
 
 
 const cx = classNames.bind(styles);
@@ -21,7 +19,7 @@ const Shop = () => {
                     <p className={cx("shop-nhn-vt")}>{`Shop Nhân Vật `}</p>
                     <p className={cx("shop-nhn-vt")} >{` `}</p>
                 </b>
-                <img className={cx("char1")} alt="" src={char5} />
+                <img className={cx("char1")} alt="" src={char1} />
                 <b className={cx("text-rate1")} >
                     <span>Giá: 1000</span>
                     <span className={cx("span1")} >{` `}</span>
@@ -31,9 +29,7 @@ const Shop = () => {
                     Mua
                 </button>
                 <button className={cx("btn-back")}>
-                    <div className={cx("icon-back")} >
-                        <ArrowLeftOutlined />
-                    </div>
+                    <i className=" icon-back fa fa-arrow-left"></i>
                 </button>
                 <img className={cx("char2")} alt="" src={char2} />
                 <b className={cx("text-rate2")}>
