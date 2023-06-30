@@ -222,10 +222,10 @@ function Board(props){
     const [sellMonney,setSellMonney]= useState(0) 
     const [needMoney,setNeedMonney] = useState(0)
     
-    const selectSell=()=>{
+    const selectSell=useCallback(()=>{
       const index = Number(localStorage.getItem("index"))
       socket.emit("select-sell",{index,gameRoom})
-    }
+    },[gameRoom])
 
     const handleSellHouse=()=>{
 
@@ -309,12 +309,16 @@ function Board(props){
       })
 
       socket.on("sell-reset-result",data=>{
+        console.log("a")
         if(yourTurn){
-          for(let i =0; i<listOwner;i++){
-            cellRefs.current[houseOwner[i].boardIndex].current.removeEventListener('click',selectSell)
+          console.log("b")
+          for(let i =0; i<listOwner.length;i++){
+            console.log("remove")
+            cellRefs.current[listOwner[i]].current.removeEventListener('click',selectSell)
           }
           setListOwner([])
           setListSell([])
+          setSellMonney(0)
           setNeedMonney(0)
           socket.emit("close",{gameRoom})
           socket.emit("turn",{gameRoom})

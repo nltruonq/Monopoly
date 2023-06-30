@@ -6,7 +6,6 @@ import { useLocation } from "react-router-dom";
 import { SocketContext } from "../../SocketService";
 import houses from "./constants/houses";
 import modalConstant from "./constants/modal";
-import char from "../../assets/images/char.png";
 
 import UserZone from "./components/UserZone/UserZone";
 import Board from "./components/Board/Board";
@@ -218,7 +217,6 @@ function ChessBoard() {
   },[socket])
 
 
-
   // xử lý các sự kiện socket
   useEffect(() => {
 
@@ -253,12 +251,20 @@ function ChessBoard() {
           }
           else {
 
-            // chỉ dùng để test
-            // if(turnOfUser===1) setSteps(4)
+            // chỉ dùng để test bán nhà 2 lần 
+            // user 0 : 1000
+            // user 1 : 550
+            // if(turnOfUser===0) setSteps(8)
             // else 
-            // setSteps(8)
+            // // setSteps(8)
+            // if(userInGame[1].balance >100){
+            //   setSteps(2)
 
-            // setSteps(9)
+            // }
+            // else setSteps(4)
+
+            // test khác
+            //...
 
             setSteps(data.diceOne + data.diceTwo)
           }
@@ -271,14 +277,16 @@ function ChessBoard() {
       // g/s data.user = 1 
       console.log(userInGame)
       let i =data.user
-      // while(userInGame[i].active !==true){
-      //   if(i === userInGame.length -1 ){
-      //     i=0
-      //   }
-      //   else {
-      //     i=i+1;
-      //   }
-      // }
+      let loop= 0
+      while(userInGame[i].active !==true && loop<6){
+        if(i === userInGame.length -1 ){
+          i=0
+        }
+        else {
+          i=i+1;
+        }
+        loop++
+      }
       setTurnUser(i)
     })
 
@@ -330,7 +338,7 @@ function ChessBoard() {
 
                 {/* nhân vật */}
                 <div className={cx(`char`)} ref={userRef.current[index]} >
-                  <img src={char} width="100px" />
+                  <img src={userInGame[index].char} height="100px" />
                   {
                     show  // mua nhà 
                     && turnOfUser!==yourTurn 
