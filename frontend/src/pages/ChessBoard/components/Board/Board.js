@@ -340,7 +340,7 @@ function Board(props){
     return (
         <>
           { 
-          needMoney && 
+          needMoney ?
           <div className={cx("sell-house")} style={{border:`5px solid ${colors[turnOfUser]}`}}>
             <div>Tổng số tiền hiện có: {sellMonney + userInGame[turnOfUser].balance}</div>
             <div>Số tiền cần trả: {-needMoney.monney}</div>
@@ -354,7 +354,9 @@ function Board(props){
             Bán
             </Button>
             }
-          </div>}
+          </div>
+        :""  
+        }
           <div className={cx("chess-board")}>
             <div ref={seagameRef} style={{display:"none",position:"absolute",top:10,left:0,zIndex:13}}> 
                 <img src= {seagameImg} width={75} />
