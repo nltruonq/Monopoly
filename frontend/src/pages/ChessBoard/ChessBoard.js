@@ -277,12 +277,12 @@ function ChessBoard() {
             //test nút start
             // if(turnOfUser === 1) setSteps(33)
             // else 
-            setSteps(33)
+            // setSteps(33)
 
             // test thua
             // setSteps(4)            
 
-            // setSteps(data.diceOne + data.diceTwo)
+            setSteps(data.diceOne + data.diceTwo)
           }
         }, 2000);   
     })
