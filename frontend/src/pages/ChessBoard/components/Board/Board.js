@@ -38,10 +38,15 @@ function Board(props){
     const houseOwner= useSelector(selectCell)
 
     const userInGame = useSelector(selectUser)
-
-    const game = useSelector(selectGame)
+    
+    const [click,setCLick] = useState(false)
 
     const dispatch = useDispatch()
+
+    useEffect(()=>{
+      console.log("your turn")
+      setCLick(false)
+    },[yourTurn])
 
     useEffect(()=>{
       socket.on("destroy-house-result",data=>{
@@ -496,13 +501,14 @@ function Board(props){
                 </div>
               </div>
               <div className={cx("center")} style={{backgroundImage:`url(${bg})`,backgroundSize:"cover",padding:"20px"}}>
-                {yourTurn&&!roll&&<button 
+                {yourTurn&&!roll&&!click&&<button 
                   onClick={() => { 
                     if(userSteps<=0 ){
+                      setCLick(true)
                       moveBySteps(diceOne + diceTwo)
                     }
                   }}>
-                  MOVE
+                  ROLL
                 </button>}
                 <Dice
                   diceOne={diceOne}
