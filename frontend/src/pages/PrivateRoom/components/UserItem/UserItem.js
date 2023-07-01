@@ -18,7 +18,7 @@ function UserItem({ color, player, handleKick, host, user }) {
             </div>
             <div className={cx("main")}>
                 <div className={cx("char")}>
-                    <img src="https://jujutsuphanpara.jp/_nuxt/img/chara_illust_gojo.40908ab.png" alt="char" />
+                    <img src={char} alt="char" />
                 </div>
             </div>
             <div className={cx("footer")}>
