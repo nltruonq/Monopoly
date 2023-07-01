@@ -16,7 +16,7 @@ function TaxComponent({ show, changeShow,turnOfUser,socket,gameRoom,possition })
   const cell = cells[possition[turnOfUser]]
   const taxValue= cell instanceof Tax
                   ?cell?.payTax(user[turnOfUser].balance)
-                  :Math.round(-0.1*user[turnOfUser].balance)
+                  :Math.round(-0.5*user[turnOfUser].balance)
   
 
   // chỉ để test
@@ -56,7 +56,7 @@ function TaxComponent({ show, changeShow,turnOfUser,socket,gameRoom,possition })
       </Modal.Header>
       <Modal.Body>
             <img src= {taxImg} width={200} />
-            Bạn bị trừ 10% tài sản: {- taxValue} <RiCoinFill color="yellow" />
+            Bạn bị trừ 50% tài sản: {- taxValue} <RiCoinFill color="yellow" />
       </Modal.Body>
       <Modal.Footer>
         <Button 

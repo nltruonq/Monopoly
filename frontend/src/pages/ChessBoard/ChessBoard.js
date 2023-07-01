@@ -263,6 +263,11 @@ function ChessBoard() {
             // }
             // else setSteps(4)
 
+            //test phá nhà
+            // chance -> phá nhà
+            // if(turnOfUser===1) setSteps(6)
+            // else setSteps(4)
+
             // test step
             // if(turnOfUser===0){
             //   setSteps(7)
@@ -272,7 +277,7 @@ function ChessBoard() {
             // test thua
             // setSteps(4)            
 
-            setSteps(data.diceOne + data.diceTwo)
+            // setSteps(data.diceOne + data.diceTwo)
           }
         }, 2000);   
     })
@@ -281,7 +286,6 @@ function ChessBoard() {
       // ac  no  no  ac
       //kiểm tra active 
       // g/s data.user = 1 
-      console.log(userInGame)
       let i =data.user
       let loop= 0
       while(userInGame[i].active !==true && loop<6){
@@ -346,7 +350,19 @@ function ChessBoard() {
                 {/* nhân vật */}
                 <div className={cx(`char`)} ref={userRef.current[index]} 
                 style={{color:colors[index],display:"flex",flexDirection:"column"}}>
-                  <div>{userInGame[index].username}</div>
+                  <div  
+                  style={{
+                    position:"absolute",
+                    top:-40,
+                    left:20,
+                    fontWeight:500,
+                    borderRadius:3,
+                    border: `3px solid ${colors[index]}`,
+                    padding:'5px 3px',
+                    backgroundColor:"white"}}
+                  >
+                    {userInGame[index].username}
+                  </div>
                   <img src={userInGame[index].char} height="100px" />
                   {
                     show  // mua nhà 

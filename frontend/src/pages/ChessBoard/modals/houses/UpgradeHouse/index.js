@@ -20,6 +20,8 @@ function UpgradeHouse({ show, changeShow, possition,title,turnOfUser,socket,game
   const house = useSelector(selectCell);
   const [select,setSelect]=useState(3)
   const userIngame= useSelector(selectUser)
+  
+
   const userBalance = userIngame[turnOfUser].balance
 
   
@@ -29,9 +31,11 @@ function UpgradeHouse({ show, changeShow, possition,title,turnOfUser,socket,game
   })
   const currentLevel= currentCell.level
   
+  console.log(currentLevel,'level')
+
   const currentCity = cells[possition[turnOfUser]]
   
-  const [affortToPay,setAffort] = useState(userBalance - currentCity.fPriceToBuy(3))
+  const [affortToPay,setAffort] = useState(userBalance - currentCity.fPriceToUpgrade(currentLevel,3))
   
 
   const handleClose = () => {

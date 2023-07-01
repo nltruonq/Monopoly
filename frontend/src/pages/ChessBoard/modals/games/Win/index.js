@@ -5,24 +5,27 @@ import Modal from "react-bootstrap/Modal";
 import { colors } from "../../../constants/Color/color";
 import { useSelector } from "react-redux";
 import { selectUser } from "../../../../../redux/slices/userSlice";
+import { useNavigate } from "react-router-dom";
 
 function Win({ show, changeShow,winner,turnOfUser}) {
 
   const userInGame= useSelector(selectUser)
-
+  const navigate = useNavigate()
   console.log(winner)
 
   const index = userInGame.indexOf(winner)
 
   console.log(index)
+
   const handleClose = () => {
     changeShow(false);
+    navigate('/')
     //  sau này sẽ thế thành giá trị 2 xúc xắc để xét double
   };
 
   return (
     <Modal show={show}>
-      <Modal.Header closeButton onClick={handleClose} style={{backgroundColor:colors[index],color:"white"}}>
+      <Modal.Header closeButton onClick={handleClose} style={{backgroundColor:colors[index]||"red",color:"white"}}>
         <Modal.Title>{ "NGƯỜI THẮNG"}</Modal.Title>
       </Modal.Header>
       <Modal.Body>

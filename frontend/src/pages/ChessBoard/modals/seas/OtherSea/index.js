@@ -127,7 +127,7 @@ function OtherSea({ show, changeShow, possition,turnOfUser,socket,gameRoom }) {
           style={{opacity:`${affortToPay<0 ? "0.5" :"1"}`}}
           
           >
-          Pay {currentSea instanceof Sea
+          Trả tiền {currentSea instanceof Sea
           ? currentSea.priceToPay
           : ""
         } <RiCoinFill color="yellow" />
@@ -137,7 +137,7 @@ function OtherSea({ show, changeShow, possition,turnOfUser,socket,gameRoom }) {
             variant="secondary"
             style={{opacity:`${affortToBuy<0 ? "0.5" :"1"}`}}
         >
-            Buy {currentSea instanceof Sea
+           Mua lại {currentSea instanceof Sea
             ? currentSea.priceToBuy
             : ""
             } <RiCoinFill color="yellow" />

@@ -5,6 +5,7 @@ import { buyHouse, destroyHouse, selectCell } from "../../../../redux/slices/cel
 import { destroySeagame, selectGame } from "../../../../redux/slices/gameSlice"
 
 
+
 function House({houses,houseRefs,cx,socket,possition,turnOfUser,cellRefs,gameRoom,seagameRef,userRef}){
     const dispatch=useDispatch()
     
@@ -12,7 +13,7 @@ function House({houses,houseRefs,cx,socket,possition,turnOfUser,cellRefs,gameRoo
     const game = useSelector(selectGame)
 
     useEffect(()=>{
-        
+        // console.log(houseOwner)        
         socket.on("bought-result",(data)=>{
             dispatch(updateBalance({amount:-data.price,turnOfUser}))
             dispatch(buyHouse({
@@ -159,7 +160,7 @@ function House({houses,houseRefs,cx,socket,possition,turnOfUser,cellRefs,gameRoo
             socket.off("loss-reset")
         }
     // },[turnOfUser,possition,seagameRef])
-    },[turnOfUser,possition,seagameRef,game,houseOwner])
+    },[turnOfUser,possition,game,houseOwner,seagameRef])
     return(
         <>
         {

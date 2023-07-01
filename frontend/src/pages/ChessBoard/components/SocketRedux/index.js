@@ -20,7 +20,7 @@ function SocketRedux({socket,gameRoom,turnOfUser}){
         socket.on("pay-birthday-result",data=>{
             for(let i = 0; i < userInGame.length ;++i ){
                 if(i !== turnOfUser && userInGame[i].active === true){
-                    dispatch(updateBalance({amount:-Math.round(0.05*userInGame[i].balance),turnOfUser:i}))
+                    dispatch(updateBalance({amount:-Math.round(0.1*userInGame[i].balance),turnOfUser:i}))
                 }
             }
         })

@@ -64,13 +64,13 @@ function BuySea({ show, changeShow, possition,turnOfUser,socket,gameRoom }) {
         <Button 
           onClick={buySea} 
           variant="secondary" style={{opacity:`${affortToPay<0 && "0.5"}`}}>
-          Buy {currentSea instanceof Sea
+          Mua {currentSea instanceof Sea
           ? currentSea.basePrice
           : ""
         } <RiCoinFill color="yellow" />
         </Button>
         <Button onClick={handleClose} variant="secondary">
-          Cancel
+          Hủy
         </Button>
       </Modal.Footer>
     </Modal>

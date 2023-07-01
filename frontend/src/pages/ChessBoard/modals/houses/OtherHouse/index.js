@@ -90,7 +90,7 @@ function OtherHouse({ show, changeShow, possition,title,turnOfUser,socket,gameRo
   },2000)
 
   const handleReBought=()=>{
-
+    console.log(currentLevel,'level')
     if(affortToBuy >=0 ) {
       let amount = currentCity.fRedemptionPrice(currentLevel)
       if(game.seagame === possition[turnOfUser]){

@@ -5,6 +5,6 @@ export class Tax extends Cell{
         super(boardIndex)
     }
     payTax(current){
-        return Math.round(-0.1*current)
+        return Math.round(-0.5*current)
     }
 }

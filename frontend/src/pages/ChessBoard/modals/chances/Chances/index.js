@@ -11,7 +11,7 @@ function ChangesModal({changeShow,turnOfUser,gameRoom,yourTurn}) {
       // dùng để test
 
       // changeShow(modalConstant.DESTROY_HOUSE)
-      //
+      
 
 
       if(winner === segments[0] ){

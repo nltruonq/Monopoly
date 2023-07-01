@@ -13,11 +13,10 @@ function Birthday({ show, changeShow,turnOfUser,socket,gameRoom,yourTurn,numberU
 
   
   const userInGame = useSelector(selectUser)
-  console.log(userInGame)
   let amount = 0
   for(let i = 0;i <userInGame.length;i++){
     if(i !== turnOfUser && userInGame[i].active === true){
-      amount +=  Math.round(0.05* userInGame[i].balance)
+      amount +=  Math.round(0.1* userInGame[i].balance)
     }
   }
   // console.log(amount)

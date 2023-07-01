@@ -32,8 +32,6 @@ function Board(props){
           =props
     
     // phá nhà
-    const [destroy,setDestroy]=useState(false)
-    const [listDestroy,setListDestroy]=useState([])
     const [listOwner,setListOwner]=useState([])
     
 
@@ -47,47 +45,46 @@ function Board(props){
 
     useEffect(()=>{
       socket.on("destroy-house-result",data=>{
-         setDestroy({user:data.user})
-      })
-      let list = []
-      for(let i = 0; i < houseOwner.length; i++ ){
-        if(houseOwner[i].owner !== destroy.user){
-          list.push(houseOwner[i].boardIndex)
-        }
-      }
-      setListDestroy(list)
-
-      if(list.length!==0){
         if(yourTurn){
-          for(let i=0; i<32; ++i){
-            if(list.includes(i)){
-              cellRefs.current[i].current.addEventListener('click',handleDestroy)
+          let list = []
+          // tìm tất cả nhà của người khác
+          for(let i = 0; i < houseOwner.length; i++ ){
+           if(houseOwner[i].owner !== turnOfUser){
+             list.push(houseOwner[i].boardIndex)
+           }
+         }
+         setListOwner(list)
+         console.log(list,"phá")
+         
+         if(list.length!==0){
+           if(yourTurn){
+             for(let i=0; i<list.length; ++i){
+               console.log("add")   
+               cellRefs.current[list[i]].current.addEventListener('click',handleDestroy)
+              }
             }
           }
-        }
-      }
-      else{
-        changeShow(false)
-        socket.emit("close",{gameRoom})
-        socket.emit("turn",{gameRoom})
-      }
-        
-      socket.on("reset-destroy-result",data=>{
-        setListDestroy([])
-        setDestroy(false)
-        for(let i=0; i<32; ++i){
-          if(list.includes(i)){
-            cellRefs.current[i].current.removeEventListener('click',handleDestroy)
+          else{
+            changeShow(false)
+            setListOwner([])
+            socket.emit("close",{gameRoom})
+            socket.emit("turn",{gameRoom})
           }
         }
-        
+           
+      })
+      socket.on("reset-destroy-result",data=>{
+        for(let i=0; i<listOwner.length; ++i){
+          cellRefs.current[listOwner[i]].current.removeEventListener('click',handleDestroy)
+        }
+        setListOwner([])
       })
       return ()=>{
         socket.off("destroy-house-result")
         socket.off("reset-destroy-result")
         socket.off("turn")
       }
-    },[socket,destroy])
+    },[socket,turnOfUser,houseOwner,listOwner,yourTurn])
 
 
     const handleDestroy=useCallback(()=>{
@@ -196,7 +193,7 @@ function Board(props){
         socket.off("host-seagame-result")
       }
 
-    },[socket,houseOwner,seagameRef,listOwner,yourTurn])
+    },[socket,houseOwner,listOwner,yourTurn,seagameRef])
 
 
     
@@ -309,9 +306,7 @@ function Board(props){
       })
 
       socket.on("sell-reset-result",data=>{
-        console.log("a")
         if(yourTurn){
-          console.log("b")
           for(let i =0; i<listOwner.length;i++){
             console.log("remove")
             cellRefs.current[listOwner[i]].current.removeEventListener('click',selectSell)
@@ -380,8 +375,7 @@ function Board(props){
                   return (
                     <div
                       key={index}
-                      className={destroy&&listDestroy.includes(9+index) 
-                                || listOwner.includes(9+index)
+                      className={listOwner.includes(9+index)
                                 // || listSell.includes(9+index) 
                                 ? cx("rectangle","able",`${listSell.includes(9+index)?"sell":""}`) :cx("rectangle")}
                       ref={cellRefs.current[9 + index]}
@@ -447,8 +441,7 @@ function Board(props){
                     return (
                       <div
                         key={index}
-                        className={destroy&&listDestroy.includes(7-index)
-                                  || listOwner.includes(7-index)
+                        className={ listOwner.includes(7-index)
                                   // || listSell.includes(7-index)
                                   ? cx("rectangle-column","able",`${listSell.includes(7-index)?"sell":""}`) 
                                   :cx("rectangle-column")}
@@ -518,8 +511,7 @@ function Board(props){
                         key={index}
                         className=
                         {
-                          destroy&&listDestroy.includes(17+index)
-                          || listOwner.includes(17+index)
+                           listOwner.includes(17+index)
                           // || listSell.includes(17+index)
                           ? cx("rectangle-column","able",`${listSell.includes(17+index)?"sell":""}`) 
                           :cx("rectangle-column")
@@ -581,8 +573,7 @@ function Board(props){
                   return (
                     <div
                       key={index}
-                      className={destroy&&listDestroy.includes(31-index)
-                                ||listOwner.includes(31-index)
+                      className={listOwner.includes(31-index)
                                 // || listSell.includes(31 - index)
                                 ? cx("rectangle","able",`${listSell.includes(31-index)?"sell":""}`) 
                                 :cx("rectangle")}
