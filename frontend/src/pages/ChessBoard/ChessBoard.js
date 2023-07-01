@@ -277,7 +277,7 @@ function ChessBoard() {
             // test thua
             // setSteps(4)            
 
-            // setSteps(data.diceOne + data.diceTwo)
+            setSteps(data.diceOne + data.diceTwo)
           }
         }, 2000);   
     })
