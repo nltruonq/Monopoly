@@ -66,6 +66,9 @@ function Cell({socket,changeShow,gameRoom}){
                  }
                  else if(sea.owner === turnOfUser){
                     console.log("oke")
+                    socket.emit("close",{gameRoom})
+                    socket.emit("turn",{gameRoom})
+                
                  }
                  else {
                     changeShow(modalConstant.OTHER_SEA)
