@@ -274,10 +274,15 @@ function ChessBoard() {
             // }
             // else setSteps(4)
 
+            //test nút start
+            // if(turnOfUser === 1) setSteps(33)
+            // else 
+            setSteps(33)
+
             // test thua
             // setSteps(4)            
 
-            setSteps(data.diceOne + data.diceTwo)
+            // setSteps(data.diceOne + data.diceTwo)
           }
         }, 2000);   
     })
@@ -285,7 +290,9 @@ function ChessBoard() {
       // 0   1   2   3
       // ac  no  no  ac
       //kiểm tra active 
-      // g/s data.user = 1 
+      // g/s data.user = 1
+      console.log("change turn",data)
+      
       let i =data.user
       let loop= 0
       while(userInGame[i].active !==true && loop<6){
@@ -299,6 +306,7 @@ function ChessBoard() {
       }
       setTurnUser(i)
     })
+
 
 
     socket.on("winner-result",data=>{
@@ -624,6 +632,7 @@ function ChessBoard() {
         {/* Xử lí khi di chyển đến ô đích -> quản lý hiện các modal*/}
         {<Cell
           socket={socket}
+          gameRoom={gameRoom}
           changeShow={changeShow}
         ></Cell>}
 

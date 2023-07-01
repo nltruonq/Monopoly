@@ -13,7 +13,7 @@ import { Corner } from "../../class/corner"
 import { selectCell } from "../../../../redux/slices/cellSlice"
 import { selectUser } from "../../../../redux/slices/userSlice"
 
-function Cell({socket,changeShow}){
+function Cell({socket,changeShow,gameRoom}){
     const buyHouse = useSelector(selectCell)
     const user = useSelector(selectUser)
 
@@ -24,11 +24,12 @@ function Cell({socket,changeShow}){
             // possition là mảng khi di chuyển bình thường 
             // là 1 số khi di chuyển qua world tour
             const userIndex = possition[turnOfUser] || possition  
+            console.log(userIndex)
             const cell = cells[userIndex]
-
+            console.log(cell)
             //dùng để test modal
             // changeShow(modalConstant.PAY_TAX)
-            
+            console.log(data,"move")
             if(cell instanceof City){
                 const house = buyHouse?.find((elm)=>{
                     return elm.boardIndex === userIndex
@@ -95,10 +96,28 @@ function Cell({socket,changeShow}){
                 else if(userIndex === 24){
                     changeShow(modalConstant.WORLD_TOUR)
                 }
+                
+                else {
+    
+    
+                // other cells  -> turn -> chuyển lượt ++ -> đổi yourTurn -> setClick
+                // start -> không chuyển lượt -> yourTurn không đổi -> không setClick
+                socket.emit("close",{gameRoom})
+                socket.emit("turn",{gameRoom})
+                }
             }
+            else {
+    
+    
+                // other cells  -> turn -> chuyển lượt ++ -> đổi yourTurn -> setClick
+                // start -> không chuyển lượt -> yourTurn không đổi -> không setClick
+                socket.emit("close",{gameRoom})
+                socket.emit("turn",{gameRoom})
+                }
         })
         return ()=>{
             socket.off("moved-result")
+            socket.off("turn")
         }
     },[socket,buyHouse])
     return (
