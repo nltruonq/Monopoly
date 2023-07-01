@@ -74,8 +74,10 @@ function Board(props){
            
       })
       socket.on("reset-destroy-result",data=>{
-        for(let i=0; i<listOwner.length; ++i){
-          cellRefs.current[listOwner[i]].current.removeEventListener('click',handleDestroy)
+        if(yourTurn){
+          for(let i=0; i<listOwner.length; ++i){
+            cellRefs.current[listOwner[i]].current.removeEventListener('click',handleDestroy)
+          }
         }
         setListOwner([])
       })
@@ -102,27 +104,32 @@ function Board(props){
     
     useEffect(()=>{
       socket.on("world-tour-result",()=>{
-        for( let i=0; i<32; ++i){
-          if(i!==24) // khác ô world tour
-          {
-            cellRefs.current[i].current.addEventListener('click',handleWourldTour)
+        if(yourTurn){
+          for( let i=0; i<32; ++i){
+            if(i!==24) // khác ô world tour
+            {
+              cellRefs.current[i].current.addEventListener('click',handleWourldTour)
+            }
           }
         }
       })
 
       socket.on("select-world-tour-result",data=>{
-        const index=data.index
-        cellRefs.current[index].current.appendChild(userRef.current[turnOfUser].current)
-        for( let i=0; i<32; ++i){
-          if(i!==24) // khác ô world tour
-          {
-            cellRefs.current[i].current.removeEventListener('click',handleWourldTour)
 
+          const index=data.index
+          cellRefs.current[index].current.appendChild(userRef.current[turnOfUser].current)
+          if(yourTurn){
+            for( let i=0; i<32; ++i){
+              if(i!==24) // khác ô world tour
+              {
+                cellRefs.current[i].current.removeEventListener('click',handleWourldTour)
+                
+              }
+            }
           }
-        }
-        possition[turnOfUser]=index
-        changePos(possition)
-        socket.emit("finish-world-tour",{possition:index,turnOfUser,gameRoom})
+          possition[turnOfUser]=index
+          changePos(possition)
+          socket.emit("finish-world-tour",{possition:index,turnOfUser,gameRoom})
       })
 
       return ()=>{
@@ -130,7 +137,7 @@ function Board(props){
         socket.off("select-world-tour-result")
       }
       
-    },[socket,turnOfUser])   
+    },[socket,turnOfUser,yourTurn])   
 
 
     // seagame
@@ -147,37 +154,43 @@ function Board(props){
     useEffect(()=>{
       let list = []
       socket.on("seagame-result",()=>{
-        for(let i = 0; i < houseOwner.length; i++ ){
-          if(houseOwner[i].owner === turnOfUser){
-            list.push(houseOwner[i].boardIndex)
-          }
-        }
-        setListOwner(list)
+        if(yourTurn){
 
-        if(list.length!==0){
-          for(let i =0 ; i<list.length ; i++){
+          for(let i = 0; i < houseOwner.length; i++ ){
+            if(houseOwner[i].owner === turnOfUser){
+              list.push(houseOwner[i].boardIndex)
+            }
+          }
+          setListOwner(list)
+          
+          if(list.length!==0){
+            for(let i =0 ; i<list.length ; i++){
               cellRefs.current[list[i]].current.addEventListener('click',handleSeagame)
+            }
           }
-        }
-
-        else {
-          console.log("không có nhà")
-          changeShow(false)
-          socket.emit("close",{gameRoom})
-          socket.emit("turn",{gameRoom})
+          
+          else {
+            console.log("không có nhà")
+            changeShow(false)
+            socket.emit("close",{gameRoom})
+            socket.emit("turn",{gameRoom})
+          }
         }
       })
 
       
       socket.on("host-seagame-result",data=>{
+
           console.log(data)
           seagameRef.current.style.display="block"
           cellRefs.current[data.index].current.appendChild(seagameRef.current)
-          
-          for(let i =0; i< listOwner.length; ++i){
-            console.log("remove")
-            cellRefs.current[listOwner[i]].current.removeEventListener('click',handleSeagame)
+          if(yourTurn){
+            for(let i =0; i< listOwner.length; ++i){
+              console.log("remove")
+              cellRefs.current[listOwner[i]].current.removeEventListener('click',handleSeagame)
+            }
           }
+
           dispatch(setSeagame({index:data.index}))
 
           setListOwner([])
