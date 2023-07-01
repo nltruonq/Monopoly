@@ -634,6 +634,7 @@ function ChessBoard() {
           socket={socket}
           gameRoom={gameRoom}
           changeShow={changeShow}
+          yourTurn={yourTurn === turnOfUser}
         ></Cell>}
 
         {/* xử lý các sự kiện socket chỉ liên quan đến redux*/}

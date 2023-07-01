@@ -13,7 +13,7 @@ import { Corner } from "../../class/corner"
 import { selectCell } from "../../../../redux/slices/cellSlice"
 import { selectUser } from "../../../../redux/slices/userSlice"
 
-function Cell({socket,changeShow,gameRoom}){
+function Cell({socket,changeShow,gameRoom,yourTurn}){
     const buyHouse = useSelector(selectCell)
     const user = useSelector(selectUser)
 
@@ -86,8 +86,7 @@ function Cell({socket,changeShow,gameRoom}){
             else if(cell instanceof Tax){
                 changeShow(modalConstant.PAY_TAX)            
             }
-            else if(cell instanceof Corner){
-                if(userIndex === 8) {
+            else if(userIndex === 8) {
                     if(user[turnOfUser].prison === 0){
                         changeShow(modalConstant.JAIL)
                     }
@@ -105,18 +104,12 @@ function Cell({socket,changeShow,gameRoom}){
     
                 // other cells  -> turn -> chuyển lượt ++ -> đổi yourTurn -> setClick
                 // start -> không chuyển lượt -> yourTurn không đổi -> không setClick
-                socket.emit("close",{gameRoom})
-                socket.emit("turn",{gameRoom})
+                if(yourTurn) {
+                    socket.emit("turn",{gameRoom})
                 }
+
             }
-            else {
-    
-    
-                // other cells  -> turn -> chuyển lượt ++ -> đổi yourTurn -> setClick
-                // start -> không chuyển lượt -> yourTurn không đổi -> không setClick
-                socket.emit("close",{gameRoom})
-                socket.emit("turn",{gameRoom})
-                }
+            
         })
         return ()=>{
             socket.off("moved-result")
