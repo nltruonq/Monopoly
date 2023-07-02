@@ -1,9 +1,9 @@
 const turnEvent=(socket,io)=>{
     // quản lý lượt chơi tron 1 phòng
-    socket.on("turn",(data)=>{
+    socket.on("turn",async (data)=>{
         try {
             const {gameRoom}=data
-            const room = io.sockets.adapter.rooms.get(gameRoom);
+            const room = await io.sockets.adapter.rooms.get(gameRoom);
             const roomArr=Array?.from(room)
             const user= roomArr.indexOf(socket.id)
             ===roomArr.length-1

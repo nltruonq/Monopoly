@@ -59,7 +59,6 @@ function Board(props){
            }
          }
          setListOwner(list)
-         console.log(list,"phá")
          
          if(list.length!==0){
            if(yourTurn){
@@ -91,7 +90,7 @@ function Board(props){
         socket.off("reset-destroy-result")
         socket.off("turn")
       }
-    },[socket,turnOfUser,houseOwner,listOwner,yourTurn])
+    },[socket,turnOfUser,houseOwner,listOwner,yourTurn,gameRoom])
 
 
     const handleDestroy=useCallback(()=>{
@@ -142,7 +141,7 @@ function Board(props){
         socket.off("select-world-tour-result")
       }
       
-    },[socket,turnOfUser,yourTurn])   
+    },[socket,turnOfUser,yourTurn,gameRoom])   
 
 
     // seagame
@@ -186,7 +185,6 @@ function Board(props){
       
       socket.on("host-seagame-result",data=>{
 
-          console.log(data)
           seagameRef.current.style.display="block"
           cellRefs.current[data.index].current.appendChild(seagameRef.current)
           if(yourTurn){
@@ -211,7 +209,7 @@ function Board(props){
         socket.off("host-seagame-result")
       }
 
-    },[socket,houseOwner,listOwner,yourTurn,seagameRef])
+    },[socket,houseOwner,listOwner,yourTurn,seagameRef,gameRoom])
 
 
     
@@ -244,7 +242,6 @@ function Board(props){
 
     const handleSellHouse=()=>{
 
-      console.log(sellMonney , userInGame[turnOfUser].balance ,needMoney.monney)
       socket.emit("sell-click",{
               gameRoom,
               listSell,
@@ -280,7 +277,6 @@ function Board(props){
             }
           }
           setListOwner(list)
-          console.log(list)
           
         }
           // changeShow(false)
@@ -344,7 +340,7 @@ function Board(props){
         socket.off("sell-reset-result")
 
       }
-    },[socket,houseOwner,userInGame,sellMonney,listSell,yourTurn])
+    },[socket,houseOwner,userInGame,sellMonney,listSell,yourTurn,gameRoom])
 
     // 200
     // -180 ->20

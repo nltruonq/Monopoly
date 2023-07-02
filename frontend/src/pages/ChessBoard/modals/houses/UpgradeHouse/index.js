@@ -31,7 +31,6 @@ function UpgradeHouse({ show, changeShow, possition,title,turnOfUser,socket,game
   })
   const currentLevel= currentCell.level
   
-  console.log(currentLevel,'level')
 
   const currentCity = cells[possition[turnOfUser]]
   

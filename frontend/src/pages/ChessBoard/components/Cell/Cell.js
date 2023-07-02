@@ -24,12 +24,9 @@ function Cell({socket,changeShow,gameRoom,yourTurn}){
             // possition là mảng khi di chuyển bình thường 
             // là 1 số khi di chuyển qua world tour
             const userIndex = possition[turnOfUser] || possition  
-            console.log(userIndex)
             const cell = cells[userIndex]
-            console.log(cell)
             //dùng để test modal
             // changeShow(modalConstant.PAY_TAX)
-            console.log(data,"move")
             if(cell instanceof City){
                 const house = buyHouse?.find((elm)=>{
                     return elm.boardIndex === userIndex
@@ -39,7 +36,6 @@ function Cell({socket,changeShow,gameRoom,yourTurn}){
                     //vào ô trống
                 }
                 else if(house.owner===turnOfUser){
-                    console.log("a")
                     changeShow(modalConstant.UPGRADE_HOUSE)
                     //vào nhà mình"
                     
@@ -65,8 +61,7 @@ function Cell({socket,changeShow,gameRoom,yourTurn}){
                     changeShow(modalConstant.BUY_SEA)
                  }
                  else if(sea.owner === turnOfUser){
-                    console.log("oke")
-                        socket.emit("turn",{gameRoom})
+                    changeShow(modalConstant.YOUR_SEA)
                  }
                  else {
                     changeShow(modalConstant.OTHER_SEA)
@@ -102,7 +97,7 @@ function Cell({socket,changeShow,gameRoom,yourTurn}){
     
                 // other cells  -> turn -> chuyển lượt ++ -> đổi yourTurn -> setClick
                 // start -> không chuyển lượt -> yourTurn không đổi -> không setClick
-                    socket.emit("turn",{gameRoom})
+                    changeShow(modalConstant.START)
 
             }
             

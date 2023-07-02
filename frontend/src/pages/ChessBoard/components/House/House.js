@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import {setBalance, updateBalance } from "../../../../redux/slices/userSlice"
+import {selectUser, setBalance, updateBalance } from "../../../../redux/slices/userSlice"
 import {useDispatch, useSelector} from "react-redux"
 import { buyHouse, destroyHouse, selectCell } from "../../../../redux/slices/cellSlice"
 import { destroySeagame, selectGame } from "../../../../redux/slices/gameSlice"
@@ -11,9 +11,10 @@ function House({houses,houseRefs,cx,socket,possition,turnOfUser,cellRefs,gameRoo
     
     const houseOwner = useSelector(selectCell)
     const game = useSelector(selectGame)
+    const userInGame  = useSelector(selectUser)
+    console.log(game,houseOwner,userInGame)
 
     useEffect(()=>{
-        // console.log(houseOwner)        
         socket.on("bought-result",(data)=>{
             dispatch(updateBalance({amount:-data.price,turnOfUser}))
             dispatch(buyHouse({
@@ -126,6 +127,12 @@ function House({houses,houseRefs,cx,socket,possition,turnOfUser,cellRefs,gameRoo
             for(let i=0;i<listSell.length;++i){
                 houseRefs.current[cityBoardIndex.indexOf(listSell[i])].current.style.display="none";
                 dispatch(destroyHouse({boardIndex:listSell[i]}))
+
+                // bán nhà seagame
+                if(game.seagame === listSell[i]){
+                    seagameRef.current.style.display = "none"
+                    dispatch(destroySeagame())
+                }
             }
             dispatch(setBalance({amount:amountUser,turnOfUser: user}))
             dispatch(updateBalance({amount:amountOwner,turnOfUser: owner}))
@@ -143,6 +150,12 @@ function House({houses,houseRefs,cx,socket,possition,turnOfUser,cellRefs,gameRoo
             for(let i = 0; i<houseOwner.length;i++){
                 if(houseOwner[i].owner === turnOfUser){
                     houseRefs.current[cityBoardIndex.indexOf(houseOwner[i].boardIndex)].current.style.display="none"
+
+                    // ẩn nhà seagame
+                    if(game.seagame === houseOwner[i].boardIndex){
+                        seagameRef.current.style.display = "none"
+                        dispatch(destroySeagame())
+                    }
                 }
             }
             dispatch(setBalance({turnOfUser,amount:"Phá sản"}))
@@ -160,7 +173,7 @@ function House({houses,houseRefs,cx,socket,possition,turnOfUser,cellRefs,gameRoo
             socket.off("loss-reset")
         }
     // },[turnOfUser,possition,seagameRef])
-    },[turnOfUser,possition,game,houseOwner,seagameRef])
+    },[turnOfUser,possition,game,houseOwner,seagameRef,gameRoom])
     return(
         <>
         {

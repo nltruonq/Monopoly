@@ -31,11 +31,14 @@ const cellSlice = createSlice({
       if (index !== -1) {
         state.splice(index, 1);
       }
+    },
+    resetHouse:(state,action)=>{
+      state = []
     }
   },
 });
 
-export const { buyHouse,houseByIndex,destroyHouse } = cellSlice.actions;
+export const { buyHouse,houseByIndex,destroyHouse,resetHouse } = cellSlice.actions;
 
 export const selectCell = createSelector(
     (state) => state.cell,

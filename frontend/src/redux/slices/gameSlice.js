@@ -5,6 +5,8 @@ const gameSlice = createSlice({
   initialState:{
     seagame: false,
     indexSelect:false, 
+    type:false,
+    host:false
   },
   reducers: {
     setSeagame: (state, action) => {
@@ -17,11 +19,25 @@ const gameSlice = createSlice({
     setIndexSelect: (state,action)=>{
         const {index} = action.payload
         state.indexSelect = index
+    },
+    setType: (state,action)=>{
+      const {type,host} = action.payload
+      state.type=true
+      state.host=host
+    },
+    resetGame:(state,action)=>{
+      state = {
+        seagame: false,
+        indexSelect:false, 
+        type:false,
+        host:false
+      }
     }
+
   },
 });
 
-export const { setSeagame,destroySeagame,setIndexSelect } = gameSlice.actions;
+export const { setSeagame,destroySeagame,setIndexSelect,resetGame,setType } = gameSlice.actions;
 
 export const selectGame = createSelector(
   (state) => state.game,

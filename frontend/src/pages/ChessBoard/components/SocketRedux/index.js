@@ -60,7 +60,7 @@ function SocketRedux({socket,gameRoom,turnOfUser}){
             socket.off("loss-result")
             socket.off("jail-count")
         }
-    },[socket,turnOfUser,userInGame])
+    },[socket,turnOfUser,userInGame,gameRoom])
 
     return (
         <>

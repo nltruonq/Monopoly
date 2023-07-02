@@ -13,6 +13,7 @@ import { SocketContext } from "../../SocketService";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { setUsername } from "../../redux/slices/userSlice";
+import { setType } from "../../redux/slices/gameSlice";
 
 const cx = classNames.bind(styles);
 
@@ -53,7 +54,7 @@ function PrivateRoom() {
     const socket = useContext(SocketContext);
 
     socket.on("play-private-room-result",(data)=>{
-        console.log(data)
+        dispatch(setType({type:"friend",host:data.host}))
         dispatch(setUsername({players}))
         navigate(`/game?room=${data.gameRoom}`)
     })

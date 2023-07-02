@@ -15,5 +15,7 @@ const modalConstant= {
     OTHER_SEA:14,
     LOSS:15,
     WIN:16,
+    START:17,
+    YOUR_SEA:18,
 }
 export default modalConstant

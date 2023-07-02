@@ -125,7 +125,12 @@ const privateRoom = (socket, io) => {
         try {
             const { roomName,players } = data;
             console.log(roomName);
-            socket.nsp.in(roomName).emit("play-private-room-result", { gameRoom: roomName, players});
+
+            // random gameRoom
+            let room = roomName + (Math.floor(Math.random() * 9999) + 1000)
+            // console.log(roomName,"aa")
+
+            socket.nsp.in(roomName).emit("play-private-room-result", { gameRoom: room, players,host:roomName});
             socket.play = true;
             // socket.to(roomName).emit("play-private-room-result",{gameRoom:roomName})
         } catch (error) {

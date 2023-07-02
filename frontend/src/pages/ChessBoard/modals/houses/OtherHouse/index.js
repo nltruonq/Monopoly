@@ -36,7 +36,6 @@ function OtherHouse({ show, changeShow, possition,title,turnOfUser,socket,gameRo
   const currentLevel= currentCell.level
   const currentCity = cells[possition[turnOfUser]]
   
-  console.log(currentLevel)
   const isSeagame =  possition[turnOfUser]===game.seagame ? 5 : 1
 
   let allBalance = userInGame[turnOfUser].balance
@@ -44,7 +43,6 @@ function OtherHouse({ show, changeShow, possition,title,turnOfUser,socket,gameRo
   const affortToPay = allBalance - currentCity.fPriceToPay(currentLevel)* isSeagame
   const affortToBuy = allBalance - currentCity.fRedemptionPrice(currentLevel)* isSeagame
 
-  console.log(affortToBuy,affortToPay)
 
   // tính tổng tài sản kể cả nhà
   for(let i=0;i<house.length;++i){
@@ -90,7 +88,6 @@ function OtherHouse({ show, changeShow, possition,title,turnOfUser,socket,gameRo
   },2000)
 
   const handleReBought=()=>{
-    console.log(currentLevel,'level')
     if(affortToBuy >=0 ) {
       let amount = currentCity.fRedemptionPrice(currentLevel)
       if(game.seagame === possition[turnOfUser]){

@@ -3,23 +3,38 @@ import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 
 import { colors } from "../../../constants/Color/color";
-import { useSelector } from "react-redux";
-import { selectUser } from "../../../../../redux/slices/userSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { resetUser, selectUser } from "../../../../../redux/slices/userSlice";
 import { useNavigate } from "react-router-dom";
+import { resetGame, selectGame } from "../../../../../redux/slices/gameSlice";
+import { resetHouse } from "../../../../../redux/slices/cellSlice";
+import { socket } from "../../../../../SocketService";
 
-function Win({ show, changeShow,winner,turnOfUser}) {
+function Win({ show, changeShow,winner,gameRoom}) {
 
   const userInGame= useSelector(selectUser)
   const navigate = useNavigate()
-  console.log(winner)
-
+  const dispatch =useDispatch()
   const index = userInGame.indexOf(winner)
-
-  console.log(index)
+  const game = useSelector(selectGame)
 
   const handleClose = () => {
+    
     changeShow(false);
+    dispatch(resetGame())
+    dispatch(resetHouse())
+    dispatch(resetUser())
+    
+    socket.emit("leave-room",{gameRoom})
+    
     navigate('/')
+
+    // if(game.type=== true){
+    //   navigate(`/private-room/${game.host}`)
+    // }
+    // else{
+    //   navigate('/')
+    // }
     //  sau này sẽ thế thành giá trị 2 xúc xắc để xét double
   };
 

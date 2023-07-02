@@ -33,6 +33,8 @@ import OtherSea from "./modals/seas/OtherSea";
 import Seagame from "./modals/corner/Seagame";
 import Lost from "./modals/games/Lost";
 import Win from "./modals/games/Win";
+import Start from "./modals/games/Start";
+import YourSea from "./modals/seas/YourSea";
 
 const cx = classNames.bind(styles);
 
@@ -215,7 +217,7 @@ function ChessBoard() {
     // 
     socket.emit("join-room", gameRoom);
 
-  },[socket])
+  },[socket,gameRoom])
 
 
   // xử lý các sự kiện socket
@@ -224,7 +226,6 @@ function ChessBoard() {
 
     socket.on("room-size",(data)=>{
       setNumberUser(data.size)
-      console.log(data)
       for(let i =0;i<data.size;i++){
         dispatch(setActive({yourTurn:i}))
       }
@@ -280,9 +281,9 @@ function ChessBoard() {
             // setSteps(33)
 
             // test thua
-            // setSteps(4)            
+            setSteps(4)            
 
-            setSteps(data.diceOne + data.diceTwo)
+            //setSteps(data.diceOne + data.diceTwo)
           }
         }, 2000);   
     })
@@ -291,7 +292,6 @@ function ChessBoard() {
       // ac  no  no  ac
       //kiểm tra active 
       // g/s data.user = 1
-      console.log("change turn",data)
       
       let i =data.user
       let loop= 0
@@ -626,6 +626,33 @@ function ChessBoard() {
         >
 
         </Win>
+        :turnOfUser ===yourTurn &&
+        show === modalConstant.START
+        ?
+        <Start
+          show={show}
+          changeShow={changeShow}
+          socket={socket}
+          turnOfUser={turnOfUser}
+          gameRoom={gameRoom}
+          possition={possition}
+        >
+
+        </Start>
+        :
+        turnOfUser ===yourTurn &&
+        show === modalConstant.YOUR_SEA
+        ?
+        <YourSea
+          show={show}
+          changeShow={changeShow}
+          socket={socket}
+          turnOfUser={turnOfUser}
+          gameRoom={gameRoom}
+          possition={possition}
+        >
+
+        </YourSea>
         :""
         }
 

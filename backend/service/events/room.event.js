@@ -13,7 +13,7 @@ const roomEvent = (socket,io,queue) => {
               
               // gameRoom lấy từ socketId của người chơi đầu tiên 
               if (i===0) {
-                gameRoom=socketId
+              gameRoom=socketId + (Math.floor(Math.random() * 9999) + 1000)
               }
               io.to(socketId).emit("waitting-result",{gameRoom})
             }
