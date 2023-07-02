@@ -115,7 +115,7 @@ function Cell({socket,changeShow,gameRoom,yourTurn}){
             socket.off("moved-result")
             socket.off("turn")
         }
-    },[socket,buyHouse])
+    },[socket,buyHouse,yourTurn])
     return (
         <>
         </>
