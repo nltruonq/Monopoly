@@ -66,10 +66,7 @@ function Cell({socket,changeShow,gameRoom,yourTurn}){
                  }
                  else if(sea.owner === turnOfUser){
                     console.log("oke")
-                    if(yourTurn){
                         socket.emit("turn",{gameRoom})
-                    }
-                
                  }
                  else {
                     changeShow(modalConstant.OTHER_SEA)
@@ -105,9 +102,7 @@ function Cell({socket,changeShow,gameRoom,yourTurn}){
     
                 // other cells  -> turn -> chuyển lượt ++ -> đổi yourTurn -> setClick
                 // start -> không chuyển lượt -> yourTurn không đổi -> không setClick
-                if(yourTurn) {
                     socket.emit("turn",{gameRoom})
-                }
 
             }
             
