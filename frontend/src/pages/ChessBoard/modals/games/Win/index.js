@@ -24,10 +24,10 @@ function Win({ show, changeShow,winner,gameRoom}) {
     dispatch(resetGame())
     dispatch(resetHouse())
     dispatch(resetUser())
-    
     socket.emit("leave-room",{gameRoom})
     
     navigate('/')
+    window.location.reload();
 
     // if(game.type=== true){
     //   navigate(`/private-room/${game.host}`)
