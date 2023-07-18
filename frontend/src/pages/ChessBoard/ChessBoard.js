@@ -295,7 +295,7 @@ function ChessBoard() {
       
       let i =data.user
       let loop= 0
-      while(userInGame[i].active !==true && loop<6){
+      while(userInGame[i].active !==true && loop<numberUser){
         if(i === userInGame.length -1 ){
           i=0
         }

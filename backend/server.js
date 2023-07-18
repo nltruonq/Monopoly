@@ -17,6 +17,7 @@ db.connect();
 
 app.use(cors(corsConfig));
 app.use(corsMiddleware);
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json({ limit: "10mb" }));
 app.use(cookieParser());
